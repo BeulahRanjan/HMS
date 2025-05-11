@@ -5,6 +5,9 @@ import userRoutes from "./route/user.js";
 import docRoutes from "./route/doctor.js";
 import nurRoutes from "./route/nurse.js";
 import deptRoutes from "./route/dept.js";
+import recepRoutes from "./route/recep.js";
+import patRoutes from "./route/patient.js";
+import apptRoutes from "./route/appt.js";
 
 
 const app = express();
@@ -22,6 +25,9 @@ app.use("/auth", userRoutes);
 app.use("/",docRoutes);
 app.use("/",nurRoutes);
 app.use("/",deptRoutes);
+app.use("/",recepRoutes);
+app.use("/",patRoutes);
+app.use("/",apptRoutes);
 // console.log(express.static(path.join(__dirname, 'uploads')));
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // app.use('/uploads', express.static('uploads'));

@@ -6,7 +6,7 @@ const recepSchema = new mongoose.Schema({
   phone_no: { type: String, required: true },
   experience: { type: String, required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Link to the auth user
-  shift: { type: String, enum: ['Morning', 'Evening', 'Night'], default: 'Morning' },
+  shift: { type: String, enum: ['Morning', 'Afternoon','Evening', 'Night'], default: 'Morning' },
   joining_date: { type: Date, default: Date.now },
   is_active: { type: Boolean, default: true }
 });
@@ -14,3 +14,4 @@ const recepSchema = new mongoose.Schema({
 const Receptionist = mongoose.model("Receptionist", recepSchema);
 
 export default Receptionist;
+ 
