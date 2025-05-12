@@ -116,7 +116,7 @@ function Dform() {
                 </select>
                 </div>
             </div>
-             <button className='m-10  ml-[250px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
+             <button className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
            </form>
           
           </div>
