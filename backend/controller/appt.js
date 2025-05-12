@@ -65,7 +65,7 @@ async function getAppt(req, res) {
         const appointment = await Appointment.findById(apptId)
               .populate('patient', 'name _id')
               .populate('doctor', 'name _id')
-              .populate('receptionist', 'name _id')
+              .populate('created_by', 'name _id')
               .populate('department', 'name _id');
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found" });

@@ -10,14 +10,16 @@ async function addPatient(req, res) {
         if(!name || !age || !gender || !email || !phone_no || !address || !blood_group){
             return res.status(400).json({message:"Please fill all the fields"});
         }
-           const userId = req.user.userId; // Logged-in user
-           const receptionist = await Receptionist.findOne({ user: userId });
+            const userId = req.user.userId; // Logged-in user
+            const receptionist = await Receptionist.findOne({ user: userId });
 
-            if (!receptionist) {
-            return res.status(404).json({ message: "Receptionist profile not found" });
-            }
+               
+               if (!receptionist) {
+                console.log(userId);
+               return res.status(404).json({ message: "Receptionist profile not found" });
+               }
 
-        const pat = new patient({
+            const pat = new patient({
             name,
             age,
             gender,
@@ -54,7 +56,7 @@ async function delPatient(req, res) {
 async function getPatByName(req,res) {
     try{
         const patName = req.params.name;
-        const pat = await patient.find({ name: patName });
+        const pat = await patient.find({ name: patName }).populate('created_by', 'name _id'); 
         if (!pat) {
             return res.status(404).json({ message: "Patient not found" });
         }
@@ -68,7 +70,7 @@ async function getPatByName(req,res) {
 
 async function getAllPat(req,res) {
     try{
-        const patients = await patient.find();
+        const patients = await patient.find().populate(('receptionist', 'name _id'));
         if (!patients) {
             return res.status(404).json({ message: "No patients found" });
         }
