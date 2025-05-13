@@ -35,24 +35,24 @@ function Abtus() {
           />
         </div>
       </div>
-      <div  className='bg-[#eff6fa] w-[700px] p-3 text-center mr-10  shadow-2xl rounded-2xl' >
+      <div  className='bg-[#eff6fa] w-[700px] p-7 m-5 text-left mr-10  shadow-2xl rounded-2xl text-sm' >
         Established in 2010, HopeCare Hospital began with a simple yet powerful vision — to provide compassionate, affordable, 
         and high-quality healthcare to all. What started as a modest facility with a handful of dedicated professionals has grown 
-        into a trusted name in healthcare, known for its patient-first approach and medical excellence.<br/>
+        into a trusted name in healthcare, known for its patient-first approach and medical excellence.<br/><br/>
         
         Over the years, we’ve steadily expanded our network by opening multiple branches and specialty centers across the region. Through 
         strategic partnerships, advanced technologies, and a commitment to continuous improvement, HopeCare continues to reach more communities 
-        while upholding the core values we were founded upon.<br/>
+        while upholding the core values we were founded upon.<br/><br/>
         
         We are proudly NABH-accredited and ISO 9001:2015 certified, reflecting our unwavering commitment to safety, quality, 
-        and global standards of care.<br/>
+        and global standards of care.<br/><br/>
         
         Today, HopeCare offers a wide range of services including emergency care, diagnostics, surgery, maternity, pediatrics, and 
-        chronic disease management — all delivered in a compassionate and respectful environment.<br/>
+        chronic disease management — all delivered in a compassionate and respectful environment.<br/><br/>
         
         At HopeCare, we believe healing begins with hope. That’s why we work tirelessly to ensure every patient receives not only the 
         best medical treatment but also the emotional support they need to recover and thrive.<br/>
-        <a href="/about" className="text-blue-400 hover:text-blue-700">Learn More</a>
+        <a href="/about" className="text-blue-400 hover:text-blue-700">Learn More</a><br/>
 
       </div>
 

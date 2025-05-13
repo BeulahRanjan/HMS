@@ -1,7 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from './HomePage';
-import Dsec from './components/Dsec';
+// import Dsec from './components/Dsec';
+import Docsec from './components/Docsec';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
       {/* <Route path="/a" element={<Abtus/>} />  */}
        {/* <Route path="/" element={<Dsec />}/> */}
        <Route path="/" element={<HomePage/>}/>
-       <Route path="/d" element={<Dsec/>} />
+       {/* <Route path="/d" element={<Dsec/>} /> */}
+       <Route path="/d" element={<Docsec/>} />
       </Routes>
     </Router>
   );
