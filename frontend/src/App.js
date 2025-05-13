@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Navbar from './main/Navbar';
-import Hsec from './components/Hsec';
+import HomePage from './HomePage';
+import Dsec from './components/Dsec';
 
 function App() {
   return (
@@ -13,8 +13,11 @@ function App() {
       <Route path="/nform" element={<Nform />} />
       <Route path="/rform" element={<Rform/>}/> */}
       {/* <Route path="/" element={<Navbar />} /> */}
-      <Route path="/" element={< Hsec/>}/>
-      
+      {/* <Route path="/h" element={< Hsec/>}/> */}
+      {/* <Route path="/a" element={<Abtus/>} />  */}
+       {/* <Route path="/" element={<Dsec />}/> */}
+       <Route path="/" element={<HomePage/>}/>
+       <Route path="/d" element={<Dsec/>} />
       </Routes>
     </Router>
   );
