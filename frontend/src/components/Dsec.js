@@ -2,7 +2,7 @@ import React from 'react'
 
 function Dsec() {
   return (
-    <div className='bg-[#eff6fa] h-[550px]'>
+    <div className='bg-gradient-to-b from-white  to-[#e3f0f7]  h-[550px]'>
         <div className='font-bold text-3xl text-center pt-7 '>Our Departments</div>
         <p className='text-center mt-7 font-semibold text-xl'>Explore our departments below and discover how HopeCare is committed to healing with 
             excellence and heart.</p>
