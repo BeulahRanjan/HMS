@@ -1,9 +1,10 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Rpage from './components/Rpage';
 // import HomePage from './HomePage';
 // import Dsec from './components/Dsec';
 // import Docsec from './components/Docsec';
-import Dpage from './components/Dpage';
+// import Dpage from './components/Dpage';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
        {/* <Route path="/" element={<HomePage/>}/> */}
        {/* <Route path="/d" element={<Dsec/>} /> */}
        {/* <Route path="/d" element={<Docsec/>} /> */}
-       <Route path='/' element={< Dpage/>} />
+       {/* <Route path='/' element={< Dpage/>} /> */}
+       <Route path='/' element={<Rpage/>}/>
       </Routes>
     </Router>
   );

@@ -69,8 +69,69 @@ const appointments = [
   }
 ];
 
+const doct = [
+  {
+    img: "https://i.pinimg.com/736x/c8/1c/c5/c81cc548ebf9b7ad5e2bb5c666e7dfcc.jpg", 
+    name: "Dr. Anjali Mehta",
+    dept: "Cardiology",
+    experience: "10+ years",
+    rating: 4.9,
+    desc: "Specialist in heart diseases with over 10 years of experience treating complex cardiovascular conditions."
+  },
+  {
+    img: "https://i.pinimg.com/736x/44/f0/cd/44f0cd0a70468a149d2bcd4836d7e93c.jpg", 
+    name: "Dr. Rajeev Kumar",
+    dept: "Neurology",
+    experience: "8+ years",
+    rating: 4.8,
+    desc: "Expert in neurological disorders including epilepsy, stroke, and multiple sclerosis."
+  },
+  {
+    img: "https://i.pinimg.com/736x/47/1d/97/471d978af65fe65ec1fd7e9647ce2ab7.jpg", 
+    name: "Dr. Neha Sharma",
+    dept: "Orthopedics",
+    experience: "11+ years",
+    rating: 4.7,
+    desc: "Experienced orthopedic surgeon specializing in joint replacement and sports injuries."
+  },
+  {
+    img: "https://i.pinimg.com/736x/6c/6e/d7/6c6ed7f4011b7f926b3f1505475aba16.jpg", 
+    name: "Dr. Arvind Patel",
+    dept: "Pediatrics",
+    experience: "15+ years",
+    rating: 4.6,
+    desc: "Trusted pediatrician caring for children's health and development from infancy to adolescence."
+  },
+  {
+    img: "https://i.pinimg.com/736x/6c/59/95/6c599523460f54ddeba81f3cd689ae04.jpg", 
+    name: "Dr. Priya Desai",
+    dept: "Dermatology",
+    experience: "8+ years",
+    rating: 4.5,
+    desc: "Skin specialist with a focus on acne, eczema, and cosmetic dermatological treatments."
+  },
+  {
+    img: "https://i.pinimg.com/736x/4f/e6/13/4fe613b07575cb969aef68498ad342f1.jpg", 
+    name: "Dr. Karan Verma",
+    dept: "Radiology",
+    experience: "20+ years",
+    rating: 4.4,
+    desc: "Radiologist skilled in diagnostic imaging, including X-rays, MRIs, and CT scans."
+  },
+  {
+    img: "https://i.pinimg.com/736x/e6/44/1f/e6441fea7bfedba0cda5a56d7fdbc71d.jpg", 
+    name: "Dr. Shalini Nair",
+    dept: "Oncology",
+    experience: "11+ years",
+    rating: 4.3,
+    desc: "Compassionate oncologist dedicated to the treatment and care of cancer patients."
+  }
+];
 
-function Dpage() {
+
+function Rpage() {
+
+  const [currentSection, setCurrentSection] = useState('dashboard');
   const [filters, setFilters] = useState({
   status: '',
   timeSlot: '', // new field
@@ -101,49 +162,17 @@ const filteredAppointments = appointments.filter((appt) => {
   return  matchesStatus && matchesTime;
 });
 
-
-
   return (
-    <div>
-      <Sidebar/>
-        <div className='bg-[#eff6fa] p-2  flex flex-row  '>
-            <img src='' alt='' className='w-12 h-12 rounded-full border-2 border-black ml-[90px] '/>
-            <div className='flex flex-col ml-[10px]'>
-            <p>Dr. Rajeev Kumar</p>
-            <p>Neurologist</p>
-            </div>
-            <div className='flex flex-col ml-[1000px]'>
-              <p>Date: {new Date().toLocaleDateString()}</p>
-              <p>Time: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-            </div>
-        </div>
-        <img src='https://i.pinimg.com/736x/1d/8f/8f/1d8f8faed281703de0d2f87c88def6a3.jpg' alt=''
-        className='w-full h-screen '/>
-        <div className='absolute  top-0 left-0 w-full h-full bg-gradient-to-l mt-[63px] from-[#e9f3f8]/90 to-[#e9f3f8]/90  opacity-80'>
-          <select
-          value={filters.timeSlot}
-          onChange={(e) => setFilters({ ...filters, timeSlot: e.target.value })}
-          className="border px-3 py-2 rounded-md mt-10 ml-[100px] mr-10"
-        >
-          <option value="">All Time Slots</option>
-          <option value="morning">Morning (8 AM – 12 PM)</option>
-          <option value="afternoon">Afternoon (12 PM – 4 PM)</option>
-          <option value="evening">Evening (4 PM – 8 PM)</option>
-          <option value="night">Night (8 PM - 12 AM) </option>
-          </select>
-          <select
-            value={filters.status}
-            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="border px-3 py-2 rounded-md"
-          >
-            <option value="">All Status</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-            <option value="Rescheduled">Rescheduled</option>
-          </select>
-          <div>
-          <table className="ml-[90px] mx-10 mt-10 w-full max-w-[1400px] table-auto  shadow-xl
+
+
+        <div className="flex">
+      <Sidebar onNavigate={setCurrentSection} />
+      <div className="ml-64 p-6 w-full">
+        {currentSection === 'dashboard' && <div>Welcome to Dashboard</div>}
+        {currentSection === 'patients' && <div>Patient Form/List</div>}
+        {currentSection === 'appointments' && 
+        <div>  
+          <table className="mx-10 mt-10 w-[1100px] table-auto  shadow-xl
           overflow-hidden">
             <thead className="bg-[#d6e9f3] ">
               <tr>
@@ -182,10 +211,40 @@ const filteredAppointments = appointments.filter((appt) => {
                 ))}
             </tbody>
           </table>
+        </div>}
+        {currentSection === 'doctors' && 
+        <div>
+          <div className="w-full min-h-screen bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] py-10 px-6 ">
+      <p className="text-3xl font-bold text-center mb-8">Our Doctors</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+        {doct.map((doc, index) => (
+          <div key={index} className="w-[270px] bg-blue-200 rounded-lg flex flex-col text-center p-4 
+          shadow-md hover:shadow-xl transition duration-300">
+            <img
+              src={doc.img}
+              alt={doc.name}
+              className="w-[240px] h-[180px] mb-4 rounded-lg object-cover hover:scale-105 transition duration-300"
+            />
+            <h2 className="text-xl font-bold mb-1">{doc.name}</h2>
+            <p className="text-lg font-semibold mb-2">{doc.dept}</p>
+            <p className="text-sm mb-1"><strong>Experience:</strong> {doc.experience}</p>
+            <p className="text-sm mb-2">
+              <strong>Rating:</strong> {doc.rating} ⭐
+            </p>
+            <p className="text-sm text-justify overflow-y-auto px-2 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-100">
+              {doc.desc} <a href="/" className="text-blue-700">Read More</a>
+            </p>
           </div>
-        </div>
+        ))}
+      </div>
+          </div>
+        </div>}
+        {currentSection === 'profile' && <div>Hello, I'm back!!!</div>}
+      </div>
     </div>
+
   )
 }
 
-export default Dpage;
+export default Rpage;
