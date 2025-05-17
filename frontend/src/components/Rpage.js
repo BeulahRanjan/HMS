@@ -167,7 +167,7 @@ const filteredAppointments = appointments.filter((appt) => {
 
         <div className="flex">
       <Sidebar onNavigate={setCurrentSection} />
-      <div className="ml-64 p-6 w-full">
+      <div className=" p-6 w-full">
         {currentSection === 'dashboard' && <div>Welcome to Dashboard</div>}
         {currentSection === 'patients' && <div>Patient Form/List</div>}
         {currentSection === 'appointments' && 

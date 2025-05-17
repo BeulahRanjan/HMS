@@ -14,7 +14,7 @@ function Hsec() {
         alt="hospital"
         className="w-full h-full object-cover"
       />
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#398ebc]/90 via-[#5fa8cf]/60 to-transparent  opacity-80">
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#398ebc]/90 via-[#5fa8cf]/30 to-[#e3f0f7]/50  opacity-80">
       <Navbar/>
         <div className="flex flex-col items-start justify-center h-full px-6 md:px-16 ">
             <h1 className='text-7xl font-bold text-blue-700 mb-10 ml-[100px] mt-[-50px] text-center'>Welcome to <br/> HopeCare</h1>
