@@ -2,7 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Pform from './components/Pform';
 // import Rpage from './components/Rpage';
+import { UserProvider } from './hooks/UserProvider';
 import Signup from './Signup';
+import Login from './Login';
  import HomePage from './HomePage';
 // import Dsec from './components/Dsec';
 // import Docsec from './components/Docsec';
@@ -13,7 +15,14 @@ function App() {
     <Router>
       <Routes>
       <Route path="/signup" element={<Signup />} />
-      {/* <Route path="/login" element={<Login />} /> */}
+        <Route
+            path="/login"
+            element={
+                <UserProvider>
+                    <Login />
+                </UserProvider>
+            }
+            />
       {/* <Route path="/" element={<Dform />} />
       <Route path="/nform" element={<Nform />} />
       <Route path="/rform" element={<Rform/>}/> */}

@@ -1,6 +1,69 @@
 import React from 'react'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import {ToastContainer, toast} from "react-toastify";
+import Cookies from "js-cookie"
+import { useUserContext } from "./hooks/UserProvider";
+
+
 
 function Login() {
+    const [userData, setUserData]=useState({
+        email:"",
+        password:""
+    })
+    const {setUserGlobalData}=useUserContext();
+    
+const navigate = useNavigate();
+
+    const handleChange=(e)=>{
+        setUserData({ ...userData, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit=async(e)=>{
+        e.preventDefault();
+        try{
+            const response = await axios.post('http://localhost:5000/auth/login', userData);
+           if(response.status===200){
+            toast.success("Login Successfull !", {
+                        position: "top-right",
+                        autoClose:2000,
+                      });
+            Cookies.set('authToken', response.data.token, { 
+                expires: 7, 
+                sameSite: 'strict'
+              });
+              Cookies.set('userId', response.data.userId, { 
+                expires: 7, 
+                sameSite: 'strict'
+              });
+              Cookies.set('username', response.data.username, { 
+                expires: 7, 
+                sameSite: 'strict'
+              });
+              console.log(response.data);
+              setUserGlobalData(response.data.userId, response.data.username);
+              setUserData({email:"", password:""});
+              setTimeout(()=>navigate("/home"), 2000);
+              
+           }
+           else if(response.status===400){
+            toast.error("Wrong Password!", {
+                position: "top-center",
+              });
+           }
+
+        }
+        catch(error){
+            toast.error("Login Failed! Try Again", {
+                position: "top-center",
+              });
+        }
+    }
+
+
+
   return (
   <div className="bg-[#d2ecf7] h-screen w-auto">
   <div className="flex items-center justify-center h-screen rounded-2xl">
@@ -25,7 +88,7 @@ function Login() {
 
         </div>
         <div className='w-1/2  rounded-br-2xl rounded-tr-2xl'>
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className='flex flex-col items-center justify-center h-full'>
                 <h1 className='text-3xl font-bold mt-[100px]'>Login</h1>
                 <div className='flex flex-col w-4/5 mt-10'>
@@ -34,11 +97,15 @@ function Login() {
 
                     <label className='text-lg mb-1'>Email:</label>
                     <input type="email" 
+                    name='email'
+                    onChange={handleChange}
                     placeholder="Enter your email" 
                     className='border border-gray-300 rounded-md p-2 mb-4 bg-transparent'/>
 
                     <label className='text-lg mb-1'>Password:</label>
                     <input type="password" 
+                    name='password'
+                    onChange={handleChange}
                     placeholder="Enter your password" 
                     className='border border-gray-300 rounded-md p-2 mb-4 bg-transparent'/>
                     
@@ -51,6 +118,7 @@ function Login() {
         </form>
         </div>
     </div>
+    <ToastContainer/>
   </div>
 </div>
 
