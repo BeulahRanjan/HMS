@@ -1,6 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function Rform() {
+  const[formData, setFormData]=useState({
+    name:"",
+    email:"",
+    phone_no:"",
+    dob:"",
+    experience:"",
+    shift:"",
+    joining_date:""
+
+  });
+
+  const handleChange =(e) => {
+    const {name, value} = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      try {
+        const response = await axios.post('http://localhost:5000/addRecep', formData, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('authToken')}`,
+          },
+        });
+  
+        if (response.status === 201) {
+          toast.success("Receptionist form submitted!");
+          navigate('/'); // Redirect to homepage
+        }
+      } catch (error) {
+        toast.error("Error submitting form.");
+        console.error(error);
+      }
+    };
+  
+        const handleform=()=>{
+          navigate("/");
+          Cookies.set('hasSubmittedForm', true);
+      }
+  
   return (
     <div className='bg-[#d0e5f1] h-screen w-auto flex items-center justify-center'>
         <div className='flex flex-col items-center justify-center h-4/5 w-2/3 rounded-2xl shadow-2xl'>
@@ -24,6 +68,8 @@ function Rform() {
                 <label className="text-lg mb-1">Full Name:</label>
                 <input
                     type="text"
+                    name='name'
+                    value={formData.name}
                     placeholder="Enter your name"
                     className="border border-black rounded-md p-2 px-10  bg-transparent placeholder-black"
                 />
@@ -32,6 +78,8 @@ function Rform() {
                 <label className="text-lg mb-1">Email:</label>
                 <input
                     type="email"
+                    name='email'
+                    value={formData.email}
                     placeholder="Enter your email"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
@@ -40,6 +88,8 @@ function Rform() {
                 <label className="text-lg mb-1">Phone Number:</label>
                 <input
                     type="text"
+                    name='phone_no'
+                    value={formData.phone_no}
                     placeholder="Enter phone number"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
@@ -48,6 +98,7 @@ function Rform() {
                 <label className="text-lg mb-1">Date of Birth:</label>
                 <input
                     type="date"
+                    
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>

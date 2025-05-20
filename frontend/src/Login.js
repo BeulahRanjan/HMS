@@ -25,6 +25,7 @@ const navigate = useNavigate();
         e.preventDefault();
         try{
             const response = await axios.post('http://localhost:5000/auth/login', userData);
+            console.log(response.data.user);
            if(response.status===200){
             toast.success("Login Successfull !", {
                         position: "top-right",
@@ -34,20 +35,42 @@ const navigate = useNavigate();
                 expires: 7, 
                 sameSite: 'strict'
               });
-              Cookies.set('userId', response.data.userId, { 
+              Cookies.set('userId', response.data.user._id, { 
                 expires: 7, 
                 sameSite: 'strict'
               });
-              Cookies.set('username', response.data.username, { 
+              Cookies.set('username', response.data.user.name, { 
+                expires: 7, 
+                sameSite: 'strict'
+              });
+              Cookies.set('hasSubmittedForm', response.data.user.hasSubmittedForm, { 
                 expires: 7, 
                 sameSite: 'strict'
               });
               console.log(response.data);
-              setUserGlobalData(response.data.userId, response.data.username);
-              setUserData({email:"", password:""});
-              setTimeout(()=>navigate("/home"), 2000);
-              
-           }
+                // Set global context
+      setUserGlobalData(response.data.user._id, response.data.user.name);
+
+      // Clear form
+      setUserData({ email: "", password: "", role: "" });
+
+      // Use role from backend response
+      const user = response.data.user;
+      const userRole = response.data.user.role;
+               setTimeout(() => {
+                if (!user.hasSubmittedForm) {
+                  console.log(user.hasSubmittedForm);
+          // Redirect to respective form if first-time login
+          if (userRole === 'doctor') navigate('/addDoctor');
+          else if (userRole === 'nurse') navigate('/nurseform');
+          else if (userRole === 'receptionist') navigate('/receptionistform');
+          else navigate('/');
+        } else {
+          // Already submitted form → Go to homepage
+          navigate('/');
+        }
+      }, 1000);}
+
            else if(response.status===400){
             toast.error("Wrong Password!", {
                 position: "top-center",
@@ -62,6 +85,9 @@ const navigate = useNavigate();
         }
     }
 
+        const handleSignUp=()=>{
+        navigate("/");
+    }
 
 
   return (
@@ -112,7 +138,8 @@ const navigate = useNavigate();
                    
 
 
-                    <button type="submit" className='ml-[130px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'>Login</button>
+                    <button type="submit" className='ml-[130px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
+                    onClick={()=>{handleSignUp()}}  >Login</button>
                 </div>
             </div>
         </form>
@@ -121,7 +148,6 @@ const navigate = useNavigate();
     <ToastContainer/>
   </div>
 </div>
-
   )
 }
 

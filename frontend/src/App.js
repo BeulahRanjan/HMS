@@ -6,9 +6,12 @@ import { UserProvider } from './hooks/UserProvider';
 import Signup from './Signup';
 import Login from './Login';
  import HomePage from './HomePage';
+ import Dform from './components/Dform';
+ import Nform from './components/Nform';
+ import Rform from './components/Rform';
 // import Dsec from './components/Dsec';
 // import Docsec from './components/Docsec';
-//  import Dpage from './components/Dpage';
+ import Dpage from './components/Dpage';
 
 function App() {
   return (
@@ -23,18 +26,22 @@ function App() {
                 </UserProvider>
             }
             />
-      {/* <Route path="/" element={<Dform />} />
-      <Route path="/nform" element={<Nform />} />
-      <Route path="/rform" element={<Rform/>}/> */}
+      <Route path="/addDoctor" element={<Dform />} />
+      <Route path="/nurseform" element={<Nform />} />
+      <Route path="/receptionistform" element={<Rform/>}/>
       {/* <Route path='/' element={<Pform/>} /> */}
       {/* <Route path="/" element={<Navbar />} /> */}
       {/* <Route path="/h" element={< Hsec/>}/> */}
       {/* <Route path="/a" element={<Abtus/>} />  */}
        {/* <Route path="/" element={<Dsec />}/> */}
-       <Route path="/" element={<HomePage/>}/>
+
+       <Route path="/" element={
+         <UserProvider>
+                    <HomePage />
+                </UserProvider>}/>
        {/* <Route path="/d" element={<Dsec/>} /> */}
        {/* <Route path="/d" element={<Docsec/>} /> */}
-       {/* <Route path='/' element={< Dpage/>} /> */}
+       <Route path='/doctor' element={< Dpage/>} />
        {/* <Route path='/' element={<Rpage/>}/> */}
       </Routes>
     </Router>
