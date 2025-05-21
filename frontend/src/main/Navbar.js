@@ -27,7 +27,11 @@ function Navbar() {
   }, []);
 
   const handleProfileClick = () => {
-    navigate('/doctor');
+    const val = Cookies.get('role');
+    if(val === 'doctor')
+      navigate('/doctor');
+    else
+    navigate('/recep');
   };
 
   const handleLogout = () => {

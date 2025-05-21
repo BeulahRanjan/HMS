@@ -43,6 +43,10 @@ const navigate = useNavigate();
                 expires: 7, 
                 sameSite: 'strict'
               });
+              Cookies.set('role', response.data.user.role, { 
+                expires: 7, 
+                sameSite: 'strict'
+              });
               Cookies.set('hasSubmittedForm', response.data.user.hasSubmittedForm, { 
                 expires: 7, 
                 sameSite: 'strict'

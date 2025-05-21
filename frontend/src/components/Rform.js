@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+
 
 function Rform() {
+  
+       const navigate = useNavigate();
   const[formData, setFormData]=useState({
     name:"",
     email:"",
     phone_no:"",
     dob:"",
     experience:"",
+    gender:"",
     shift:"",
     joining_date:""
 
@@ -62,7 +71,7 @@ function Rform() {
             <p className="mt-1 text-md italic">
             “Because healing begins with the right information.”
             </p>
-           <form className='overflow-y-auto h-80 mt-10'>
+           <form className='overflow-y-auto h-80 mt-10' onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-6">
                 <div className="flex flex-col">
                 <label className="text-lg mb-1">Full Name:</label>
@@ -70,6 +79,7 @@ function Rform() {
                     type="text"
                     name='name'
                     value={formData.name}
+                    onChange={handleChange}
                     placeholder="Enter your name"
                     className="border border-black rounded-md p-2 px-10  bg-transparent placeholder-black"
                 />
@@ -80,6 +90,7 @@ function Rform() {
                     type="email"
                     name='email'
                     value={formData.email}
+                    onChange={handleChange}
                     placeholder="Enter your email"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
@@ -90,6 +101,7 @@ function Rform() {
                     type="text"
                     name='phone_no'
                     value={formData.phone_no}
+                    onChange={handleChange}
                     placeholder="Enter phone number"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
@@ -98,7 +110,9 @@ function Rform() {
                 <label className="text-lg mb-1">Date of Birth:</label>
                 <input
                     type="date"
-                    
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>
@@ -106,6 +120,9 @@ function Rform() {
                 <label className="text-lg mb-1">Experience</label>
                 <input
                     type="text"
+                    name='experience'
+                    value={formData.experience}
+                    onChange={handleChange}
                     placeholder="Enter your experience in yrs.."
                     className="border border-black rounded-md p-2  bg-transparent placeholder-black"
                 />
@@ -116,11 +133,14 @@ function Rform() {
                 <label className='text-lg mb-1'>Gender</label>
                 <select className="w-full px-4 py-2 bg-transparent border border-black rounded-md shadow-sm 
                 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                name='gender'
+                value={formData.gender}
+                onChange={handleChange}
                 defaultValue="">
                 <option value="" disabled>Select your status in dept....</option>
-                <option value="">Male(HOD)</option>
-                <option value="">Female</option>
-                <option value="">Other</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
                 </select>
                 </div>
 
@@ -128,6 +148,10 @@ function Rform() {
                 <label className='text-lg mb-1'>Shift</label>
                 <select className="w-full px-4 py-2 bg-transparent border border-black rounded-md shadow-sm 
                 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                name='shift'
+                value={formData.shift}
+                
+                    onChange={handleChange}
                 defaultValue="">
                 <option value="" disabled>Select your status in dept....</option>
                 <option value="">Morning</option>
@@ -141,10 +165,14 @@ function Rform() {
                 <label className="text-lg mb-1">Joining Date:</label>
                 <input
                     type="date"
+                    name='joining_date'
+                    value={formData.joining_date}
+                    
+                    onChange={handleChange}
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"/>
                 </div>
             </div>
-             <button className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
+             <button className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700' onClick={()=>{handleform()}}>Submit</button>
            </form>
           
           </div>

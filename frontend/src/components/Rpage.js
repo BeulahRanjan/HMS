@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 
 const appointments = [
@@ -131,11 +132,17 @@ const doct = [
 
 function Rpage() {
 
+
   const [currentSection, setCurrentSection] = useState('dashboard');
   const [filters, setFilters] = useState({
   status: '',
   timeSlot: '', // new field
 });
+ const navigate =useNavigate();
+
+        const handlePatient=()=>{
+        navigate("/addPatient");
+    }
 
 const isTimeInSlot = (time, slot) => {
   const [rawHour, rawMinuteModifier] = time.split(':'); // "04", "00 PM"
@@ -167,11 +174,13 @@ const filteredAppointments = appointments.filter((appt) => {
 
         <div className="flex">
       <Sidebar onNavigate={setCurrentSection} />
-      <div className=" p-6 w-full">
+      <div className="ml-[100px] p-6 w-full">
         {currentSection === 'dashboard' && <div>Welcome to Dashboard</div>}
-        {currentSection === 'patients' && <div>Patient Form/List</div>}
+        {currentSection === 'patients' && <div> <button  className='ml-[150px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
+        onClick={()=>{handlePatient()}}  >Add Patient</button></div>}
         {currentSection === 'appointments' && 
         <div>  
+          
           <table className="mx-10 mt-10 w-[1100px] table-auto  shadow-xl
           overflow-hidden">
             <thead className="bg-[#d6e9f3] ">
@@ -240,7 +249,7 @@ const filteredAppointments = appointments.filter((appt) => {
       </div>
           </div>
         </div>}
-        {currentSection === 'profile' && <div>Hello, I'm back!!!</div>}
+        {currentSection === 'profile' && <div >Hello, I'm back!!!</div>}
       </div>
     </div>
 

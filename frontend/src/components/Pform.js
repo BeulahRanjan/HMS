@@ -1,6 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Pform() {
+const navigate =useNavigate();
+    const handleform=()=>{
+        navigate("/recep");
+    }
+
   return (
     <div className='bg-[#d0e5f1] h-screen w-auto flex items-center justify-center'>
         <div className='flex flex-col items-center justify-center h-4/5 w-2/3 rounded-2xl shadow-2xl'>
@@ -127,7 +133,7 @@ function Pform() {
 </div>
 
             </div>
-             <button className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
+             <button  onClick={()=>{handleform()}} className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
            </form>
           
           </div>

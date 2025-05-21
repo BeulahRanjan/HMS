@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Pform from './components/Pform';
-// import Rpage from './components/Rpage';
+import Pform from './components/Pform';
+import Rpage from './components/Rpage';
 import { UserProvider } from './hooks/UserProvider';
 import Signup from './Signup';
 import Login from './Login';
@@ -29,7 +29,7 @@ function App() {
       <Route path="/addDoctor" element={<Dform />} />
       <Route path="/nurseform" element={<Nform />} />
       <Route path="/receptionistform" element={<Rform/>}/>
-      {/* <Route path='/' element={<Pform/>} /> */}
+      <Route path='/addPatient' element={<Pform/>} />
       {/* <Route path="/" element={<Navbar />} /> */}
       {/* <Route path="/h" element={< Hsec/>}/> */}
       {/* <Route path="/a" element={<Abtus/>} />  */}
@@ -42,7 +42,7 @@ function App() {
        {/* <Route path="/d" element={<Dsec/>} /> */}
        {/* <Route path="/d" element={<Docsec/>} /> */}
        <Route path='/doctor' element={< Dpage/>} />
-       {/* <Route path='/' element={<Rpage/>}/> */}
+       <Route path='/recep' element={<Rpage/>}/>
       </Routes>
     </Router>
   );
