@@ -1,8 +1,9 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
-
 
 const appointments = [
   {
@@ -168,6 +169,24 @@ const filteredAppointments = appointments.filter((appt) => {
 
   return  matchesStatus && matchesTime;
 });
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/getAllPat', {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('authToken')}`,
+          },
+        });
+        setPatients(response.data.patients);
+      } catch (error) {
+        console.error('Error fetching patients:', error);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   return (
 
@@ -176,8 +195,41 @@ const filteredAppointments = appointments.filter((appt) => {
       <Sidebar onNavigate={setCurrentSection} />
       <div className="ml-[100px] p-6 w-full">
         {currentSection === 'dashboard' && <div>Welcome to Dashboard</div>}
-        {currentSection === 'patients' && <div> <button  className='ml-[150px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
-        onClick={()=>{handlePatient()}}  >Add Patient</button></div>}
+        {currentSection === 'patients' && 
+        <div> 
+        <button  className='ml-[150px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
+        onClick={()=>{handlePatient()}}  >Add Patient
+        </button>
+          <div className="p-4">
+      <h2 className="text-xl ml-[150px] font-bold mb-4">Patient List</h2>
+      <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto  shadow-xl
+          overflow-hidden">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2">Name</th>
+            <th className="border px-4 py-2">Age</th>
+            <th className='border px-4 py-2'>Email</th>
+            <th className="border px-4 py-2">Gender</th>
+            <th className='border px-4 py-2'>Address</th>
+            <th className="border px-4 py-2">Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(patients) && patients.map((pat, index) => (
+            <tr key={index}>
+              <td className="border text-center px-4 py-2">{pat.name}</td>
+              <td className="border text-center px-4 py-2">{pat.age}</td>
+              <td className='border text-center px-4 py-2'>{pat.email}</td>
+              <td className="border text-center px-4 py-2">{pat.gender}</td>
+              <td className='border text-center px-4 py-2'>{pat.address}</td>
+              <td className="border text-center px-4 py-2">{pat.phone_no}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  
+        </div>}
         {currentSection === 'appointments' && 
         <div>  
           

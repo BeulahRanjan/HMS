@@ -67,7 +67,7 @@ const navigate = useNavigate();
           // Redirect to respective form if first-time login
           if (userRole === 'doctor') navigate('/addDoctor');
           else if (userRole === 'nurse') navigate('/nurseform');
-          else if (userRole === 'receptionist') navigate('/receptionistform');
+          else if (userRole === 'receptionist') navigate('/addRecep');
           else navigate('/');
         } else {
           // Already submitted form → Go to homepage

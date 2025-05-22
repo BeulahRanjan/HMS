@@ -28,7 +28,7 @@ function App() {
             />
       <Route path="/addDoctor" element={<Dform />} />
       <Route path="/nurseform" element={<Nform />} />
-      <Route path="/receptionistform" element={<Rform/>}/>
+      <Route path="/addRecep" element={<Rform/>}/>
       <Route path='/addPatient' element={<Pform/>} />
       {/* <Route path="/" element={<Navbar />} /> */}
       {/* <Route path="/h" element={< Hsec/>}/> */}

@@ -154,10 +154,10 @@ function Rform() {
                     onChange={handleChange}
                 defaultValue="">
                 <option value="" disabled>Select your status in dept....</option>
-                <option value="">Morning</option>
-                <option value="">Afternoon</option>
-                <option value="">Evening</option>
-                <option value="">Night</option>
+                <option value="morning">Morning</option>
+                <option value="afternoon">Afternoon</option>
+                <option value="evening">Evening</option>
+                <option value="night">Night</option>
                 </select>
                 </div>
 
