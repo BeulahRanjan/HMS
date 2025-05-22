@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 
 
 function Dform() {
-     const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
