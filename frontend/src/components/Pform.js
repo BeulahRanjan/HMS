@@ -39,7 +39,7 @@ const navigate = useNavigate();
         },
       });
 
-      console.log(response)
+      // console.log(response.data.pat.created_by);
       if (response.status === 201) {
         toast.success("Doctor form submitted!");
         navigate('/recep'); // Redirect to homepage

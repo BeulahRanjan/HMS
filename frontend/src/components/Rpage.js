@@ -145,6 +145,11 @@ function Rpage() {
         navigate("/addPatient");
     }
 
+     const handleAppt=()=>{
+        navigate("/addAppt");
+    }
+
+
 const isTimeInSlot = (time, slot) => {
   const [rawHour, rawMinuteModifier] = time.split(':'); // "04", "00 PM"
   const [minute, modifier] = rawMinuteModifier.split(' ');
@@ -179,6 +184,7 @@ const filteredAppointments = appointments.filter((appt) => {
             Authorization: `Bearer ${Cookies.get('authToken')}`,
           },
         });
+        console.log(response.data.patients);
         setPatients(response.data.patients);
       } catch (error) {
         console.error('Error fetching patients:', error);
@@ -212,6 +218,7 @@ const filteredAppointments = appointments.filter((appt) => {
             <th className="border px-4 py-2">Gender</th>
             <th className='border px-4 py-2'>Address</th>
             <th className="border px-4 py-2">Contact</th>
+            <th className='border px-4 py-2'>By</th>
           </tr>
         </thead>
         <tbody>
@@ -223,6 +230,7 @@ const filteredAppointments = appointments.filter((appt) => {
               <td className="border text-center px-4 py-2">{pat.gender}</td>
               <td className='border text-center px-4 py-2'>{pat.address}</td>
               <td className="border text-center px-4 py-2">{pat.phone_no}</td>
+              <td className='border text-center px-4 py-2'>{pat.created_by.name}</td>
             </tr>
           ))}
         </tbody>
@@ -233,45 +241,9 @@ const filteredAppointments = appointments.filter((appt) => {
         {currentSection === 'appointments' && 
         <div>  
           
-          <table className="mx-10 mt-10 w-[1100px] table-auto  shadow-xl
-          overflow-hidden">
-            <thead className="bg-[#d6e9f3] ">
-              <tr>
-                <th className="px-4 py-2 border border-blue-200 text-center">Sr.No.</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Timing</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Patient Name</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Age</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Gender</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Phone No.</th>
-                <th className="px-4 py-2 border border-blue-200 text-center">Status of Appointment</th>
-              </tr>
-            </thead>
-            <tbody>
-                {filteredAppointments.map((appt, index) => (
-                  <tr key={appt.id} className="hover:bg-blue-200">
-                    <td className="px-4 py-2 border border-blue-200 text-center">{index + 1}</td>
-                    <td className="px-4 py-2 border border-blue-200 text-center">{appt.time}</td>
-                    <td className="px-4 py-2 border border-blue-200 text-center">{appt.name}</td>
-                    <td className="px-4 py-2 border  border-blue-200 text-center">{appt.age}</td>
-                    <td className="px-4 py-2 border border-blue-200 text-center">{appt.gender}</td>
-                    <td className="px-4 py-2 border border-blue-200 text-center">1234567890</td> {/* Replace with real phone number if available */}
-                    <td
-                      className={`px-4 py-2 border border-blue-200 text-center font-semibold ${
-                        appt.status === 'Confirmed'
-                          ? 'text-green-600'
-                          : appt.status === 'Pending'
-                          ? 'text-yellow-600'
-                          : appt.status === 'Cancelled'
-                          ? 'text-red-600'
-                          : 'text-blue-600'
-                      }`}
-                    >
-                      {appt.status}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+           <button  className='ml-[150px] mt-5 bg-blue-300  w-[100px] rounded-md p-2 hover:bg-blue-400'
+        onClick={()=>{handleAppt()}}  >Add Appointment
+        </button>
         </div>}
         {currentSection === 'doctors' && 
         <div>

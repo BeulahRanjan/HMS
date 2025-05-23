@@ -38,7 +38,7 @@ function Navbar() {
     Cookies.remove('hasSubmittedForm');
     setHasSubmitted(false);
     setShowDropdown(false);
-    navigate('/signup');
+    navigate('/');
   };
 
   return (
