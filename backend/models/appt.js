@@ -11,8 +11,16 @@ const apptSchema = new mongoose.Schema({
     enum: ['Scheduled', 'Completed', 'Cancelled'],
     default: 'Scheduled'
   },
-  created_by: { type: mongoose.Schema.Types.ObjectId, ref: "Receptionist" }, // receptionist
-}, { timestamps: true });
+  created_by: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Receptionist",
+        required: true
+      },
+      name: { type: String, required: true }
+    }
+  
+  }, { timestamps: true })
 
 const Appointment = mongoose.model("Appointment", apptSchema);
 export default Appointment;

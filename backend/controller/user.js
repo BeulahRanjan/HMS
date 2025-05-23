@@ -47,8 +47,14 @@ async function login(req,res){
         if(!PasswordValid){
             res.status(401).json({message:"Invalid credentials"});
         }
-        const token = jwt.sign({userId: existingUser._id},process.env.SECRET_KEY, {expiresIn: '1h'});
-        res.status(200).json({message:"Login successful", token, user: existingUser});
+        const token = jwt.sign({userId: existingUser._id},process.env.SECRET_KEY, {expiresIn: '1d'});
+        res.status(200).json({message:"Login successful", token, user: {
+        _id: existingUser._id,
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role, 
+        hasSubmittedForm: existingUser.hasSubmittedForm// Important for frontend redirection
+      },});
        }
        catch(error){
         console.log("Login error:", error);

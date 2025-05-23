@@ -8,8 +8,10 @@ dotenv.config();
 async function addDoctor(req, res) {
     console.log("Adding doctor:", req.body);
     try{
-        const {email, name, phone_no, department, specialization, experience} =req.body;
-        if(!email || !name || !phone_no || !department || !specialization || !experience){
+        const {email, name, phone_no, dob, department, specialization, experience,status, gender, shift} =req.body;
+        if(!email || !name || !phone_no ||!dob || !department || !specialization || !experience ||!status ||
+            !gender|| !shift
+        ){
             return res.status(400).json({message:"Please fill all the fields"});
         }
 
@@ -29,13 +31,19 @@ async function addDoctor(req, res) {
             name,
             email,
             phone_no,
+            dob,
             department: dept._id,
             specialization,
             experience,
+            status,
+            gender,
+            shift,
             user: userId
         });
         const savedDoc = await doc.save();
         // console.log("Request params are:", req.params.id);
+        
+await User.findByIdAndUpdate(userId, { hasSubmittedForm: true });
         return res.status(201).json({message:"Doctor added successfully"});
     }
     catch(error){

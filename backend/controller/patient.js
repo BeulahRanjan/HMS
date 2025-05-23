@@ -27,10 +27,14 @@ async function addPatient(req, res) {
             phone_no,
             address, 
             blood_group,
-            created_by: receptionist._id
+             created_by: {
+                _id: receptionist._id,
+                name: receptionist.name
+            }
         });
         const savedPat = await pat.save();
-        return res.status(201).json({message:"Patient added successfully"});
+        
+        return res.status(201).json({message:"Patient added successfully", pat});
     }
     catch (error) {
         console.log("Error in adding patient:", error);
@@ -70,7 +74,7 @@ async function getPatByName(req,res) {
 
 async function getAllPat(req,res) {
     try{
-        const patients = await patient.find().populate(('receptionist', 'name _id'));
+        const patients = await patient.find().populate(('created_by', 'name _id'));
         if (!patients) {
             return res.status(404).json({ message: "No patients found" });
         }
@@ -86,7 +90,7 @@ async function upPatient(req,res) {
     try{
         const patName = req.params.name;
         const data = req.body;
-        const patient = await patient.findByIdAndUpdate({ name: patName }, data, { new: true});
+        const patient = await patie11nt.findByIdAndUpdate({ name: patName }, data, { new: true});
         if (!patient) {
             return res.status(404).json({ message: "Patient not found" });
         } 

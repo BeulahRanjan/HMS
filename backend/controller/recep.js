@@ -6,8 +6,8 @@ dotenv.config();
 
 async function addRecep(req,res) {
     try{
-        const { name, email, phone_no, experience, shift } =req.body;
-        if ( !name || !email || !phone_no || !experience) {
+        const { name, email, phone_no,dob, experience,gender, shift,joining_date } =req.body;
+        if ( !name || !email || !phone_no ||!dob || !experience || !gender || !shift || !joining_date) {
             return res.status(400).json({ message: "Please fill all the fields" });
         }
         const userId = req.user.userId;
@@ -19,9 +19,12 @@ async function addRecep(req,res) {
             name,
             email,
             phone_no,
+            dob,
             experience,
             user: userId,
-            shift
+            gender,
+            shift,
+            joining_date
         });
         const savedRecep = await recep.save();
         return res.status(201).json({ message: "Receptionist added successfully" });
