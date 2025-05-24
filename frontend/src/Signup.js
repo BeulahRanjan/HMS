@@ -120,6 +120,7 @@ function Signup() {
 
 
                     <button type="submit" onClick={()=>{handleLogin()}} className='ml-[130px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'>Sign Up</button>
+                     <p onClick={()=>{handleLogin()}}>Already have an account?</p>
                 </div>
             </div>
         </form>

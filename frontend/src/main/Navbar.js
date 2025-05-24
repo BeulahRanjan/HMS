@@ -35,7 +35,7 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    Cookies.remove('hasSubmittedForm');
+    Cookies.remove('authToken');
     setHasSubmitted(false);
     setShowDropdown(false);
     navigate('/');
