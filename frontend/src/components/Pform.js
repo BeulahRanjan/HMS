@@ -31,15 +31,14 @@ const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post('http://localhost:5000/addPatient', formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get('authToken')}`,
         },
       });
-
-      // console.log(response.data.pat.created_by);
+    console.log(Cookies.get('authToken'));
+      console.log(response.data.pat.created_by);
       if (response.status === 201) {
         toast.success("Doctor form submitted!");
         navigate('/recep'); // Redirect to homepage
@@ -205,7 +204,7 @@ const navigate = useNavigate();
               </div> */}
 
             </div>
-             <button  onClick={()=>{handleform()}} className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
+             <button type='submit' onClick={()=>{handleform()}} className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
            </form>
           
           </div>

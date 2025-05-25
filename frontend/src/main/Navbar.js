@@ -35,10 +35,9 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    Cookies.remove('authToken');
-    setHasSubmitted(false);
+    setHasSubmitted(true);
     setShowDropdown(false);
-    navigate('/');
+    navigate('/signup');
   };
 
   return (

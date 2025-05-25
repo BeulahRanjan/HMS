@@ -10,15 +10,12 @@ function Aform() {
   
        const navigate = useNavigate();
   const[formData, setFormData]=useState({
-    name:"",
-    email:"",
-    phone_no:"",
-    dob:"",
-    experience:"",
-    gender:"",
-    shift:"",
-    joining_date:""
-
+    patient:"",
+    doctor:"",
+    department:"",
+    date:"",
+    time:"",
+    status:""
   });
 
   const handleChange =(e) => {
@@ -31,17 +28,21 @@ function Aform() {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
+            console.log(Cookies.get('authToken'));
+
   
       try {
-        const response = await axios.post('http://localhost:5000/addRecep', formData, {
+        const response = await axios.post('http://localhost:5000/addAppt', formData, {
           headers: {
             Authorization: `Bearer ${Cookies.get('authToken')}`,
           },
         });
-  
+        
+            console.log(Cookies.get('authToken'));
+        console.log(response.data.newAppt);
         if (response.status === 201) {
-          toast.success("Receptionist form submitted!");
-          navigate('/'); // Redirect to homepage
+          toast.success("Appointment form submitted!");
+          navigate('/recep'); // Redirect to homepage
         }
       } catch (error) {
         toast.error("Error submitting form.");
@@ -50,8 +51,8 @@ function Aform() {
     };
   
         const handleform=()=>{
-          navigate("/");
-          Cookies.set('hasSubmittedForm', true);
+          navigate("/recep");
+          
       }
   
   return (
@@ -64,64 +65,61 @@ function Aform() {
             className="w-full h-full object-cover rounded-2xl"
           />
           <div className="absolute rounded-2xl top-0 left-0 w-full h-full bg-[#aad1e6] opacity-60 flex flex-col items-center  px-8 rounded-2xl">
-            <h1 className="mt-5 text-3xl font-bold text-blue-700">Welcome to HopeCare!</h1>
-            <p className="mt-2 text-lg text-center">
-            We're thrilled to have you on board. Let's complete your profile so we can better connect you with your patients 
-            and streamline your work experience.</p>
+            <h1 className="mt-5 text-3xl font-bold text-blue-700">Add Patient</h1>
             <p className="mt-1 text-md italic">
-            “Because healing begins with the right information.”
+            Fields marked with an asterisk () are mandatory.*
             </p>
            <form className='overflow-y-auto h-80 mt-10' onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-6">
                 <div className="flex flex-col">
-                <label className="text-lg mb-1">Full Name:</label>
+                <label className="text-lg mb-1">Petient<span className="text-red-600 ml-1">*</span>:</label>
                 <input
                     type="text"
-                    name='name'
-                    value={formData.name}
+                    name='patient'
+                    value={formData.patient}
                     onChange={handleChange}
                     placeholder="Enter your name"
                     className="border border-black rounded-md p-2 px-10  bg-transparent placeholder-black"
                 />
                 </div>
                 <div className="flex flex-col">
-                <label className="text-lg mb-1">Email:</label>
+                <label className="text-lg mb-1">Doctor<span className="text-red-600 ml-1">*</span>:</label>
                 <input
-                    type="email"
-                    name='email'
-                    value={formData.email}
+                    type="text"
+                    name='doctor'
+                    value={formData.doctor}
                     onChange={handleChange}
                     placeholder="Enter your email"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>
                 <div className="flex flex-col">
-                <label className="text-lg mb-1">Phone Number:</label>
+                <label className="text-lg mb-1">Department<span className="text-red-600 ml-1">*</span>:</label>
                 <input
                     type="text"
-                    name='phone_no'
-                    value={formData.phone_no}
+                    name='department'
+                    value={formData.department}
                     onChange={handleChange}
                     placeholder="Enter phone number"
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>
                 <div className="flex flex-col">
-                <label className="text-lg mb-1">Date of Birth:</label>
+                <label className="text-lg mb-1">Date<span className="text-red-600 ml-1">*</span>:</label>
                 <input
                     type="date"
-                    name="dob"
-                    value={formData.dob}
+                    name="date"
+                    value={formData.date}
                     onChange={handleChange}
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>
                 <div className="flex flex-col">
-                <label className="text-lg mb-1">Experience</label>
+                <label className="text-lg mb-1">time<span className="text-red-600 ml-1">*</span>:</label>
                 <input
                     type="text"
-                    name='experience'
-                    value={formData.experience}
+                    name='time'
+                    value={formData.time}
                     onChange={handleChange}
                     placeholder="Enter your experience in yrs.."
                     className="border border-black rounded-md p-2  bg-transparent placeholder-black"
@@ -130,49 +128,22 @@ function Aform() {
                 
 
                 <div className="flex flex-col">
-                <label className='text-lg mb-1'>Gender</label>
+                <label className='text-lg mb-1'>Status<span className="text-red-600 ml-1">*</span>:</label>
                 <select className="w-full px-4 py-2 bg-transparent border border-black rounded-md shadow-sm 
                 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                name='gender'
-                value={formData.gender}
+                name='status'
+                value={formData.status}
                 onChange={handleChange}
                 defaultValue="">
-                <option value="" disabled>Select your status in dept....</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="" disabled>Select your status...</option>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Cancelled">Cancelled</option>
                 </select>
-                </div>
-
-                <div className="flex flex-col">
-                <label className='text-lg mb-1'>Shift</label>
-                <select className="w-full px-4 py-2 bg-transparent border border-black rounded-md shadow-sm 
-                focus:outline-none focus:ring-2 focus:ring-blue-200"
-                name='shift'
-                value={formData.shift}
-                
-                    onChange={handleChange}
-                defaultValue="">
-                <option value="" disabled>Select your status in dept....</option>
-                <option value="morning">Morning</option>
-                <option value="afternoon">Afternoon</option>
-                <option value="evening">Evening</option>
-                <option value="night">Night</option>
-                </select>
-                </div>
-
-                <div className="flex flex-col">
-                <label className="text-lg mb-1">Joining Date:</label>
-                <input
-                    type="date"
-                    name='joining_date'
-                    value={formData.joining_date}
-                    
-                    onChange={handleChange}
-                    className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"/>
                 </div>
             </div>
-             <button className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700' onClick={()=>{handleform()}}>Submit</button>
+             <button type='submit' className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'
+              onClick={()=>{handleform()}}
+              >Submit</button>
            </form>
           
           </div>

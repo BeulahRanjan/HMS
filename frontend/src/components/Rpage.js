@@ -5,71 +5,71 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Sidebar from './Sidebar';
 
-const appointments = [
-  {
-    id: 1,
-    date: '2025-05-15',
-    time: '10:00 AM',
-    name: 'John Doe',
-    status: 'Confirmed',
-    age: 30,
-    gender: 'Male'
-  },
-  {
-    id: 2,
-    date: '2025-05-15',
-    time: '9:00 AM',
-    name: 'Jane Smith',
-    status: 'Pending',
-    age: 25,
-    gender: 'Female'
-  },
-  {
-    id: 3,
-    date: '2025-05-15',
-    time: '12:00 PM',
-    name: 'Bob Johnson',
-    status: 'Cancelled',
-    age: 40,
-    gender: 'Male'
-  },
-  {
-    id: 4,
-    date: '2025-05-15',
-    time: '01:00 PM',
-    name: 'Alice Brown',
-    status: 'Completed',
-    age: 29,
-    gender: 'Female'
-  },
-  {
-    id: 5,
-    date: '2025-05-15',
-    time: '09:00 PM',
-    name: 'Charlie Davis',
-    status: 'Confirmed',
-    age: 35,
-    gender: 'Male'
-  },
-  {
-    id: 6,
-    date: '2025-05-15',
-    time: '03:00 PM',
-    name: 'Diana Evans',
-    status: 'Pending',
-    age: 28,
-    gender: 'Female'
-  },
-  {
-    id: 7,
-    date: '2025-05-15',
-    time: '04:00 PM',
-    name: 'Ethan Foster',
-    status: 'Cancelled',
-    age: 32,
-    gender: 'Male'
-  }
-];
+// const appointments = [
+//   {
+//     id: 1,
+//     date: '2025-05-15',
+//     time: '10:00 AM',
+//     name: 'John Doe',
+//     status: 'Confirmed',
+//     age: 30,
+//     gender: 'Male'
+//   },
+//   {
+//     id: 2,
+//     date: '2025-05-15',
+//     time: '9:00 AM',
+//     name: 'Jane Smith',
+//     status: 'Pending',
+//     age: 25,
+//     gender: 'Female'
+//   },
+//   {
+//     id: 3,
+//     date: '2025-05-15',
+//     time: '12:00 PM',
+//     name: 'Bob Johnson',
+//     status: 'Cancelled',
+//     age: 40,
+//     gender: 'Male'
+//   },
+//   {
+//     id: 4,
+//     date: '2025-05-15',
+//     time: '01:00 PM',
+//     name: 'Alice Brown',
+//     status: 'Completed',
+//     age: 29,
+//     gender: 'Female'
+//   },
+//   {
+//     id: 5,
+//     date: '2025-05-15',
+//     time: '09:00 PM',
+//     name: 'Charlie Davis',
+//     status: 'Confirmed',
+//     age: 35,
+//     gender: 'Male'
+//   },
+//   {
+//     id: 6,
+//     date: '2025-05-15',
+//     time: '03:00 PM',
+//     name: 'Diana Evans',
+//     status: 'Pending',
+//     age: 28,
+//     gender: 'Female'
+//   },
+//   {
+//     id: 7,
+//     date: '2025-05-15',
+//     time: '04:00 PM',
+//     name: 'Ethan Foster',
+//     status: 'Cancelled',
+//     age: 32,
+//     gender: 'Male'
+//   }
+// ];
 
 const doct = [
   {
@@ -165,15 +165,15 @@ const isTimeInSlot = (time, slot) => {
 };
 
 
-const filteredAppointments = appointments.filter((appt) => {
+// const filteredAppointments = appointments.filter((appt) => {
   
-  const matchesStatus = filters.status ? appt.status === filters.status : true;
+//   const matchesStatus = filters.status ? appt.status === filters.status : true;
 
-  const matchesTime =
-    filters.timeSlot !== '' ? isTimeInSlot(appt.time, filters.timeSlot) : true;
+//   const matchesTime =
+//     filters.timeSlot !== '' ? isTimeInSlot(appt.time, filters.timeSlot) : true;
 
-  return  matchesStatus && matchesTime;
-});
+//   return  matchesStatus && matchesTime;
+// });
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
@@ -194,6 +194,28 @@ const filteredAppointments = appointments.filter((appt) => {
     fetchPatients();
   }, []);
 
+
+
+
+   const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/getAllAppts', {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('authToken')}`,
+          },
+        });
+        console.log(response.data.appointments);
+        setAppointments(response.data.appointments);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
   return (
 
 
@@ -206,9 +228,9 @@ const filteredAppointments = appointments.filter((appt) => {
         <button  className='ml-[150px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
         onClick={()=>{handlePatient()}}  >Add Patient
         </button>
-          <div className="p-4">
-      <h2 className="text-xl ml-[150px] font-bold mb-4">Patient List</h2>
-      <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto  shadow-xl
+        <div className="p-4">
+         <h2 className="text-xl ml-[150px] font-bold mb-4">Patient List</h2>
+         <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto  shadow-xl
           overflow-hidden">
         <thead>
           <tr className="bg-gray-100">
@@ -234,17 +256,51 @@ const filteredAppointments = appointments.filter((appt) => {
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
+         </table>
+         </div>
   
         </div>}
         {currentSection === 'appointments' && 
-        <div>  
-          
-           <button  className='ml-[150px] mt-5 bg-blue-300  w-[100px] rounded-md p-2 hover:bg-blue-400'
-        onClick={()=>{handleAppt()}}  >Add Appointment
-        </button>
-        </div>}
+  <div>  
+    <button
+      className='ml-[150px] mt-5 bg-blue-300 w-[100px] rounded-md p-2 hover:bg-blue-400'
+      onClick={handleAppt}
+    >
+      Add Appointment
+    </button>
+
+    <div className="p-4">
+      <h2 className="text-xl ml-[150px] font-bold mb-4">Appointment List</h2>
+      <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto shadow-xl overflow-hidden">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2">Patient Name</th>
+            <th className="border px-4 py-2">Doctor Name</th>
+            <th className='border px-4 py-2'>Department</th>
+            <th className="border px-4 py-2">Date</th>
+            <th className='border px-4 py-2'>Time</th>
+            <th className="border px-4 py-2">Status</th>
+            <th className='border px-4 py-2'>By</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(appointments) && appointments.map((appt, index) => (
+            <tr key={index}>
+              <td className="border text-center px-4 py-2">{appt.patient.name}</td>
+              <td className="border text-center px-4 py-2">{appt.doctor.name}</td>
+              <td className='border text-center px-4 py-2'>{appt.department.name}</td>
+              <td className="border text-center px-4 py-2">{appt.date}</td>
+              <td className='border text-center px-4 py-2'>{appt.time}</td>
+              <td className="border text-center px-4 py-2">{appt.status}</td>
+              <td className='border text-center px-4 py-2'>{appt.created_by.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
+
         {currentSection === 'doctors' && 
         <div>
           <div className="w-full min-h-screen bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] py-10 px-6 ">

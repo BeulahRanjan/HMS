@@ -12,6 +12,7 @@ import Login from './Login';
 // import Dsec from './components/Dsec';
 // import Docsec from './components/Docsec';
  import Dpage from './components/Dpage';
+import Aform from './components/Aform';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
       <Route path="/nurseform" element={<Nform />} />
       <Route path="/addRecep" element={<Rform/>}/>
       <Route path='/addPatient' element={<Pform/>} />
+      <Route path='/addAppt' element={<Aform/>} />
       {/* <Route path="/" element={<Navbar />} /> */}
       {/* <Route path="/h" element={< Hsec/>}/> */}
       {/* <Route path="/a" element={<Abtus/>} />  */}
