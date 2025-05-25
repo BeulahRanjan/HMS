@@ -8,9 +8,9 @@ const apptSchema = new mongoose.Schema({
   time: { type: String, required: true }, // or use Date if needed
   status: {
     type: String,
-    enum: ['Scheduled', 'Completed', 'Cancelled'],
-    default: 'Scheduled'
+    enum: ['Scheduled', 'Rescheduled', 'Cancelled']
   },
+
   created_by: {
       _id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +20,7 @@ const apptSchema = new mongoose.Schema({
       name: { type: String, required: true }
     }
   
-  }, { timestamps: true })
+  }, { timestamps: true });
 
 const Appointment = mongoose.model("Appointment", apptSchema);
 export default Appointment;

@@ -29,15 +29,18 @@ async function addAppt(req, res) {
     const newAppt = new Appointment({
       patient: patientDoc._id,
       doctor: doctorDoc._id,
-      department: departmentDoc._id,
+      department: departmentDoc._id, 
       date,
       time,
       status,
-      created_by: receptionist._id, // assuming auth middleware sets req.user
+      created_by: {
+                _id: receptionist._id,
+                name: receptionist.name
+            } // assuming auth middleware sets req.user
     });
 
-    await newAppt.save();
-    return res.status(201).json({ message: "Appointment created successfully", appointment: newAppt });
+    const savedappt = await newAppt.save();
+    return res.status(201).json({ message: "Appointment created successfully", newAppt });
 
   } catch (error) {
     console.error("Error in adding appointment:", error);
@@ -82,7 +85,7 @@ async function getAllAppts(req, res) {
         const appointments = await Appointment.find()
               .populate('patient', 'name _id')
               .populate('doctor', 'name _id')
-              .populate('receptionist', 'name _id')
+              .populate('created_by', 'name _id')
               .populate('department', 'name _id');
         return res.status(200).json({ appointments });
     } catch (error) {
