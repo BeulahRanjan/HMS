@@ -5,7 +5,7 @@ import apptController from '../controller/appt.js';
 const router = express.Router();
 
 router.post('/addAppt', auth,apptController.addAppt);
-router.delete('/delAppt', auth , apptController.delAppt);
+router.delete('/delAppt/:id', auth , apptController.delAppt);
 router.get('/getAppt/:id', auth , apptController.getAppt);
 router.get('/getAllAppts', auth , apptController.getAllAppts);
 router.put('/upAppt/:id', auth , apptController.upAppt);

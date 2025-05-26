@@ -44,7 +44,7 @@ async function addPatient(req, res) {
 
 async function delPatient(req, res) {
     try{
-        const patientname = req.params.name;
+        const patientname = req.params.id;
         const pat = await patient.findByIdAndDelete(patientname); 
         if (!pat) {
             return res.status(404).json({ message: "Patient not found" });
