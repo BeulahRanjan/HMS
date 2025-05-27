@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Sidebar from './Sidebar';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 // const appointments = [
 //   {
@@ -149,7 +152,6 @@ function Rpage() {
         navigate("/addAppt");
     }
 
-
 const isTimeInSlot = (time, slot) => {
   const [rawHour, rawMinuteModifier] = time.split(':'); // "04", "00 PM"
   const [minute, modifier] = rawMinuteModifier.split(' ');
@@ -216,6 +218,46 @@ const isTimeInSlot = (time, slot) => {
 
     fetchAppointments();
   }, []);
+
+  const deleteAppointment = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:5000/delAppt/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+      },
+    });
+
+    // Update UI after deletion
+    setAppointments((prevAppointments) =>
+      prevAppointments.filter((appt) => appt._id !== id)
+    );
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    // alert("Failed to delete appointment.");
+  }
+};
+
+  const deletePatient = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:5000/delPatient/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+      },
+    });
+
+    // Update UI after deletion
+    setPatients((prevPatients) =>
+      prevPatients.filter((pat) => pat._id !== id)
+    );
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    // alert("Failed to delete appointment.");
+  }
+};
+
+
+
+
   return (
 
 
@@ -241,6 +283,7 @@ const isTimeInSlot = (time, slot) => {
             <th className='border px-4 py-2'>Address</th>
             <th className="border px-4 py-2">Contact</th>
             <th className='border px-4 py-2'>By</th>
+            <th className='border px-4 py-2'>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -253,6 +296,10 @@ const isTimeInSlot = (time, slot) => {
               <td className='border text-center px-4 py-2'>{pat.address}</td>
               <td className="border text-center px-4 py-2">{pat.phone_no}</td>
               <td className='border text-center px-4 py-2'>{pat.created_by.name}</td>
+              <td className='border gap-2 px-4 py-2 flex flex-row'>
+                      <EditIcon className='cursor-pointer text-blue-100'/>
+                        <DeleteIcon className='cursor-pointer text-blue-100' onClick={() => deletePatient(pat._id)} />
+                    </td>
             </tr>
           ))}
         </tbody>
@@ -261,45 +308,49 @@ const isTimeInSlot = (time, slot) => {
   
         </div>}
         {currentSection === 'appointments' && 
-  <div>  
-    <button
-      className='ml-[150px] mt-5 bg-blue-300 w-[100px] rounded-md p-2 hover:bg-blue-400'
-      onClick={handleAppt}
-    >
-      Add Appointment
-    </button>
-
-    <div className="p-4">
-      <h2 className="text-xl ml-[150px] font-bold mb-4">Appointment List</h2>
-      <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto shadow-xl overflow-hidden">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2">Patient Name</th>
-            <th className="border px-4 py-2">Doctor Name</th>
-            <th className='border px-4 py-2'>Department</th>
-            <th className="border px-4 py-2">Date</th>
-            <th className='border px-4 py-2'>Time</th>
-            <th className="border px-4 py-2">Status</th>
-            <th className='border px-4 py-2'>By</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(appointments) && appointments.map((appt, index) => (
-            <tr key={index}>
-              <td className="border text-center px-4 py-2">{appt.patient.name}</td>
-              <td className="border text-center px-4 py-2">{appt.doctor.name}</td>
-              <td className='border text-center px-4 py-2'>{appt.department.name}</td>
-              <td className="border text-center px-4 py-2">{appt.date}</td>
-              <td className='border text-center px-4 py-2'>{appt.time}</td>
-              <td className="border text-center px-4 py-2">{appt.status}</td>
-              <td className='border text-center px-4 py-2'>{appt.created_by.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-}
+        <div>  
+          <button
+            className='ml-[150px] mt-5 bg-blue-300 w-[100px] rounded-md p-2 hover:bg-blue-400'
+            onClick={handleAppt}
+          >
+            Add Appointment
+          </button>
+          <div className="p-4">
+            <h2 className="text-xl ml-[150px] font-bold mb-4">Appointment List</h2>
+            <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto shadow-xl overflow-hidden">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border px-4 py-2">Patient Name</th>
+                  <th className="border px-4 py-2">Doctor Name</th>
+                  <th className='border px-4 py-2'>Department</th>
+                  <th className="border px-4 py-2">Date</th>
+                  <th className='border px-4 py-2'>Time</th>
+                  <th className="border px-4 py-2">Status</th>
+                  <th className='border px-4 py-2'>By</th>
+                  <th className='border px-4 py-2'>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(appointments) && appointments.map((appt, index) => (
+                  <tr key={index}>
+                    <td className="border text-center px-4 py-2">{appt.patient.name}</td>
+                    <td className="border text-center px-4 py-2">{appt.doctor.name}</td>
+                    <td className='border text-center px-4 py-2'>{appt.department.name}</td>
+                    <td className="border text-center px-4 py-2">{appt.date}</td>
+                    <td className='border text-center px-4 py-2'>{appt.time}</td>
+                    <td className="border text-center px-4 py-2">{appt.status}</td>
+                    <td className='border text-center px-4 py-2'>{appt.created_by.name}</td>
+                    <td className='border gap-2 px-4 py-2 flex flex-row'>
+                      <EditIcon className='cursor-pointer text-blue-100'/>
+                        <DeleteIcon className='cursor-pointer text-blue-100' onClick={() => deleteAppointment(appt._id)} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        }
 
         {currentSection === 'doctors' && 
         <div>

@@ -1,6 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {  useState } from "react";
+// import axios from "axios";
 import Sidebar from './Sidebar';
+
 
 
 const appointments = [
@@ -118,6 +119,9 @@ function updateAppointmentsToInProcess(appointments) {
 
 
 
+
+
+
   return (
     <div className='flex '>
       <Sidebar role={"doctor"} />
@@ -170,38 +174,15 @@ function updateAppointmentsToInProcess(appointments) {
               <th className="px-4 py-2 border border-blue-300 text-center">Sr.No.</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Timing</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Patient Name</th>
-              <th className="px-4 py-2 border border-blue-300 text-center">Age</th>
+              {/* <th className="px-4 py-2 border border-blue-300 text-center">Age</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Gender</th>
-              <th className="px-4 py-2 border border-blue-300 text-center">Phone No.</th>
+              <th className="px-4 py-2 border border-blue-300 text-center">Phone No.</th> */}
               <th className="px-4 py-2 border border-blue-300 text-center">Status of Appointment</th>
             </tr>
           </thead>
-          <tbody>
-          {filteredAppointments.map((appt, index) => (
-            <tr key={appt.id} className="hover:bg-gray-50">
-              <td className="px-4 py-2 border border-blue-300 text-center">{index + 1}</td>
-              <td className="px-4 py-2 border border-blue-300 text-center">{appt.time}</td>
-              <td className="px-4 py-2 border border-blue-300 text-center">{appt.name}</td>
-              <td className="px-4 py-2 border border-blue-300 text-center">{appt.age}</td>
-              <td className="px-4 py-2 border border-blue-300 text-center">{appt.gender}</td>
-              <td className="px-4 py-2 border border-blue-300 text-center">1234567890</td> {/* Replace with real phone number if available */}
-              <td
-                className={`px-4 py-2 border border-blue-300 text-center font-semibold ${
-                  appt.status === 'Confirmed'
-                    ? 'text-green-600'
-                    : appt.status === 'Pending'
-                    ? 'text-yellow-600'
-                    : appt.status === 'Cancelled'
-                    ? 'text-red-600'
-                    : 'text-blue-600'
-                }`}
-              >
-                {appt.status}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+           <tbody>
 
+  </tbody>
         </table>
 
 
