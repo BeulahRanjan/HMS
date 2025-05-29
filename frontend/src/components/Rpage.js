@@ -6,73 +6,10 @@ import Cookies from "js-cookie";
 import Sidebar from './Sidebar';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useParams } from 'react-router-dom';
 
 
-// const appointments = [
-//   {
-//     id: 1,
-//     date: '2025-05-15',
-//     time: '10:00 AM',
-//     name: 'John Doe',
-//     status: 'Confirmed',
-//     age: 30,
-//     gender: 'Male'
-//   },
-//   {
-//     id: 2,
-//     date: '2025-05-15',
-//     time: '9:00 AM',
-//     name: 'Jane Smith',
-//     status: 'Pending',
-//     age: 25,
-//     gender: 'Female'
-//   },
-//   {
-//     id: 3,
-//     date: '2025-05-15',
-//     time: '12:00 PM',
-//     name: 'Bob Johnson',
-//     status: 'Cancelled',
-//     age: 40,
-//     gender: 'Male'
-//   },
-//   {
-//     id: 4,
-//     date: '2025-05-15',
-//     time: '01:00 PM',
-//     name: 'Alice Brown',
-//     status: 'Completed',
-//     age: 29,
-//     gender: 'Female'
-//   },
-//   {
-//     id: 5,
-//     date: '2025-05-15',
-//     time: '09:00 PM',
-//     name: 'Charlie Davis',
-//     status: 'Confirmed',
-//     age: 35,
-//     gender: 'Male'
-//   },
-//   {
-//     id: 6,
-//     date: '2025-05-15',
-//     time: '03:00 PM',
-//     name: 'Diana Evans',
-//     status: 'Pending',
-//     age: 28,
-//     gender: 'Female'
-//   },
-//   {
-//     id: 7,
-//     date: '2025-05-15',
-//     time: '04:00 PM',
-//     name: 'Ethan Foster',
-//     status: 'Cancelled',
-//     age: 32,
-//     gender: 'Male'
-//   }
-// ];
+
 
 const doct = [
   {
@@ -255,7 +192,34 @@ const isTimeInSlot = (time, slot) => {
   }
 };
 
+ const { id } = useParams();
+  const [formData, setFormData] = useState({
+    patient: '',
+    doctor: '',
+    // ... other fields
+  });
 
+  useEffect(() => {
+    if (id) {
+      const fetchAppointment = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5000/getAppt/${id}`, {
+            headers: {
+              Authorization: `Bearer ${Cookies.get('authToken')}`,
+            },
+           
+          });
+           console.log(response.data);
+           setFormData(response.data.newAppt); // ✅ This sets the actual appointment data correctly
+
+        } catch (error) {
+          console.error('Error fetching appointment:', error);
+        }
+      };
+
+      fetchAppointment();
+    }
+  }, [id]);
 
 
   return (
@@ -307,6 +271,7 @@ const isTimeInSlot = (time, slot) => {
          </div>
   
         </div>}
+
         {currentSection === 'appointments' && 
         <div>  
           <button
@@ -341,7 +306,7 @@ const isTimeInSlot = (time, slot) => {
                     <td className="border text-center px-4 py-2">{appt.status}</td>
                     <td className='border text-center px-4 py-2'>{appt.created_by.name}</td>
                     <td className='border gap-2 px-4 py-2 flex flex-row'>
-                      <EditIcon className='cursor-pointer text-blue-100'/>
+                      <EditIcon className='cursor-pointer text-blue-100' onClick={() => navigate(`/addAppt/${appt._id}`)}/>
                         <DeleteIcon className='cursor-pointer text-blue-100' onClick={() => deleteAppointment(appt._id)} />
                     </td>
                   </tr>
@@ -380,11 +345,13 @@ const isTimeInSlot = (time, slot) => {
       </div>
           </div>
         </div>}
+
         {currentSection === 'profile' && <div >Hello, I'm back!!!</div>}
       </div>
     </div>
 
   )
 }
+
 
 export default Rpage;

@@ -31,7 +31,8 @@ function App() {
       <Route path="/nurseform" element={<Nform />} />
       <Route path="/addRecep" element={<Rform/>}/>
       <Route path='/addPatient' element={<Pform/>} />
-      <Route path='/addAppt' element={<Aform/>} />
+      <Route path='/addAppt/:id' element={<Aform />} />
+
       {/* <Route path="/" element={<Navbar />} /> */}
       {/* <Route path="/h" element={< Hsec/>}/> */}
       {/* <Route path="/a" element={<Abtus/>} />  */}
