@@ -79,7 +79,7 @@ function Rpage() {
   status: '',
   timeSlot: '', // new field
 });
- const navigate =useNavigate();
+    const navigate =useNavigate();
 
         const handlePatient=()=>{
         navigate("/addPatient");
@@ -192,35 +192,25 @@ const isTimeInSlot = (time, slot) => {
   }
 };
 
- const { id } = useParams();
-  const [formData, setFormData] = useState({
-    patient: '',
-    doctor: '',
-    // ... other fields
-  });
 
-  useEffect(() => {
-    if (id) {
-      const fetchAppointment = async () => {
-        try {
-          const response = await axios.get(`http://localhost:5000/getAppt/${id}`, {
-            headers: {
-              Authorization: `Bearer ${Cookies.get('authToken')}`,
-            },
-           
-          });
-           console.log(response.data);
-           setFormData(response.data.newAppt); // ✅ This sets the actual appointment data correctly
+const fetchAppointment = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/getAppt/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+      },
+    });
 
-        } catch (error) {
-          console.error('Error fetching appointment:', error);
-        }
-      };
+    const appt = response.data.appointment;
+    console.log(appt);
+    // ✅ Navigate and pass appointment data via state
+    navigate('/addAppt', { state: { appt } });
 
-      fetchAppointment();
-    }
-  }, [id]);
-
+  } catch (error) {
+    console.error('Error fetching appointment:', error);
+  }
+};
+ 
 
   return (
 
@@ -228,15 +218,19 @@ const isTimeInSlot = (time, slot) => {
         <div className="flex">
       <Sidebar onNavigate={setCurrentSection} />
       <div className="ml-[100px] p-6 w-full">
-        {currentSection === 'dashboard' && <div>Welcome to Dashboard</div>}
+        {currentSection === 'Profile' && <div>Welcome to HopeCare</div>}
         {currentSection === 'patients' && 
         <div> 
-        <button  className='ml-[150px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
+       
+        <div className="p-4">
+          <div className='flex justify-between items-center'>
+            <h2 className="text-xl ml-[150px] font-bold mb-4">Patient List</h2>
+             <button  className='mr-[170px] mt-[-20px] bg-blue-300  w-[100px] rounded-md p-2 hover:bg-blue-400'
         onClick={()=>{handlePatient()}}  >Add Patient
         </button>
-        <div className="p-4">
-         <h2 className="text-xl ml-[150px] font-bold mb-4">Patient List</h2>
-         <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto  shadow-xl
+          </div>
+
+         <table className="ml-[100px] mx-10 mt-0 w-[1100px] table-auto  shadow-xl
           overflow-hidden">
         <thead>
           <tr className="bg-gray-100">
@@ -261,8 +255,8 @@ const isTimeInSlot = (time, slot) => {
               <td className="border text-center px-4 py-2">{pat.phone_no}</td>
               <td className='border text-center px-4 py-2'>{pat.created_by.name}</td>
               <td className='border gap-2 px-4 py-2 flex flex-row'>
-                      <EditIcon className='cursor-pointer text-blue-100'/>
-                        <DeleteIcon className='cursor-pointer text-blue-100' onClick={() => deletePatient(pat._id)} />
+                      <EditIcon className='cursor-pointer text-blue-200'/>
+                        <DeleteIcon className='cursor-pointer text-blue-200' onClick={() => deletePatient(pat._id)} />
                     </td>
             </tr>
           ))}
@@ -274,15 +268,17 @@ const isTimeInSlot = (time, slot) => {
 
         {currentSection === 'appointments' && 
         <div>  
-          <button
-            className='ml-[150px] mt-5 bg-blue-300 w-[100px] rounded-md p-2 hover:bg-blue-400'
+          <div className="p-4">
+            <div className="flex justify-between items-center"> 
+            <h2 className="text-xl ml-[150px] font-bold mb-4">Appointment List</h2>
+               <button
+            className='mr-[170px] mt-[-20px] bg-blue-300 w-[150px] rounded-md p-2 hover:bg-blue-400'
             onClick={handleAppt}
           >
             Add Appointment
           </button>
-          <div className="p-4">
-            <h2 className="text-xl ml-[150px] font-bold mb-4">Appointment List</h2>
-            <table className="ml-[100px] mx-10 mt-10 w-[1100px] table-auto shadow-xl overflow-hidden">
+          </div>
+            <table className="ml-[100px] mx-10 mt-0 w-[1100px] table-auto shadow-xl overflow-hidden">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="border px-4 py-2">Patient Name</th>
@@ -306,8 +302,8 @@ const isTimeInSlot = (time, slot) => {
                     <td className="border text-center px-4 py-2">{appt.status}</td>
                     <td className='border text-center px-4 py-2'>{appt.created_by.name}</td>
                     <td className='border gap-2 px-4 py-2 flex flex-row'>
-                      <EditIcon className='cursor-pointer text-blue-100' onClick={() => navigate(`/addAppt/${appt._id}`)}/>
-                        <DeleteIcon className='cursor-pointer text-blue-100' onClick={() => deleteAppointment(appt._id)} />
+                      <EditIcon className='cursor-pointer text-blue-200' onClick={() => {fetchAppointment(appt._id)}}/>
+                        <DeleteIcon className='cursor-pointer text-blue-200' onClick={() => deleteAppointment(appt._id)} />
                     </td>
                   </tr>
                 ))}
@@ -346,7 +342,7 @@ const isTimeInSlot = (time, slot) => {
           </div>
         </div>}
 
-        {currentSection === 'profile' && <div >Hello, I'm back!!!</div>}
+        {/* {currentSection === 'profile' && <div >Hello, I'm back!!!</div>} */}
       </div>
     </div>
 

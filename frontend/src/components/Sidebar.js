@@ -15,11 +15,11 @@ const Sidebar = ({ onNavigate, role }) => {
   ];
 
   const recepItems = [
-    { label: 'Dashboard', value: 'dashboard', icon: '📊' },
+    { label: 'Profile', value: 'Profile', icon: '📊' },
     { label: 'Patients', value: 'patients', icon: '🧾' },
     { label: 'Appointments', value: 'appointments', icon: '📅' },
     { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' },
-    { label: 'Profile', value: 'profile', icon:'🧑‍⚕️ ' }
+    // { label: 'Profile', value: 'profile', icon:'🧑‍⚕️ ' }
   ];
 
   const links = role === "doctor" ? docItems : recepItems;
