@@ -85,7 +85,7 @@ async function getDeptByName(req,res) {
         if(!dept){
             return res.status(404).json({message:"Department not found"});
         }
-        return res.status(200).json(dept);
+        return res.status(200).json({department:dept});
     }
     catch(error){
         console.log("Error in getting department by name:", error);

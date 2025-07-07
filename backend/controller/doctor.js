@@ -76,6 +76,21 @@ async function getDoctor(req,res) {
         return res.status(500).json({message:"Error in getting doctor"});
     }
 }
+async function getDocByName(req,res) {
+    try{
+        const docName = req.params.name;
+        const doc = await Doctor.findOne({ name: docName }).populate('department', 'name');
+        if (!doc) {
+            return res.status(404).json({ message: "Doctor not found" });
+        }
+        return res.status(200).json({ doctor:doc });
+    }
+    catch (error) {
+        console.log("Error in getting doctor:", error);
+        return res.status(500).json({ message: "Error in getting doctor" });
+    }
+}
+       
 
 async function getAllDoctors(req,res) {
     try{
@@ -142,6 +157,7 @@ const docController = {
     addDoctor: addDoctor,
     getAllDoctors: getAllDoctors,
     getDoctor: getDoctor,
+    getDocByName: getDocByName,
      upDoctor: upDoctor,
     delDoctor: delDoctor,
     getdeptDoc: getdeptDoc

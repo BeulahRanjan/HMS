@@ -60,11 +60,11 @@ async function delPatient(req, res) {
 async function getPatByName(req,res) {
     try{
         const patName = req.params.name;
-        const pat = await patient.find({ name: patName }).populate('created_by', 'name _id'); 
+        const pat = await patient.findOne({ name: patName }).populate('created_by', 'name _id'); 
         if (!pat) {
             return res.status(404).json({ message: "Patient not found" });
         }
-        return res.status(200).json({ pat });
+        return res.status(200).json({ patient:pat });
     }
     catch (error) {
         console.log("Error in getting patient:", error);
