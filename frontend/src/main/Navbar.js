@@ -31,7 +31,15 @@ function Navbar() {
     if(val === 'doctor')
       navigate('/doctor');
     else
-    navigate('/recep');
+      // if(val === 'nurse')
+      //   navigate('/recep');
+      // else
+        if(val === 'receptionist')
+          navigate('/recep');
+        else
+          if(val === 'admin')
+            navigate('/admin');
+          
   };
 
   const handleLogout = () => {
@@ -61,6 +69,7 @@ function Navbar() {
           }}
         >
           {hasSubmitted ? 'My Profile' : 'Sign in'}
+        
 
           {showDropdown && (
             <ul

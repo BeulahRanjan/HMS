@@ -2,8 +2,8 @@ import React from 'react'
 
 function Abtus() {
   return (
-    <div className="w-full py-5 opacity-80 -mt-16 z-10 relative">
-    <div className=" h-[700px] w-full py-5 z-10">
+    <div className="w-full py-5 opacity-80 -mt-9 z-10 relative ">
+    <div className=" h-[700px] w-full py-5 z-10 bg-gradient-to-b from-white  to-[#cae2ef]">
     
       <p className="text-center font-bold text-3xl mt-[70px]">About Us</p>
       <div className=' pb-10 pr-10 pl-10 flex flex-row items-center rounded-2xl  ml-[160px] mr-10 mt-10 w-4/5 gap-5 '>

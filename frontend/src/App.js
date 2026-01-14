@@ -55,6 +55,7 @@ function App() {
        {/* <Route path="/d" element={<Docsec/>} /> */}
        <Route path='/doctor' element={< Dpage/>} />
        <Route path='/recep' element={<Rpage/>}/>
+      
       </Routes>
     </Router>
   );

@@ -2,14 +2,14 @@ import React from 'react'
 
 function Dsec() {
   return (
-    <div className='bg-gradient-to-b from-white  to-[#e3f0f7]  h-[550px]'>
+    <div className='bg-gradient-to-b from-[#e9f3f8] to-white  h-[550px]'>
         <div className='font-bold text-3xl text-center pt-7 '>Our Departments</div>
         <p className='text-center mt-7 font-semibold text-xl'>Explore our departments below and discover how HopeCare is committed to healing with 
             excellence and heart.</p>
     <div className="flex flex-col  gap-y-[20px] mt-10 items-center">
         <div className='flex flex-row gap-x-[100px]'>
 
-
+ 
         <div className='flex flex-col '>
         <div className='border-2 border-blue-300 p-2 rounded-[50px]  shadow-xl '>
         <img src="/icons/heart-organ.svg" alt="Cardiology" className="w-14 h-14 " />

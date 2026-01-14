@@ -117,35 +117,53 @@ function Docsec() {
     ],
   };
 
-  return (
-    <div className="w-full h-[600px] bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] rounded-lg">
+  //bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa]
+  return ( 
+    <div className="w-full h-[550px]  bg-gradient-to-b from-white  to-[#cae2ef]  bg-white/20 backdrop-blur-xl rounded-lg">
       <p className="text-3xl font-bold text-center pt-10 pb-5"> Our Doctors</p>
     <div className="relative ">
       <Slider {...settings}>
         {doct.map((doc, index) => (
           <div key={index} className="p-4">
-            <div className="w-[270px] h-[430px] bg-blue-200 rounded-lg flex flex-col gap-x-5 text-center p-4 shadow-md 
-            hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
-              <img
-                src={doc.img}
-                alt={doc.name}
-                className="w-[240px] h-[180px] mb-4 rounded-lg hover:shadow-2xl hover:scale-105 transition-shadow duration-300"
-              />
-              <h2 className="text-xl font-bold text-center mb-1">{doc.name}</h2>
-              <p className="text-lg  font-semibold mb-2">{doc.dept}</p>
-                <p className="text-sm mb-1"><strong>Experience:</strong> {doc.experience}</p>
-                <p className="text-sm mb-2">
-                  <strong>Rating:</strong> {doc.rating} ⭐
-                </p>
-              <p className="text-sm text-justify overflow-y-auto px-2 scrollbar-thin 
-              scrollbar-thumb-blue-200 scrollbar-track-blue-100">
-                {doc.desc} <a href="/" className="text-blue-700">Read More</a>
-              </p>
-            </div>
-          </div>
+  <div className="w-[270px] h-[400px] bg-white/20 backdrop-blur-md rounded-2xl flex flex-col text-center p-4 
+    shadow-lg border border-white/30 hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
+    
+    <img
+      src={doc.img}
+      alt={doc.name}
+      className="w-[220px] h-[150px] object-cover mx-auto mb-4 rounded-xl shadow-md 
+        transition-transform duration-300 hover:scale-105"
+    />
+    
+    <h2 className="text-xl font-bold text-black mb-1">{doc.name}</h2>
+    <p className="text-blue-500 font-semibold text-md mb-1">{doc.dept}</p>
+    
+    <div className="text-sm text-black-100 mb-1">
+      <strong className="font-medium text-black">Experience:</strong> {doc.experience}
+    </div>
+
+    <div className="text-sm text-black-100 mb-2">
+      <strong className="font-medium text-black">Rating:</strong> {doc.rating} <span className="text-yellow-400">★</span>
+    </div>
+    
+    <p className="text-sm text-black/90 text-justify overflow-y-auto px-2 scrollbar-thin 
+      scrollbar-thumb-blue-600 scrollbar-track-blue-100 h-[100px] rounded-md">
+      {doc.desc} <a href="/" className="text-blue-600 font-medium hover:underline">Read More</a>
+    </p>
+  </div>
+</div>
+
         ))}
       </Slider>
     </div>
+
+
+  
+ 
+
+
+
+
     </div>
   );
 }

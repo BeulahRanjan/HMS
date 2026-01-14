@@ -1,130 +1,169 @@
-import React, {  useState } from "react";
-// import axios from "axios";
-import Sidebar from './Sidebar';
-
-
-
-const appointments = [
-  {
-    id: 1,
-    date: '2025-05-15',
-    time: '10:00 AM',
-    name: 'John Doe',
-    status: 'Confirmed',
-    age: 30,
-    gender: 'Male'
-  },
-  {
-    id: 2,
-    date: '2025-05-15',
-    time: '9:00 AM',
-    name: 'Jane Smith',
-    status: 'Pending',
-    age: 25,
-    gender: 'Female'
-  },
-  {
-    id: 3,
-    date: '2025-05-15',
-    time: '12:00 PM',
-    name: 'Bob Johnson',
-    status: 'Cancelled',
-    age: 40,
-    gender: 'Male'
-  },
-  {
-    id: 4,
-    date: '2025-05-15',
-    time: '01:00 PM',
-    name: 'Alice Brown',
-    status: 'Completed',
-    age: 29,
-    gender: 'Female'
-  },
-  {
-    id: 5,
-    date: '2025-05-15',
-    time: '09:00 PM',
-    name: 'Charlie Davis',
-    status: 'Confirmed',
-    age: 35,
-    gender: 'Male'
-  },
-  {
-    id: 6,
-    date: '2025-05-15',
-    time: '03:00 PM',
-    name: 'Diana Evans',
-    status: 'Pending',
-    age: 28,
-    gender: 'Female'
-  },
-  {
-    id: 7,
-    date: '2025-05-15',
-    time: '04:00 PM',
-    name: 'Ethan Foster',
-    status: 'Cancelled',
-    age: 32,
-    gender: 'Male'
-  }
-];
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Sidebar from "./Sidebar";
+import Cookies from "js-cookie";
 
 function Dpage() {
+  const navigate = useNavigate();
 
-    const [filters, setFilters] = useState({
-  status: '',
-  timeSlot: '', // new field
-});
+  const [appointments, setAppointments] = useState([]);
+  const [doctorProfile, setDoctorProfile] = useState(null);
+  const [currentSection, setCurrentSection] = useState("dashboard");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
-const isTimeInSlot = (time, slot) => {
-  const [hour, modifier] = time.split(/[: ]/);
-  let h = parseInt(hour);
-  if (modifier === 'PM' && h !== 12) h += 12;
-  if (modifier === 'AM' && h === 12) h = 0;
+  const [filters, setFilters] = useState({
+    status: "",
+    timeSlot: "",
+  });
 
-  if (slot === 'morning') return h >= 8 && h < 12;
-  if (slot === 'afternoon') return h >= 12 && h < 16;
-  if (slot === 'evening') return h >= 16 && h < 20;
-  if (slot === 'night') return h>=20 && h <=24;
-  return true;
+  //console.log(doctorProfile.profileImage);
+  /* ================================
+     FETCH LOGGED-IN DOCTOR PROFILE
+  ================================= */
+  const loadDoctorProfile = async () => {
+    try {
+      const token = Cookies.get("authToken");
+
+      const res = await axios.get("http://localhost:5000/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setDoctorProfile(res.data.doctor);
+      console.log("Doctor Profile:", res.data.doctor);
+      
+      
+      
+    } catch (error) {
+      console.error("Error loading doctor profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadDoctorProfile();
+  }, []);
+
+  /* ================================
+     IMAGE UPLOAD LOGIC
+  ================================= */
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+const uploadProfileImage = async () => {
+  
+  if (!selectedImage) return;
+
+  try {
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("profileImage", selectedImage);
+
+    const res = await axios.put(
+      "http://localhost:5000/upload-profile-image",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
+      }
+    );
+
+    const { imagePath } = res.data;
+    // 🔥 Update UI instantly
+    setDoctorProfile((prev) => ({
+      ...prev,
+      profileImage: imagePath,
+    }));
+
+    setSelectedImage(null);
+    setPreview(null);
+  } catch (error) {
+    console.error("Image upload failed:", error);
+  } finally {
+    setUploading(false);
+  }
 };
 
+  /* ================================
+     CLEAN UP PREVIEW MEMORY
+  ================================= */
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
+  /* ================================
+     NAVIGATE TO EDIT PAGE
+  ================================= */
+  const goToEditDoctor = async (id) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/getDoctor/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+        }
+      );
 
-  const filteredAppointments = appointments.filter((appt) => {
-  const matchesDate = filters.date ? appt.date === filters.date : true;
-  const matchesStatus = filters.status ? appt.status === filters.status : true;
-  const matchesName = filters.patientName
-    ? appt.name.toLowerCase().includes(filters.patientName.toLowerCase())
-    : true;
-  const matchesTime =
-    filters.timeSlot !== '' ? isTimeInSlot(appt.time, filters.timeSlot) : true;
-
-  return matchesStatus &&  matchesTime;
-});
-
-function updateAppointmentsToInProcess(appointments) {
-  const now = new Date();
-  const currentTime = now.toTimeString().slice(0, 5); // Format: "HH:MM"
-
-  return appointments.map((appt) => {
-    // Assuming appt.time is also in "HH:MM" format
-    if (appt.status === "Pending" && appt.time === currentTime) {
-      return { ...appt, status: "In Process" };
+      navigate("/addDoctor", {
+        state: { doctorProfile: res.data.doctor },
+      });
+    } catch (error) {
+      console.error("Error opening edit page:", error);
     }
-    return appt;
-  });
-}
+  };
+
+  /* ================================
+     TIME SLOT FILTER
+  ================================= */
+  const isTimeInSlot = (time, slot) => {
+    if (!time || !slot) return true;
+
+    const [timePart, modifier] = time.split(" ");
+    let hour = parseInt(timePart.split(":")[0], 10);
+
+    if (modifier === "PM" && hour !== 12) hour += 12;
+    if (modifier === "AM" && hour === 12) hour = 0;
+
+    if (slot === "morning") return hour >= 8 && hour < 12;
+    if (slot === "afternoon") return hour >= 12 && hour < 16;
+    if (slot === "evening") return hour >= 16 && hour < 20;
+    if (slot === "night") return hour >= 20;
+
+    return true;
+  };
+
+  const filteredAppointments = appointments.filter(
+    (appt) =>
+      (!filters.status || appt.status === filters.status) &&
+      (!filters.timeSlot || isTimeInSlot(appt.time, filters.timeSlot))
+  );
 
 
+  const hasProfileImage =
+  doctorProfile?.profileImage &&
+  doctorProfile.profileImage !== "null" &&
+  doctorProfile.profileImage !== "undefined";
 
 
 
 
   return (
-    <div className='flex '>
-      <Sidebar role={"doctor"} />
+    <div className='flex overflow-x-hidden'>
+    <Sidebar onNavigate={setCurrentSection} role={"doctor"}/>
+    {currentSection === 'appointments' &&
       <div className='flex flex-col'>
         <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
           <div className='flex flex-row gap-3'>
@@ -160,7 +199,7 @@ function updateAppointmentsToInProcess(appointments) {
         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
         className="border border-blue-300 px-3 py-2 rounded-md ml-4 bg-transparent">
         <option value="">All Status</option>
-        <option value="Confirmed">Confirmed</option>
+        <option value="Scheduled">Scheduled</option>
         <option value="Pending">Pending</option>
         <option value="Cancelled">Cancelled</option>
         <option value="Completed">Completed</option>
@@ -174,21 +213,207 @@ function updateAppointmentsToInProcess(appointments) {
               <th className="px-4 py-2 border border-blue-300 text-center">Sr.No.</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Timing</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Patient Name</th>
-              {/* <th className="px-4 py-2 border border-blue-300 text-center">Age</th>
+              <th className="px-4 py-2 border border-blue-300 text-center">Age</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Gender</th>
-              <th className="px-4 py-2 border border-blue-300 text-center">Phone No.</th> */}
+              {/* <th className="px-4 py-2 border border-blue-300 text-center">Phone No.</th> */}
               <th className="px-4 py-2 border border-blue-300 text-center">Status of Appointment</th>
             </tr>
           </thead>
-           <tbody>
+          <tbody>
+  {filteredAppointments.length === 0 ? (
+    <tr>
+      <td colSpan="4" className="text-center py-4">
+        No appointments found
+      </td>
+    </tr>
+  ) : (
+    filteredAppointments.map((appt, index) => (
+      <tr key={appt._id}>
+        <td className="border px-4 py-2 text-center">
+          {index + 1}
+        </td>
+        <td className="border px-4 py-2 text-center">
+          {appt.time}
+        </td>
+        <td className="border px-4 py-2 text-center">
+          {appt.patient?.name}
+        </td>
+              <td className="border px-4 py-2 text-center">
+          {appt.patient?.age}
+        </td>
+                <td className="border px-4 py-2 text-center">
+          {appt.patient?.gender}
+        </td>
+        <td className="border px-4 py-2 text-center">
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-semibold
+              ${
+                appt.status === "Scheduled"
+                  ? "text-yellow-800"
+                  : appt.status === "Completed"
+                  ? "text-green-800"
+                  : appt.status === "Cancelled"
+                  ? "text-red-800"
+                  : "text-gray-800"
+              }`}
+          >
+            {appt.status}
+          </span>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
 
-  </tbody>
+
         </table>
 
 
           </div>
         </div>
+      
+      
+      </div>}
+
+ <div className="ml-[100px] p-6 w-full">
+  {currentSection === 'profile' && 
+      <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex flex-col">
+  {/* Top Nav */}
+  <header className="h-16 bg-blue-700 text-white flex items-center justify-between px-6 shadow-md">
+    <h1 className="text-2xl font-bold">HopeCare</h1>
+    <span className="text-lg">Doctor Dashboard</span>
+  </header>
+    
+  <main className="flex-1 p-6 flex justify-center">
+    {doctorProfile && (
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 space-y-8">
+         {!hasProfileImage && (
+    <div className="mb-4 p-3 rounded-lg bg-yellow-100 border border-yellow-400 text-yellow-800 text-center">
+      ⚠️ Please upload a profile image in formal doctor attire.
+    </div>
+  )}
+        
+        {/* Profile Header */}
+        <div className="flex flex-col md:flex-row items-center gap-6 relative">
+     
+  
+  {/* Profile Image */}
+  <div className="relative">
+    <img
+      src={
+    preview
+      ? preview
+      : doctorProfile?.profileImage
+      ? `http://localhost:5000${doctorProfile.profileImage}?t=${Date.now()}`
+      : "/default-doctor.png"
+  }
+      
+      alt="Doctor Avatar"
+      className="w-28 h-28 rounded-full border-4 border-blue-200 shadow object-cover"
+    />
+
+
+
+
+    {/* Edit Icon */}
+    <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
+      ✏️
+      <input
+  type="file"
+  accept="image/*"
+  className="hidden"
+  onChange={handleImageChange}
+/>
+
+    </label>
+  </div>
+
+  {/* Doctor Info */}
+  <div className="text-center md:text-left">
+    <h2 className="text-3xl font-bold text-gray-800">
+      {doctorProfile.name}
+    </h2>
+
+    <p className="text-blue-600 font-medium text-lg">
+      {doctorProfile.specialization}
+    </p>
+
+    <span
+      className={`inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold
+        ${
+          doctorProfile.status === "Active"
+            ? "bg-green-100 text-green-700"
+            : "bg-yellow-100 text-yellow-700"
+        }`}
+    >
+      {doctorProfile.status}
+    </span>
+
+    {/* 🔥 Upload Button (only when image selected) */}
+    {selectedImage && (
+      <div className="mt-3">
+        <button
+          onClick={uploadProfileImage}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+        >
+          Save Photo
+        </button>
       </div>
+    )}
+  </div>
+</div>
+
+
+        {/* Info Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* Personal Info */}
+          <div className="bg-blue-50 rounded-xl p-5 shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-4 text-lg">
+              🧍 Personal Information
+            </h3>
+
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Email:</strong> {doctorProfile.email}</p>
+              <p><strong>Phone:</strong> {doctorProfile.phone_no}</p>
+              <p><strong>Gender:</strong> {doctorProfile.gender}</p>
+              <p><strong>Date of Birth:</strong> {doctorProfile.dob}</p>
+            </div>
+          </div>
+
+          {/* Professional Info */}
+          <div className="bg-blue-50 rounded-xl p-5 shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-4 text-lg">
+              🏥 Professional Information
+            </h3>
+
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Department:</strong> {doctorProfile.department?.name}</p>
+              <p><strong>Experience:</strong> {doctorProfile.experience} years</p>
+              <p><strong>Shift:</strong> {doctorProfile.shift}</p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Actions (optional) */}
+        <div className="flex justify-end">
+          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition" 
+           onClick={() => {goToEditDoctor(doctorProfile._id)}}>
+            Edit Profile 
+          </button>
+        </div>
+      </div>
+    )}
+  </main>
+</div>
+
+}
+ </div>
+        
+        
+
+      
     </div>
   )
 }

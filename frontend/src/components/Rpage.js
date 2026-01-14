@@ -218,7 +218,78 @@ const fetchAppointment = async (id) => {
         <div className="flex">
       <Sidebar onNavigate={setCurrentSection} />
       <div className="ml-[100px] p-6 w-full">
-        {currentSection === 'Profile' && <div>Welcome to HopeCare</div>}
+        {currentSection === 'Profile' && 
+        <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex flex-col">
+  {/* Top Nav */}
+  <header className="h-16 bg-blue-700 text-white flex items-center justify-between px-6 shadow-md">
+    <h1 className="text-2xl font-bold">HopeCare</h1>
+    <span className="text-lg">Receptionist Dashboard</span>
+  </header>
+
+  <div className="flex flex-1 overflow-hidden">
+    {/* Sidebar */}
+
+    {/* Main Content */}
+    <main className="flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+        {/* Profile Header */}
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-between">
+          <div className="flex items-center gap-6">
+            <img
+              src="/avatar.jpg"
+              alt="Receptionist Avatar"
+              className="w-24 h-24 rounded-full shadow"
+            />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800">Asha Verma</h2>
+              <p className="text-blue-600 font-medium">Receptionist</p>
+              <p className="text-green-600">🟢 Active</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Info Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Personal Info */}
+          <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-2">📍 Personal Info</h3>
+            <p><strong>Phone:</strong> +91-9876543210</p>
+            <p><strong>Email:</strong> asha@hopecare.com</p>
+            <p><strong>Address:</strong> Bhubaneswar, Odisha</p>
+            <p><strong>Date of Birth:</strong> 20 Aug 1990</p>
+          </div>
+
+          {/* Professional Info */}
+          <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-2">🏥 Professional Info</h3>
+            <p><strong>Employee ID:</strong> HC-RECEP-0012</p>
+            <p><strong>Department:</strong> Front Desk / OPD</p>
+            <p><strong>Shift:</strong> 9:00 AM – 5:00 PM</p>
+            <p><strong>Date Joined:</strong> 15 Jan 2023</p>
+          </div>
+
+          {/* System Access */}
+          <div className="bg-blue-50 p-4 rounded-lg shadow-inner col-span-1 md:col-span-2">
+            <h3 className="font-semibold text-gray-700 mb-2">🔐 System Access</h3>
+            <p><strong>Username:</strong> asha.verma</p>
+            <p><strong>Last Login:</strong> 01 Aug 2025, 10:34 AM</p>
+            <p><strong>Permissions:</strong> Book/Edit Appointments, Manage Patients</p>
+          </div>
+        </div>
+
+        {/* Optional: Recent Activity */}
+        <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
+          <h3 className="font-semibold text-gray-700 mb-2">🕒 Recent Activity</h3>
+          <ul className="list-disc pl-5 text-sm">
+            <li>Booked appointment for Mr. Ravi (10:00 AM)</li>
+            <li>Registered new patient: Ms. Neha</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+}
         {currentSection === 'patients' && 
         <div> 
        

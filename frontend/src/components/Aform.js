@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 function Aform() {
   const location = useLocation(); // <-- add this line
   const passedAppt = location.state?.appt;
-  const [isEditMode, setIsEditMode] = useState(true);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [appointmentId, setAppointmentId] = useState(null);
   const navigate = useNavigate();
   const[formData, setFormData]=useState({
@@ -32,23 +32,23 @@ function Aform() {
 
 
 
-useEffect(() => {
-  if (passedAppt) {
-    setIsEditMode(true);
-    setAppointmentId(passedAppt._id);
-    setFormData({
-       patient: passedAppt.patient?._id || '',
-        patientName: passedAppt.patient?.name || '',
-        doctor: passedAppt.doctor?._id || '',
-        doctorName: passedAppt.doctor?.name || '',
-        department: passedAppt.department?._id || '',
-        departmentName: passedAppt.department?.name || '',
-      date: passedAppt.date?.slice(0, 10) || '',
-      time: passedAppt.time || '',
-      status: passedAppt.status || '',
-    });
-  }
-}, [passedAppt]);
+// useEffect(() => {
+//   if (passedAppt) {
+//     setIsEditMode(true);
+//     setAppointmentId(passedAppt._id);
+//     setFormData({
+//        patient: passedAppt.patient?._id || '',
+//         patientName: passedAppt.patient?.name || '',
+//         doctor: passedAppt.doctor?._id || '',
+//         doctorName: passedAppt.doctor?.name || '',
+//         department: passedAppt.department?._id || '',
+//         departmentName: passedAppt.department?.name || '',
+//       date: passedAppt.date?.slice(0, 10) || '',
+//       time: passedAppt.time || '',
+//       status: passedAppt.status || '',
+//     });
+//   }
+// }, [passedAppt]);
 
 
 
@@ -92,6 +92,29 @@ useEffect(() => {
 //   }
 // };
 
+useEffect(() => {
+  if (passedAppt) {
+    setIsEditMode(true);
+    setAppointmentId(passedAppt._id);
+
+    setFormData({
+      patient: passedAppt.patient?._id,
+      doctor: passedAppt.doctor?._id,
+      department: passedAppt.department?._id,
+
+      patientName: passedAppt.patient?.name || "",
+      doctorName: passedAppt.doctor?.name || "",
+      departmentName: passedAppt.department?.name || "",
+
+      date: passedAppt.date?.slice(0, 10),
+      time: passedAppt.time,
+      status: passedAppt.status,
+    });
+  }
+}, [passedAppt]);
+
+console.log(isEditMode);
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -113,8 +136,12 @@ const handleSubmit = async (e) => {
     const patientId = patientRes.data?.patient?._id;
     const doctorId = doctorRes.data?.doctor?._id;
     const departmentId = deptRes.data?.department?._id;
+    console.log(patientRes.data);
+    console.log("Patient ID:", patientId);
     console.log(doctorRes.data);
     console.log("Doctor ID:", doctorId);
+    console.log(deptRes.data);
+    console.log("Department ID:", departmentId);
 
     if (!patientId) {
       toast.error("One or more entities not found");
@@ -148,6 +175,8 @@ if (!doctorId) {
       },
     });
 
+    console.log(appointmentId);
+    console.log("Response:", response.data);
     if (response.status === 200 || response.status === 201) {
       const msg = isEditMode ? 'Appointment updated!' : 'Appointment added!';
       toast.success(msg);

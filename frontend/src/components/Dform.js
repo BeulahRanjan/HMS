@@ -1,4 +1,7 @@
 import React from 'react';
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,6 +11,9 @@ import Cookies from "js-cookie";
 
 function Dform() {
   const navigate = useNavigate();
+  const location = useLocation();
+const doctorProfile = location.state?.doctorProfile;
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,30 +37,134 @@ function Dform() {
   }));
 };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    useEffect(() => {
+  if (doctorProfile) {
+    setFormData({
+      name: doctorProfile.name || "",
+      email: doctorProfile.email || "",
+      phone_no: doctorProfile.phone_no || "",
+      dob: doctorProfile.dob || "",
+      department: doctorProfile.department?.name || "",
+      specialization: doctorProfile.specialization || "",
+      experience: doctorProfile.experience || "",
+      status: doctorProfile.status || "",
+      gender: doctorProfile.gender || "",
+      shift: doctorProfile.shift || ""
+    });
+  }
+}, [doctorProfile]);
 
-    try {
-      const response = await axios.post('http://localhost:5000/addDoctor', formData, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('authToken')}`,
-        },
-      });
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-      if (response.status === 201) {
-        toast.success("Doctor form submitted!");
-        navigate('/'); // Redirect to homepage
-      }
-    } catch (error) {
-      toast.error("Error submitting form.");
-      console.error(error);
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/addDoctor', formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${Cookies.get('authToken')}`,
+  //       },
+  //     });
+
+  //     if (response.status === 201) {
+  //       toast.success("Doctor form submitted!");
+  //       navigate('/'); // Redirect to homepage
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error submitting form.");
+  //     console.error(error);
+  //   }
+  // };
+
+  const isEditMode = Boolean(doctorProfile?._id);
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    // 1️⃣ Resolve IDs from names 
+    const [deptRes, userRes] = await Promise.all([
+      axios.get(
+        `http://localhost:5000/getDeptByName/${formData.department}`,
+        { headers: { Authorization: `Bearer ${Cookies.get('authToken')}` } }
+      ),
+      axios.get(
+        `http://localhost:5000/auth/getUserByEmail/${formData.email}`,
+        { headers: { Authorization: `Bearer ${Cookies.get('authToken')}` } }
+      )
+    ]);
+
+    const departmentId = deptRes.data?.department?._id;
+    const userId = userRes.data?.user?._id;
+
+    console.log("Department ID:", departmentId);
+    console.log("User ID:", userId);
+
+    if (!departmentId || !userId) {
+      toast.error("Department or User not found");
+      return;
     }
-  };
 
-      const handleform=()=>{
-        navigate("/");
-        Cookies.set('hasSubmittedForm', true);
-    }
+    // 2️⃣ Build payload (ONLY ObjectIds for refs)
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      phone_no: formData.phone_no,
+      dob: formData.dob,
+      department: departmentId,
+      specialization: formData.specialization,
+      experience: formData.experience,
+      status: formData.status,
+      gender: formData.gender,
+      shift: formData.shift,
+      user: userId
+    };
+
+    // 3️⃣ Decide Add vs Update
+    const url = isEditMode
+      ? `http://localhost:5000/upDoctor/${doctorProfile._id}`
+      : `http://localhost:5000/addDoctor`;
+
+    const method = isEditMode ? "put" : "post";
+
+    // 4️⃣ API call
+    const response = await axios({
+      method,
+      url,
+      data: payload,
+      headers: {
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+      },
+    });
+
+    // 5️⃣ Success handling
+if (response.status === 200 || response.status === 201) {
+  toast.success(
+    isEditMode ? "Doctor updated successfully!" : "Doctor added successfully!"
+  );
+
+  // ✅ set cookie AFTER backend success
+  Cookies.set("hasSubmittedForm", true);
+
+  // ✅ navigate AFTER cookie is set
+  navigate("/");
+}
+
+  }  catch (error) {
+  console.error("FULL ERROR:", error.response?.data);
+  console.error("STATUS:", error.response?.status);
+  console.error("URL:", error.config?.url);
+  toast.error("Failed to save doctor");
+}
+
+};
+
+
+    //   const handleform=()=>{
+    //     navigate("/");
+    //     Cookies.set('hasSubmittedForm', true);
+    // }
+
+
 
 
   return (
@@ -74,7 +184,7 @@ function Dform() {
             <p className="mt-1 text-md italic">
             “Because healing begins with the right information.”
             </p>
-           <form className='overflow-y-auto h-80 mt-10' onSubmit={handleSubmit}>
+           <form className='overflow-y-auto h-80 mt-10'  onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-6">
                 <div className="flex flex-col">
                 <label className="text-lg mb-1">Full Name:</label>
@@ -202,7 +312,10 @@ function Dform() {
                 </select>
                 </div>
             </div>
-             <button onClick={()=>{handleform()}} className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 hover:bg-blue-700'>Submit</button>
+             <button 
+              type='submit'
+             className='m-10  ml-[270px] p-2 px-4 rounded-lg bg-blue-400 
+             hover:bg-blue-700'>Submit</button>
            </form>
           
           </div>
