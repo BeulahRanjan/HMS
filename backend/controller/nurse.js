@@ -32,6 +32,7 @@ async function addNurse(req, res) {
             user: userId
         });
         const savedNurse = await nurse.save();
+        await User.findByIdAndUpdate(userId, {hasSubmittedForm: true});
         return res.status(201).json({message:"Nurse added successfully"});
     }
     catch(error){

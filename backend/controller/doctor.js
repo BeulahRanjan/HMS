@@ -22,10 +22,10 @@ async function addDoctor(req, res) {
            return  res.status(404).json({message:"User not found"});
         }
 
-          const dept = await Department.findOne({ name: department });
-        if (!dept) {
-            return res.status(404).json({ message: "Department not found" });
-        }
+         const dept = await Department.findById(department);
+    if (!dept) {
+      return res.status(404).json({ message: "Department not found" });
+    }
 
         const doc= new Doctor({
             name,
@@ -43,7 +43,7 @@ async function addDoctor(req, res) {
         const savedDoc = await doc.save();
         // console.log("Request params are:", req.params.id);
         
-await User.findByIdAndUpdate(userId, { hasSubmittedForm: true });
+       await User.findByIdAndUpdate(userId, { hasSubmittedForm: true });
         return res.status(201).json({message:"Doctor added successfully"});
     }
     catch(error){
@@ -64,18 +64,26 @@ async function delDoctor(req, res) {
     }
 }
 
-async function getDoctor(req,res) {
-    try{
+async function getDoctor(req, res) {
+  try {
     const doctorId = req.params.id;
-    const doctor = await Doctor.findById(doctorId).populate('department', 'name');
-;
-    return res.status(200).json({doctor});
+
+    const doctor = await Doctor.findById(doctorId)
+      .populate('department', 'name _id')
+       .populate("user", "email _id");
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
     }
-    catch(error){
-        console.log("Error in getting doctor:", error);
-        return res.status(500).json({message:"Error in getting doctor"});
-    }
+
+    return res.status(200).json({ doctor });
+  } catch (error) {
+    console.error("Error in getting doctor:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }
+
+
 async function getDocByName(req,res) {
     try{
         const docName = req.params.name;
@@ -123,43 +131,149 @@ async function getdeptDoc(req,res) {
     }
 }
 
-async function upDoctor(req,res){
-    try{
-        const doctorId = req.params.id;
-        // const data = req.body;
-        const { department, ...data } = req.body;
+// async function upDoctor(req,res){
+//     try{
+//         const doctorId = req.params.id;
+//         // const data = req.body;
+//         const { department, ...data } = req.body;
 
-        let departmentId = null;
-        if (department) {
-            const dept = await Department.findOne({ name: department });
-            if (!dept) {
-                return res.status(404).json({ message: "Department not found" });
-            }
-            departmentId = dept._id;
-        }
+//         let departmentId = null;
+//         if (department) {
+//             const dept = await Department.findOne({ name: department });
+//             if (!dept) {
+//                 return res.status(404).json({ message: "Department not found" });
+//             }
+//             departmentId = dept._id;
+//         }
 
-        // If a valid departmentId is found, add it to the data object
-        if (departmentId) {
-            data.department = departmentId;
-        }
+//         // If a valid departmentId is found, add it to the data object
+//         if (departmentId) {
+//             data.department = departmentId;
+//         }
 
-        const doctor = await Doctor.findByIdAndUpdate(doctorId, data, {new:true});
-        return res.status(200).json({message:"Doctor updated successfully", doctor});
+//         const doctor = await Doctor.findByIdAndUpdate(doctorId, data, {new:true});
+//         return res.status(200).json({message:"Doctor updated successfully", doctor});
+//     }
+//     catch(error){
+//         console.log("Error in updating doctor:", error);
+//         return res.status(500).json({message:"Error in updating doctor"});
+//     }
+
+// }
+async function upDoctor(req, res){
+  try {
+    const {
+      name,
+      email,
+      phone_no,
+      dob,
+      department,
+      specialization,
+      experience,
+      status,
+      gender,
+      shift,
+      user
+    } = req.body;
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        email,
+        phone_no,
+        dob,
+        department,
+        specialization,
+        experience,
+        status,
+        gender,
+        shift,
+        user // 👈 explicitly updating user
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: "Doctor not found" });
     }
-    catch(error){
-        console.log("Error in updating doctor:", error);
-        return res.status(500).json({message:"Error in updating doctor"});
+
+    res.status(200).json({ doctor: updatedDoctor });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+async function getMyDoctorProfile(req, res) {
+  try {
+    const userId = req.user.userId;
+
+    const doctor = await Doctor.findOne({ user: userId })
+      .populate("department", "name");
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor profile not found" });
     }
 
+    return res.status(200).json({ doctor });
+  } catch (error) {
+    console.log("Error fetching doctor profile:", error);
+    return res.status(500).json({ message: "Error fetching doctor profile" });
+  }
 }
+
+
+async function uploadProfileImage(req, res) {
+  try {
+    console.log("FILE:", req.file);
+    console.log("USER:", req.user);
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
+    const userId = req.user.userId;
+
+    // ✅ FIND DOCTOR USING USER ID
+    const doctor = await Doctor.findOneAndUpdate(
+      { user: userId },          // 👈 IMPORTANT FIX
+      { profileImage: imagePath },
+      { new: true }
+    );
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    res.status(200).json({
+      message: "Profile image updated successfully",
+      imagePath: doctor.profileImage,
+    });
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+
+
+
 
 const docController = {
     addDoctor: addDoctor,
     getAllDoctors: getAllDoctors,
     getDoctor: getDoctor,
     getDocByName: getDocByName,
-     upDoctor: upDoctor,
+    upDoctor: upDoctor,
     delDoctor: delDoctor,
-    getdeptDoc: getdeptDoc
+    getdeptDoc: getdeptDoc,
+    uploadProfileImage: uploadProfileImage,
+    getMyDoctorProfile: getMyDoctorProfile
 }
 export default docController;

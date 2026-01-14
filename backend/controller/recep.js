@@ -27,6 +27,8 @@ async function addRecep(req,res) {
             joining_date
         });
         const savedRecep = await recep.save();
+        
+        await User.findByIdAndUpdate(userId, {hasSubmittedForm: true});
         return res.status(201).json({ message: "Receptionist added successfully" });
     }
     catch (error) {

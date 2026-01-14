@@ -14,6 +14,9 @@ const auth = (req, res, next) => {
 
         req.user = {userId:decoded.userId};
         next();
+        console.log("TOKEN:", token);
+        console.log("SECRET:", process.env.SECRET_KEY);
+
     }
     catch(error){
         console.log("Auth error:", error);

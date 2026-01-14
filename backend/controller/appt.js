@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function addAppt(req, res) {
+     console.log("Adding Appt:", req.body);
   try {
     const { patient, doctor, department, date, time, status } = req.body;
 
@@ -115,12 +116,40 @@ async function upAppt(req, res) {
 }
 
 
+
+async function getDoctorAppts(req, res) {
+  try {
+    const userId = req.user.userId;
+
+    const doctor = await Doctor.findOne({ user: userId });
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    const appointments = await Appointment.find({
+      doctor: doctor._id
+    })
+      .populate("patient", "name _id age gender")
+      .populate("department", "name _id");
+
+    return res.status(200).json({ appointments });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+
+
 const apptController ={
     addAppt : addAppt, 
     delAppt : delAppt,
     getAppt : getAppt,
     getAllAppts : getAllAppts,
-    upAppt : upAppt
+    upAppt : upAppt,
+    getDoctorAppts : getDoctorAppts
 }
 
 export default apptController;

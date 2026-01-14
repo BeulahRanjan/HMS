@@ -12,7 +12,8 @@ const doctorSchema = new mongoose.Schema({
     gender:{type:String,required:true},
     shift:{type:String,required:true},
     user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
-})
+    profileImage: { type: String,   default: null  }   // URL or path
+}, { timestamps: true });
 
 const Doctor = mongoose.model('Doctor', doctorSchema);
 
