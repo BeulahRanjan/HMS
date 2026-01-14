@@ -37,7 +37,7 @@ async function addAppt(req, res) {
       created_by: {
                 _id: receptionist._id,
                 name: receptionist.name
-            } // assuming auth middleware sets req.user
+            } 
     });
 
     const savedappt = await newAppt.save();
