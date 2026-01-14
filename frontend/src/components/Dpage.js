@@ -19,7 +19,7 @@ function Dpage() {
     timeSlot: "",
   });
 
-  //console.log(doctorProfile.profileImage);
+ 
   /* ================================
      FETCH LOGGED-IN DOCTOR PROFILE
   ================================= */
