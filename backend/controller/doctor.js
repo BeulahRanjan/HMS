@@ -41,7 +41,6 @@ async function addDoctor(req, res) {
             user: userId
         });
         const savedDoc = await doc.save();
-        // console.log("Request params are:", req.params.id);
         
        await User.findByIdAndUpdate(userId, { hasSubmittedForm: true });
         return res.status(201).json({message:"Doctor added successfully"});
