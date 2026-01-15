@@ -20,7 +20,9 @@ function Dpage() {
   });
 
  
-
+  /* ================================
+     FETCH LOGGED-IN DOCTOR PROFILE
+  ================================= */
   const loadDoctorProfile = async () => {
     try {
       const token = Cookies.get("authToken");
