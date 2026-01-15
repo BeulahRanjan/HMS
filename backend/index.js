@@ -38,12 +38,7 @@ app.use("/",deptRoutes);
 app.use("/",recepRoutes);
 app.use("/",patRoutes);
 app.use("/",apptRoutes);
-// GET appointments for a specific doctor
 
-
-// console.log(express.static(path.join(__dirname, 'uploads')));
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// app.use('/uploads', express.static('uploads'));
 
 
 
