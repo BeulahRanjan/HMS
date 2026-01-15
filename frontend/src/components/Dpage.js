@@ -20,9 +20,7 @@ function Dpage() {
   });
 
  
-  /* ================================
-     FETCH LOGGED-IN DOCTOR PROFILE
-  ================================= */
+
   const loadDoctorProfile = async () => {
     try {
       const token = Cookies.get("authToken");
@@ -47,9 +45,7 @@ function Dpage() {
     loadDoctorProfile();
   }, []);
 
-  /* ================================
-     IMAGE UPLOAD LOGIC
-  ================================= */
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -94,18 +90,14 @@ const uploadProfileImage = async () => {
   }
 };
 
-  /* ================================
-     CLEAN UP PREVIEW MEMORY
-  ================================= */
+
   useEffect(() => {
     return () => {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
-  /* ================================
-     NAVIGATE TO EDIT PAGE
-  ================================= */
+
   const goToEditDoctor = async (id) => {
     try {
       const res = await axios.get(
@@ -125,9 +117,7 @@ const uploadProfileImage = async () => {
     }
   };
 
-  /* ================================
-     TIME SLOT FILTER
-  ================================= */
+
   const isTimeInSlot = (time, slot) => {
     if (!time || !slot) return true;
 
