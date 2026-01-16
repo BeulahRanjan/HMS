@@ -38,30 +38,31 @@ async function addRecep(req,res) {
 }
 
 async function delRecep(req, res) {
-    try{
-        const recepname =req.params.name;
-        const recep = await Receptionist.findByIdAndDelete(recepname);
-        return res.status(200).json({message:"Receptionist deleted successfully"});
+  try {
+    const recepId = req.params.id;
+
+    const recep = await Receptionist.findByIdAndDelete(recepId);
+    if (!recep) {
+      return res.status(404).json({ message: "Receptionist not found" });
     }
-    catch(error){
-        console.log("Error in deleting receptionist:", error);
-        return res.status(500).json({message:"Error in deleting receptionist"});
-    }
+
+    return res.status(200).json({ message: "Receptionist deleted successfully" });
+  } catch (error) {
+    console.log("Error in deleting receptionist:", error);
+    return res.status(500).json({ message: "Error in deleting receptionist" });
+  }
 }
 
-async function getRecep(req,res) {
-    try{
-        const recepname =req.params.name;
-        const recep = await Receptionist.find({ name: recepname });
-        if (!recep) {
-            return res.status(404).json({ message: "Receptionist not found" });
-        }
-        return res.status(200).json({ recep });
-    }
-    catch (error) {
-        console.log("Error in getting receptionist:", error);
-        return res.status(500).json({ message: "Error in getting receptionist" });
-    }
+
+async function getRecep(req, res) {
+ try {
+    const recep = await Receptionist.findById(req.params.id);
+    if (!recep) return res.status(404).json({ message: "Receptionist not found" });
+    res.status(200).json({ recep });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching receptionist" });
+  }
 }
 
 async function getAllRecep(req, res) {
@@ -79,27 +80,93 @@ async function getAllRecep(req, res) {
 }
 
 async function upRecep(req, res) {
-    try{
-        const recepname = req.params.name;
-        const data = req.body;
-        const recep = await Receptionist.findOneAndUpdate({ name: recepname }, data, { new: true });
-        if (!recep) {
-            return res.status(404).json({ message: "Receptionist not found" });
-        }
-        return res.status(200).json({ message: "Receptionist updated successfully", recep });
+  try {
+    const recepId = req.params.id;
+    const data = req.body;
+
+    const recep = await Receptionist.findByIdAndUpdate(
+      recepId,
+      data,
+      { new: true }
+    );
+
+    if (!recep) {
+      return res.status(404).json({ message: "Receptionist not found" });
     }
-    catch (error) {
-        console.log("Error in updating receptionist:", error);
-        return res.status(500).json({ message: "Error in updating receptionist" });
-    }
+
+    return res.status(200).json({
+      message: "Receptionist updated successfully",
+      recep
+    });
+  } catch (error) {
+    console.log("Error in updating receptionist:", error);
+    return res.status(500).json({ message: "Error in updating receptionist" });
+  }
 }
+
+
+async function getMyRecepProfile(req, res) {
+  try {
+    const userId = req.user.userId;
+
+    const recep = await Receptionist.findOne({ user: userId });
+
+    if (!recep) {
+      return res.status(404).json({ message: "Receptionist profile not found" });
+    }
+
+    return res.status(200).json({ recep });
+  } catch (error) {
+    console.log("Error fetching receptionist profile:", error);
+    return res.status(500).json({ message: "Error fetching receptionist profile" });
+  }
+}
+
+
+async function uploadRecepProfileImage(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
+    const userId = req.user.userId;
+
+    const recep = await Receptionist.findOneAndUpdate(
+      { user: userId },
+      { profileImage: imagePath },
+      { new: true }
+    );
+
+    if (!recep) {
+      return res.status(404).json({ message: "Receptionist not found" });
+    }
+
+    return res.status(200).json({
+      message: "Profile image updated successfully",
+      imagePath: recep.profileImage,
+    });
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+
+
+
+
+
+
  
 const recepController = {
     addRecep: addRecep,
     delRecep: delRecep,
     getRecep: getRecep,
     getAllRecep: getAllRecep,
-    upRecep: upRecep
+    upRecep: upRecep,
+    getMyRecepProfile: getMyRecepProfile,
+    uploadRecepProfileImage: uploadRecepProfileImage    
 }
 
 export default recepController;
