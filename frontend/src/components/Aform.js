@@ -159,6 +159,7 @@ if (!doctorId) {
       time: formData.time,
       status: formData.status,
     };
+console.log("Auth token:", Cookies.get('authToken'));
 
     const url = isEditMode
       ? `http://localhost:5000/upAppt/${appointmentId}`
