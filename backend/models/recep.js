@@ -10,7 +10,8 @@ const recepSchema = new mongoose.Schema({
   gender:{ type: String, required:true},
   shift: { type: String, enum: ['morning', 'afternoon','evening', 'night'], default: 'Morning' },
   joining_date: { type:String, required:true},
-});
+   profileImage: { type: String,   default: null  }   // URL or path
+}, { timestamps: true });
 
 const Receptionist = mongoose.model("Receptionist", recepSchema);
 

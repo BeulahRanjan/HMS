@@ -57,10 +57,12 @@ async function delRecep(req, res) {
 async function getRecep(req, res) {
  try {
     const recep = await Receptionist.findById(req.params.id);
+    
     if (!recep) return res.status(404).json({ message: "Receptionist not found" });
     res.status(200).json({ recep });
   } catch (err) {
     console.error(err);
+    console.log("Fetched receptionist:", recep);
     res.status(500).json({ message: "Error fetching receptionist" });
   }
 }
@@ -123,34 +125,30 @@ async function getMyRecepProfile(req, res) {
 }
 
 
-async function uploadRecepProfileImage(req, res) {
+export const uploadRecepProfileImage = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+    console.log("FILE:", req.file); // MUST print object
+    console.log("BODY:", req.body);
+
+    const imagePath = req.file
+      ? req.file.path.replace(/\\/g, "/")
+      : null;
+
+    console.log("Image uploaded to:", imagePath);
+
+    if (!imagePath) {
+      return res.status(400).json({ message: "No image uploaded" });
     }
 
-    const imagePath = `/uploads/${req.file.filename}`;
-    const userId = req.user.userId;
+    // save imagePath to DB
+    // ...
 
-    const recep = await Receptionist.findOneAndUpdate(
-      { user: userId },
-      { profileImage: imagePath },
-      { new: true }
-    );
-
-    if (!recep) {
-      return res.status(404).json({ message: "Receptionist not found" });
-    }
-
-    return res.status(200).json({
-      message: "Profile image updated successfully",
-      imagePath: recep.profileImage,
-    });
-  } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-    return res.status(500).json({ message: error.message });
+    res.status(200).json({ imagePath });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Upload failed" });
   }
-}
+};
 
 
 

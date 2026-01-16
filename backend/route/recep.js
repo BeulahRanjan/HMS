@@ -12,9 +12,9 @@ router.get("/getRecep/:id", auth, recepController.getRecep);
 router.put("/upRecep/:id", auth, recepController.upRecep);
 router.delete("/delRecep/:id", auth, recepController.delRecep);
 
-router.get("/profile", auth, recepController.getMyRecepProfile);
+router.get("/rprofile", auth, recepController.getMyRecepProfile);
 router.put(
-  "/upload-profile-image",
+  "/upload-rprofile-image",
   auth,
   upload.single("profileImage"),
   recepController.uploadRecepProfileImage
