@@ -4,50 +4,101 @@ import Receptionist from "../models/recep.js";
 import Department from "../models/dept.js";
 import Appointment from "../models/appt.js"; // Capitalized for convention
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 dotenv.config();
 
+// async function addAppt(req, res) {
+//      console.log("Adding Appt:", req.body);
+//   try {
+//     const { patient, doctor, department, date, time, status } = req.body;
+
+//      const patientDoc = await Patient.findOne({ name: patient });
+//     const doctorDoc = await Doctor.findOne({ name: doctor });
+//     const departmentDoc = await Department.findOne({ name: department });
+
+//     if (!patientDoc || !doctorDoc || !departmentDoc) {
+//       return res.status(404).json({ message: 'Invalid patient, doctor, or department name' });
+//     }
+
+//     const userId = req.user.userId; // Logged-in user
+//     const receptionist = await Receptionist.findOne({ user: userId });
+    
+//     if (!receptionist) {
+//     return res.status(404).json({ message: "Receptionist profile not found" });
+//     }
+
+//     const newAppt = new Appointment({
+//       patient: patientDoc._id,
+//       doctor: doctorDoc._id,
+//       department: departmentDoc._id, 
+//       date,
+//       time,
+//       status,
+//       created_by: {
+//                 _id: receptionist._id,
+//                 name: receptionist.name
+//             } 
+//     });
+
+//     const savedappt = await newAppt.save();
+//     return res.status(201).json({ message: "Appointment created successfully", newAppt });
+
+//   } catch (error) {
+//     console.error("Error in adding appointment:", error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// }
+
+
 async function addAppt(req, res) {
-     console.log("Adding Appt:", req.body);
+  console.log("Adding Appt:", req.body);
+
   try {
     const { patient, doctor, department, date, time, status } = req.body;
 
-     const patientDoc = await Patient.findOne({ name: patient });
-    const doctorDoc = await Doctor.findOne({ name: doctor });
-    const departmentDoc = await Department.findOne({ name: department });
+    if (
+  !mongoose.Types.ObjectId.isValid(patient) ||
+  !mongoose.Types.ObjectId.isValid(doctor) ||
+  !mongoose.Types.ObjectId.isValid(department)
+) {
+  return res.status(400).json({ message: "Invalid IDs provided" });
+}
 
-    if (!patientDoc || !doctorDoc || !departmentDoc) {
-      return res.status(404).json({ message: 'Invalid patient, doctor, or department name' });
-    }
 
-    const userId = req.user.userId; // Logged-in user
+    const userId = req.user.userId;
     const receptionist = await Receptionist.findOne({ user: userId });
-    
+
     if (!receptionist) {
-    return res.status(404).json({ message: "Receptionist profile not found" });
+      return res.status(403).json({ message: "Only receptionist can add appointments" });
     }
 
     const newAppt = new Appointment({
-      patient: patientDoc._id,
-      doctor: doctorDoc._id,
-      department: departmentDoc._id, 
+      patient,
+      doctor,
+      department,
       date,
       time,
       status,
       created_by: {
-                _id: receptionist._id,
-                name: receptionist.name
-            } 
+        _id: receptionist._id,
+        name: receptionist.name
+      }
     });
 
-    const savedappt = await newAppt.save();
-    return res.status(201).json({ message: "Appointment created successfully", newAppt });
+    const savedAppt = await newAppt.save();
+
+    return res.status(201).json({
+      message: "Appointment created successfully",
+      appointment: savedAppt
+    });
 
   } catch (error) {
     console.error("Error in adding appointment:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 }
+
 
 async function delAppt(req, res) {
     try {
