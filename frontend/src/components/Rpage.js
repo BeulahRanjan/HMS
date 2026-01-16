@@ -74,6 +74,10 @@ function Rpage() {
 
 
   const [currentSection, setCurrentSection] = useState('dashboard');
+  const [recepProfile, setRecepProfile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [filters, setFilters] = useState({
   status: '',
   timeSlot: '', 
@@ -210,6 +214,113 @@ const fetchAppointment = async (id) => {
   }
 };
  
+  const loadRecepProfile = async () => {
+    try {
+      const token = Cookies.get("authToken");
+
+      const res = await axios.get("http://localhost:5000/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setRecepProfile(res.data.recep);
+      console.log("Recep Profile:", res.data.recep);
+      
+      
+      
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadRecepProfile();
+  }, []);
+
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+const uploadProfileImage = async () => {
+  
+  if (!selectedImage) return;
+
+  try {
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("profileImage", selectedImage);
+
+    const res = await axios.put(
+      "http://localhost:5000/upload-profile-image",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
+      }
+    );
+
+    const { imagePath } = res.data;
+    // 🔥 Update UI instantly
+    setRecepProfile((prev) => ({
+      ...prev,
+      profileImage: imagePath,
+    }));
+
+    setSelectedImage(null);
+    setPreview(null);
+  } catch (error) {
+    console.error("Image upload failed:", error);
+  } finally {
+    setUploading(false);
+  }
+};
+
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+
+ const goToEditRecep = async (id) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:5000/getRecep/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
+      }
+    );
+
+    navigate("/recep", {
+      state: { recepProfile: res.data.recep },
+    });
+  } catch (error) {
+    console.error("Error opening edit page:", error);
+  }
+};
+
+
+    const hasProfileImage =
+  recepProfile?.profileImage &&
+  recepProfile.profileImage !== "null" &&
+  recepProfile.profileImage !== "undefined";
+
+
+
+
+
+
 
   return (
 
@@ -224,69 +335,129 @@ const fetchAppointment = async (id) => {
     <h1 className="text-2xl font-bold">HopeCare</h1>
     <span className="text-lg">Receptionist Dashboard</span>
   </header>
-
-  <div className="flex flex-1 overflow-hidden">
-    {/* Sidebar */}
-
-    {/* Main Content */}
-    <main className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+    
+  <main className="flex-1 p-6 flex justify-center">
+    {recepProfile && (
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 space-y-8">
+         {!hasProfileImage && (
+    <div className="mb-4 p-3 rounded-lg bg-yellow-100 border border-yellow-400 text-yellow-800 text-center">
+      ⚠️ Please upload a profile image in formal doctor attire.
+    </div>
+  )}
+        
         {/* Profile Header */}
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between">
-          <div className="flex items-center gap-6">
-            <img
-              src="/avatar.jpg"
-              alt="Receptionist Avatar"
-              className="w-24 h-24 rounded-full shadow"
-            />
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800">Asha Verma</h2>
-              <p className="text-blue-600 font-medium">Receptionist</p>
-              <p className="text-green-600">🟢 Active</p>
-            </div>
-          </div>
-        </div>
+        <div className="flex flex-col md:flex-row items-center gap-6 relative">
+     
+  
+  {/* Profile Image */}
+  <div className="relative">
+    <img
+      src={
+    preview
+      ? preview
+      : recepProfile?.profileImage
+      ? `http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`
+      : "/default-receptionist.png"
+  }
+
+      alt="Receptionist Avatar"
+      className="w-28 h-28 rounded-full border-4 border-blue-200 shadow object-cover"
+    />
+
+
+
+
+    {/* Edit Icon */}
+    <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
+      ✏️
+      <input
+  type="file"
+  accept="image/*"
+  className="hidden"
+  onChange={handleImageChange}
+/>
+
+    </label>
+  </div>
+
+  {/* Doctor Info */}
+  <div className="text-center md:text-left">
+    <h2 className="text-3xl font-bold text-gray-800">
+      {recepProfile.name}
+    </h2>
+
+    <p className="text-blue-600 font-medium text-lg">
+      {recepProfile.specialization}
+    </p>
+
+    <span
+      className={`inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold
+        ${
+          recepProfile.status === "Active"
+            ? "bg-green-100 text-green-700"
+            : "bg-yellow-100 text-yellow-700"
+        }`}
+    >
+      {recepProfile.status}
+    </span>
+
+    {/* 🔥 Upload Button (only when image selected) */}
+    {selectedImage && (
+      <div className="mt-3">
+        <button
+          onClick={uploadProfileImage}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+        >
+          Save Photo
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
 
         {/* Info Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* Personal Info */}
-          <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
-            <h3 className="font-semibold text-gray-700 mb-2">📍 Personal Info</h3>
-            <p><strong>Phone:</strong> +91-9876543210</p>
-            <p><strong>Email:</strong> asha@hopecare.com</p>
-            <p><strong>Address:</strong> Bhubaneswar, Odisha</p>
-            <p><strong>Date of Birth:</strong> 20 Aug 1990</p>
+          <div className="bg-blue-50 rounded-xl p-5 shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-4 text-lg">
+              🧍 Personal Information
+            </h3>
+
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Email:</strong> {recepProfile.email}</p>
+              <p><strong>Phone:</strong> {recepProfile.phone_no}</p>
+              <p><strong>Gender:</strong> {recepProfile.gender}</p>
+              <p><strong>Date of Birth:</strong> {recepProfile.dob}</p>
+            </div>
           </div>
 
           {/* Professional Info */}
-          <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
-            <h3 className="font-semibold text-gray-700 mb-2">🏥 Professional Info</h3>
-            <p><strong>Employee ID:</strong> HC-RECEP-0012</p>
-            <p><strong>Department:</strong> Front Desk / OPD</p>
-            <p><strong>Shift:</strong> 9:00 AM – 5:00 PM</p>
-            <p><strong>Date Joined:</strong> 15 Jan 2023</p>
+          <div className="bg-blue-50 rounded-xl p-5 shadow-inner">
+            <h3 className="font-semibold text-gray-700 mb-4 text-lg">
+              🏥 Professional Information
+            </h3>
+
+            <div className="space-y-2 text-gray-700">
+              <p><strong>Department:</strong> {recepProfile.department?.name}</p>
+              <p><strong>Experience:</strong> {recepProfile.experience} years</p>
+              <p><strong>Shift:</strong> {recepProfile.shift}</p>
+            </div>
           </div>
 
-          {/* System Access */}
-          <div className="bg-blue-50 p-4 rounded-lg shadow-inner col-span-1 md:col-span-2">
-            <h3 className="font-semibold text-gray-700 mb-2">🔐 System Access</h3>
-            <p><strong>Username:</strong> asha.verma</p>
-            <p><strong>Last Login:</strong> 01 Aug 2025, 10:34 AM</p>
-            <p><strong>Permissions:</strong> Book/Edit Appointments, Manage Patients</p>
-          </div>
         </div>
 
-        {/* Optional: Recent Activity */}
-        <div className="bg-blue-50 p-4 rounded-lg shadow-inner">
-          <h3 className="font-semibold text-gray-700 mb-2">🕒 Recent Activity</h3>
-          <ul className="list-disc pl-5 text-sm">
-            <li>Booked appointment for Mr. Ravi (10:00 AM)</li>
-            <li>Registered new patient: Ms. Neha</li>
-          </ul>
+        {/* Actions (optional) */}
+        <div className="flex justify-end">
+          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition" 
+           onClick={() => {goToEditRecep(recepProfile._id)}}>
+            Edit Profile 
+          </button>
         </div>
       </div>
-    </main>
-  </div>
+    )}
+  </main>
 </div>
 }
         {currentSection === 'patients' && 
