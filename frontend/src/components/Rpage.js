@@ -218,7 +218,7 @@ const fetchAppointment = async (id) => {
     try {
       const token = Cookies.get("authToken");
 
-      const res = await axios.get("http://localhost:5000/profile", {
+      const res = await axios.get("http://localhost:5000/rprofile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -227,8 +227,8 @@ const fetchAppointment = async (id) => {
       setRecepProfile(res.data.recep);
       console.log("Recep Profile:", res.data.recep);
       
-      
-      
+
+
     } catch (error) {
       console.error("Error loading profile:", error);
     }
@@ -258,7 +258,7 @@ const uploadProfileImage = async () => {
     formData.append("profileImage", selectedImage);
 
     const res = await axios.put(
-      "http://localhost:5000/upload-profile-image",
+      "http://localhost:5000/upload-rprofile-image",
       formData,
       {
         headers: {
@@ -268,12 +268,17 @@ const uploadProfileImage = async () => {
     );
 
     const { imagePath } = res.data;
+    console.log(res.data);
+    console.log("Image uploaded to:", imagePath);
+    const imageUrl = `http://localhost:5000/${imagePath}`;
+    console.log("Full Image URL:", imageUrl);
     // 🔥 Update UI instantly
     setRecepProfile((prev) => ({
       ...prev,
       profileImage: imagePath,
     }));
-
+    const imageUrl1=`http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`;
+    console.log(imageUrl1)
     setSelectedImage(null);
     setPreview(null);
   } catch (error) {
@@ -301,7 +306,8 @@ const uploadProfileImage = async () => {
         },
       }
     );
-
+  
+    console.log(id);
     navigate("/recep", {
       state: { recepProfile: res.data.recep },
     });
@@ -356,7 +362,7 @@ const uploadProfileImage = async () => {
     preview
       ? preview
       : recepProfile?.profileImage
-      ? `http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`
+      ? `http://localhost:5000${recepProfile?.recep?.profileImage}?t=${Date.now()}`
       : "/default-receptionist.png"
   }
 
