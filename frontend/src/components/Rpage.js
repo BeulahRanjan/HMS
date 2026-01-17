@@ -278,7 +278,7 @@ const uploadProfileImage = async () => {
       profileImage: imagePath,
     }));
     const imageUrl1=`http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`;
-    console.log(imageUrl1)
+    console.log(imageUrl1);
     setSelectedImage(null);
     setPreview(null);
   } catch (error) {
@@ -362,7 +362,7 @@ const uploadProfileImage = async () => {
     preview
       ? preview
       : recepProfile?.profileImage
-      ? `http://localhost:5000${recepProfile?.recep?.profileImage}?t=${Date.now()}`
+      ? `http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`
       : "/default-receptionist.png"
   }
 
