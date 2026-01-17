@@ -140,6 +140,9 @@ export const uploadRecepProfileImage = async (req, res) => {
       return res.status(400).json({ message: "No image uploaded" });
     }
 
+    // save imagePath to DB
+    // ...
+
     res.status(200).json({ imagePath });
   } catch (err) {
     console.error(err);
