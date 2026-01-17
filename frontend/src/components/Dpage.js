@@ -75,7 +75,7 @@ const uploadProfileImage = async () => {
     );
 
     const { imagePath } = res.data;
-    // 🔥 Update UI instantly
+
     setDoctorProfile((prev) => ({
       ...prev,
       profileImage: imagePath,
