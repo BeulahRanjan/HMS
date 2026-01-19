@@ -170,10 +170,12 @@ async function upDoctor(req, res){
       dob,
       department,
       specialization,
+      specialist,
       experience,
       status,
       gender,
       shift,
+      description,
       user
     } = req.body;
 
@@ -186,10 +188,12 @@ async function upDoctor(req, res){
         dob,
         department,
         specialization,
+        specialist,
         experience,
         status,
         gender,
         shift,
+        description,
         user // 👈 explicitly updating user
       },
       {
