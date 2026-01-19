@@ -7,10 +7,12 @@ const doctorSchema = new mongoose.Schema({
     dob:{type:String,required:true},
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: true },
     specialization:{type:String, required:true},
+    specialist:{type:String, required:true},
     experience:{type:String, required:true},
     status:{type:String,required:true},
     gender:{type:String,required:true},
     shift:{type:String,required:true},
+    descritption:{type:String,required:true},
     user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
     profileImage: { type: String,   default: null  }   // URL or path
 }, { timestamps: true });
