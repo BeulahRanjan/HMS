@@ -164,7 +164,7 @@ const uploadProfileImage = async () => {
           <img src={`http://localhost:5000${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
           <div className='flex flex-col'>
             <p>{doctorProfile?.name}</p>
-            <p>Neurologist</p>
+            <p>{doctorProfile?.specialist}</p>
           </div>
           <div className='flex flex-col ml-[1100px]'>
           <p>Date: {new Date().toLocaleDateString()}</p>
@@ -280,7 +280,7 @@ const uploadProfileImage = async () => {
     
   <main className="flex-1 p-6 flex justify-center">
     {doctorProfile && (
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 space-y-8">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8 space-y-8">
          {!hasProfileImage && (
     <div className="mb-4 p-3 rounded-lg bg-yellow-100 border border-yellow-400 text-yellow-800 text-center">
       ⚠️ Please upload a profile image in formal doctor attire.
@@ -328,8 +328,10 @@ const uploadProfileImage = async () => {
       {doctorProfile.name}
     </h2>
 
+
+
     <p className="text-blue-600 font-medium text-lg">
-      {doctorProfile.specialization}
+      {doctorProfile.specialist}
     </p>
 
     <span
@@ -372,6 +374,7 @@ const uploadProfileImage = async () => {
               <p><strong>Phone:</strong> {doctorProfile.phone_no}</p>
               <p><strong>Gender:</strong> {doctorProfile.gender}</p>
               <p><strong>Date of Birth:</strong> {doctorProfile.dob}</p>
+              <p><strong>Specialization:</strong> {doctorProfile.specialization}</p>
             </div>
           </div>
 
@@ -385,6 +388,7 @@ const uploadProfileImage = async () => {
               <p><strong>Department:</strong> {doctorProfile.department?.name}</p>
               <p><strong>Experience:</strong> {doctorProfile.experience} years</p>
               <p><strong>Shift:</strong> {doctorProfile.shift}</p>
+              <p><strong>About Me:</strong> {doctorProfile.description}</p>
             </div>
           </div>
 
@@ -404,10 +408,7 @@ const uploadProfileImage = async () => {
 
 }
  </div>
-        
-        
 
-      
     </div>
   )
 }

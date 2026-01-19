@@ -22,10 +22,12 @@ const doctorProfile = location.state?.doctorProfile;
     dob:"",
     department: "",
     specialization: "",
+    specialist: "",
     experience: "",
     status:"",
     gender:"",
-    shift:""
+    shift:"",
+    description:"",
     // Add others if needed
   });
 
@@ -46,10 +48,12 @@ const doctorProfile = location.state?.doctorProfile;
       dob: doctorProfile.dob || "",
       department: doctorProfile.department?.name || "",
       specialization: doctorProfile.specialization || "",
+      specialist: doctorProfile.specialist || "",
       experience: doctorProfile.experience || "",
       status: doctorProfile.status || "",
       gender: doctorProfile.gender || "",
-      shift: doctorProfile.shift || ""
+      shift: doctorProfile.shift || "",
+      description: doctorProfile.description || ""
     });
   }
 }, [doctorProfile]);
@@ -112,10 +116,12 @@ const handleSubmit = async (e) => {
       dob: formData.dob,
       department: departmentId,
       specialization: formData.specialization,
+      specialist: formData.specialist,
       experience: formData.experience,
       status: formData.status,
       gender: formData.gender,
       shift: formData.shift,
+      description: formData.description,
       user: userId
     };
 
@@ -164,6 +170,7 @@ if (response.status === 200 || response.status === 201) {
     //     Cookies.set('hasSubmittedForm', true);
     // }
 
+    console.log("Form Data:", formData);
 
 
 
@@ -251,6 +258,17 @@ if (response.status === 200 || response.status === 201) {
                     className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
                 />
                 </div>
+                 <div className="flex flex-col">
+                <label className="text-lg mb-1">Specialist</label>
+                <input
+                    type="text"
+                    name='specialist'
+                    value={formData.specialist}
+                    onChange={handleChange}
+                    placeholder="Enter your specialist"
+                    className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
+                />
+                </div>
                 <div className="flex flex-col">
                 <label className="text-lg mb-1">Experience</label>
                 <input
@@ -310,6 +328,18 @@ if (response.status === 200 || response.status === 201) {
                 <option value="evening">Evening</option>
                 <option value="night">Night</option>
                 </select>
+                </div>
+
+                 <div className="flex flex-col">
+                <label className="text-lg mb-1">Description</label>
+                <input
+                    type="text"
+                    name='description'
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Enter your description"
+                    className="border border-black rounded-md p-2 px-10 bg-transparent placeholder-black"
+                />
                 </div>
             </div>
              <button 
