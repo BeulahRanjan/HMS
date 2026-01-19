@@ -269,9 +269,7 @@ const uploadProfileImage = async () => {
 
     const { imagePath } = res.data;
     console.log(res.data);
-    console.log("Image uploaded to:", imagePath);
-    const imageUrl = `http://localhost:5000/${imagePath}`;
-    console.log("Full Image URL:", imageUrl);
+  
     setRecepProfile((prev) => ({
       ...prev,
       profileImage: imagePath,
