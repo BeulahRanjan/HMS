@@ -125,28 +125,39 @@ async function getMyRecepProfile(req, res) {
 }
 
 
-export const uploadRecepProfileImage = async (req, res) => {
+async function uploadRecepProfileImage(req, res) {
   try {
-    console.log("FILE:", req.file); // MUST print object
-    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+    console.log("USER:", req.user);
 
-    const imagePath = req.file
-      ? req.file.path.replace(/\\/g, "/")
-      : null;
-
-    console.log("Image uploaded to:", imagePath);
-
-    if (!imagePath) {
-      return res.status(400).json({ message: "No image uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
 
-  
-    res.status(200).json({ imagePath });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Upload failed" });
+    const imagePath = `/uploads/${req.file.filename}`;
+    const userId = req.user.userId;
+
+    // ✅ FIND RECEPTIONIST USING USER ID
+    const recep = await Receptionist.findOneAndUpdate(
+      { user: userId },          // 👈 IMPORTANT FIX
+      { profileImage: imagePath },
+      { new: true }
+    );
+
+    if (!recep) {
+      return res.status(404).json({ message: "Receptionist not found" });
+    }
+
+    res.status(200).json({
+      message: "Profile image updated successfully",
+      imagePath: recep.profileImage,
+    });
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
