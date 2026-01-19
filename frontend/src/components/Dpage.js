@@ -147,6 +147,10 @@ const uploadProfileImage = async () => {
   doctorProfile.profileImage !== "null" &&
   doctorProfile.profileImage !== "undefined";
 
+  console.log("Has Profile Image:", hasProfileImage, doctorProfile?.profileImage);
+
+
+
 
 
 
@@ -157,9 +161,9 @@ const uploadProfileImage = async () => {
       <div className='flex flex-col'>
         <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
           <div className='flex flex-row gap-3'>
-          <img src='' alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
+          <img src={`http://localhost:5000${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
           <div className='flex flex-col'>
-            <p>Dr.Rajeev Kumar</p>
+            <p>{doctorProfile?.name}</p>
             <p>Neurologist</p>
           </div>
           <div className='flex flex-col ml-[1100px]'>
