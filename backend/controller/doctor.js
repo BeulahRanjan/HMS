@@ -8,9 +8,9 @@ dotenv.config();
 async function addDoctor(req, res) {
     console.log("Adding doctor:", req.body);
     try{
-        const {email, name, phone_no, dob, department, specialization, experience,status, gender, shift} =req.body;
-        if(!email || !name || !phone_no ||!dob || !department || !specialization || !experience ||!status ||
-            !gender|| !shift
+        const {email, name, phone_no, dob, department, specialization, specialist, experience, status, gender, shift, description } =req.body;
+        if(!email || !name || !phone_no ||!dob || !department || !specialization || !specialist || !experience ||!status ||
+            !gender|| !shift || !description
         ){
             return res.status(400).json({message:"Please fill all the fields"});
         }
@@ -34,10 +34,12 @@ async function addDoctor(req, res) {
             dob,
             department: dept._id,
             specialization,
+            specialist,
             experience,
             status,
             gender,
             shift,
+            description,
             user: userId
         });
         const savedDoc = await doc.save();
