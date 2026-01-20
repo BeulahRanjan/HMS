@@ -509,35 +509,47 @@ useEffect(() => {
         <div>
           <div className="w-full min-h-screen bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] py-10 px-6 ">
            <p className="text-3xl font-bold text-center mb-8">Our Doctors</p>
-           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  justify-items-center">
   {doctors.map((doc) => (
-    <div key={doc._id} className="w-[270px] bg-blue-200 rounded-lg flex flex-col text-center p-4 shadow-md hover:shadow-xl transition duration-300">
-      <img
-        src={
-          doc?.profileImage
-            ? `http://localhost:5000${doc.profileImage}?t=${Date.now()}`
-            : "/default-doctor.png"
-        }
-        alt={doc.name}
-        className="w-[240px] h-[180px] mb-4 rounded-lg object-cover hover:scale-105 transition duration-300"
-      />
+    <div
+  key={doc._id}
+  className="w-[270px] bg-white rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 flex flex-col overflow-hidden"
+>
+  {/* Image */}
+  <div className="h-[190px] w-full overflow-hidden">
+    <img
+      src={
+        doc?.profileImage
+          ? `http://localhost:5000${doc.profileImage}?t=${Date.now()}`
+          : "/default-doctor.png"
+      }
+      alt={doc.name}
+      className="w-full h-full object-cover hover:scale-105 transition duration-300"
+    />
+  </div>
 
-      <h2 className="text-xl font-bold mb-1">{doc.name}</h2>
+  {/* Content */}
+  <div className="p-5 flex flex-col flex-grow text-center">
+    <h2 className="text-xl font-bold text-gray-800">{doc.name}</h2>
 
-      <p className="text-lg font-semibold mb-2">
-        {doc.department?.name}
-      </p>
+    <p className="text-blue-600 font-semibold">{doc.department?.name}</p>
 
-      <p className="text-sm mb-1">{doc.specialization}</p>
+    <p className="text-sm text-gray-600 mt-1">{doc.specialization}</p>
 
-      <p className="text-sm mb-1">
-        <strong>Experience:</strong> {doc.experience}
-      </p>
-
-      <p className="text-sm text-justify overflow-y-auto px-2 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-100">
-        {doc.description} <a href="/" className="text-blue-700">Read More</a>
-      </p>
+    <div className="mt-2 text-sm text-gray-700">
+      <strong>Experience:</strong> {doc.experience}
     </div>
+
+    <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+      {doc.description}
+    </p>
+
+    <button className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+      View Profile
+    </button>
+  </div>
+</div>
+
   ))}
 </div>
       

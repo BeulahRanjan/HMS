@@ -209,7 +209,6 @@ const uploadProfileImage = async () => {
               <th className="px-4 py-2 border border-blue-300 text-center">Patient Name</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Age</th>
               <th className="px-4 py-2 border border-blue-300 text-center">Gender</th>
-              {/* <th className="px-4 py-2 border border-blue-300 text-center">Phone No.</th> */}
               <th className="px-4 py-2 border border-blue-300 text-center">Status of Appointment</th>
             </tr>
           </thead>
