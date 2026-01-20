@@ -194,7 +194,7 @@ async function upDoctor(req, res){
         gender,
         shift,
         description,
-        user // 👈 explicitly updating user
+        user 
       },
       {
         new: true,
