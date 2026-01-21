@@ -25,7 +25,7 @@ function Dsec() {
         <div className='font-bold text-3xl text-center pt-7 '>Our Departments</div>
         <p className='text-center mt-7 font-semibold text-xl'>Explore our departments below and discover how HopeCare is committed to healing with 
             excellence and heart.</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1 mt-10 absolute ml-[410px] ">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-5 gap-x-10 mt-10 absolute ml-[370px] ">
   {specializations.map((item) => (
     <div key={item.name} className="flex flex-col items-center  ">
       <div className="border-2 border-blue-300 p-3 rounded-full shadow-xl hover:scale-105 transition ">
