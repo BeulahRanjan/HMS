@@ -10,7 +10,6 @@ import Cookies from "js-cookie";
 
 
 
-// Custom Next Arrow
 function SampleNextArrow(props) {
   const { onClick } = props;
   return (
@@ -23,7 +22,7 @@ function SampleNextArrow(props) {
   );
 }
 
-// Custom Prev Arrow
+
 function SamplePrevArrow(props) {
   const { onClick } = props;
   return (
