@@ -28,7 +28,6 @@ async function addDept(req, res) {
             established_year: 0
         });
         const savedDept = await dept.save();
-        // console.log("Request params are:", req.params.id);
         return res.status(201).json({message:"Department created successfully"});
     }
     catch(error){
