@@ -165,10 +165,6 @@ if (response.status === 200 || response.status === 201) {
 };
 
 
-    //   const handleform=()=>{
-    //     navigate("/");
-    //     Cookies.set('hasSubmittedForm', true);
-    // }
 
     console.log("Form Data:", formData);
 
