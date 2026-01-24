@@ -5,7 +5,7 @@ const apptSchema = new mongoose.Schema({
   doctor: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor", required: true },
   department: { type: mongoose.Schema.Types.ObjectId, ref: "Department", required: true },
   date: { type: String, required: true },
-  time: { type: String, required: true }, // or use Date if needed
+  time: { type: String, required: true }, 
   status: {
     type: String,
     enum: ['Scheduled', 'Rescheduled', 'Cancelled']
