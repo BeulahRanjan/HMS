@@ -286,7 +286,7 @@ const uploadProfileImage = async () => {
     </div>
   )}
         
-        {/* Profile Header */}
+        
         <div className="flex flex-col md:flex-row items-center gap-6 relative">
      
   
