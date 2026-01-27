@@ -8,7 +8,7 @@ const departmentSchema = new mongoose.Schema({
   No_of_surgeons: { type: Number, default: 0 },
   No_of_patients: { type: Number, default: 0 },
   No_of_attendants : { type: Number, default: 0 },
-  Head_of_department: { type: String }, // or ObjectId referencing Doctor
+  Head_of_department: { type: String }, 
   Equipment_list: [
   {
     name: { type: String, required: true },
@@ -17,9 +17,9 @@ const departmentSchema = new mongoose.Schema({
   }
 ],
 
-  floor: { type: Number }, // Optional: location info
+  floor: { type: Number },
   rooms: { type: Number }, 
-  established_year: { type: Number }, // Optional: for history records
+  established_year: { type: Number }, 
 });
 
 const Department = mongoose.model('Department', departmentSchema);
