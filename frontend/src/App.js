@@ -10,7 +10,7 @@ import Login from './Login';
  import Nform from './components/Nform';
  import Rform from './components/Rform';
 // import Dsec from './components/Dsec';
-// import Docsec from './components/Docsec';
+
  import Dpage from './components/Dpage';
 import Aform from './components/Aform';
 import Docpage from './components/Docpage';
