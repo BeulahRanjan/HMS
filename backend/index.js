@@ -16,7 +16,7 @@ app.use(
   "/uploads",
   express.static(path.join(process.cwd(), "uploads"))
 );
-app.use(express.json());
+// app.use(express.json());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -24,10 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const mongoURI =
   "mongodb+srv://beulahranjan:beulah@cluster0.v76khzx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; // Replace 'your_mongodb_atlas_connection_string' with your actual MongoDB Atlas connection string
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(mongoURI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
+
+
 // const __filename = fileURLToPath(import.meta.url);
 // const _dirname = path.dirname(_filename);
 app.use("/auth", userRoutes);
