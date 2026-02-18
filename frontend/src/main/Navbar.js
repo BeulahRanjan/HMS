@@ -51,8 +51,8 @@ function Navbar() {
   return (
     <div className='flex flex-row ml-10 p-2 mr-10 px-2 relative'>
       <div className='font-bold text-white text-xl ml-[77px]'>HopeCare</div>
-      <ul className='flex flex-row ml-[500px]'>
-        <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Home</li>
+      <ul className='flex flex-row ml-[430px]'>
+        <li onClick={() => navigate('/givefeedback')} className='ml-10 text-white font-bold text-lg cursor-pointer'>Give Feedback</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>About Us</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Departments</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Doctors</li>

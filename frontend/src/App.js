@@ -13,6 +13,7 @@ import Login from './Login';
 // import Docsec from './components/Docsec';
  import Dpage from './components/Dpage';
 import Aform from './components/Aform';
+import Docpage from './components/Docpage';
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
       <Route path='/getDocByName/:name' element={<Aform />} />
       <Route path='/getDepByName/:name' element={<Aform />} />
       <Route path='/addAppt/' element={<Aform />} />
-      
+      <Route path='/givefeedback' element={<Docpage/>}/>
 
 
 
@@ -55,6 +56,7 @@ function App() {
        {/* <Route path="/d" element={<Docsec/>} /> */}
        <Route path='/doctor' element={< Dpage/>} />
        <Route path='/recep' element={<Rpage/>}/>
+       
       
       </Routes>
     </Router>
