@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Docpage() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isDoctorsPage = location.pathname.includes("doctors");
+
 
   const fetchDoctors = async () => {
     try {
@@ -101,9 +107,16 @@ export default function Docpage() {
                 {doc.description || "No description available"}
               </p>
 
-              <button className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                View Profile
-              </button>
+              <button onClick={() => {
+                if (!isDoctorsPage) {
+                navigate("/feedback"); // 👈 change this to your actual feedback route
+                    }
+                }}
+                className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                { isDoctorsPage ? "View Profile" : "Give Feedback"}
+                </button>
+
             </div>
           </div>
         ))}

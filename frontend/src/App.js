@@ -14,6 +14,7 @@ import Login from './Login';
  import Dpage from './components/Dpage';
 import Aform from './components/Aform';
 import Docpage from './components/Docpage';
+import Feedback from './components/Feedback';
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
       <Route path='/getDepByName/:name' element={<Aform />} />
       <Route path='/addAppt/' element={<Aform />} />
       <Route path='/givefeedback' element={<Docpage/>}/>
+      <Route path='/feedback' element={<Feedback/>}/>
+      <Route path='/doctors' element={<Docpage/>}/>
+
 
 
 

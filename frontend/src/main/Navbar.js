@@ -55,7 +55,7 @@ function Navbar() {
         <li onClick={() => navigate('/givefeedback')} className='ml-10 text-white font-bold text-lg cursor-pointer'>Give Feedback</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>About Us</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Departments</li>
-        <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Doctors</li>
+        <li onClick={() => navigate('/doctors')} className='ml-10 text-white font-bold text-lg cursor-pointer'>Doctors</li>
         <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Contact Us</li>
 
         <li
