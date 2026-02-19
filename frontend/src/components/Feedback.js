@@ -3,6 +3,10 @@ import { useState } from "react";
 export default function FeedbackBox() {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
+  
+  const handlesubmit = () => {    // Handle feedback submission logic here
+    console.log("Feedback:", feedback);
+    console.log("Rating:", rating);}
 
   return (
     <div className="bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] h-screen justify-center items-center flex flex-col">
@@ -16,18 +20,16 @@ export default function FeedbackBox() {
     placeholder="Enter your feedback here..."
   />
 
-  <span className=""> Rating:</span>
+  <span className="block mt-4"> Rating:</span>
+<textarea
+  className="w-2/6 mb-10 bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] h-11 p-2 border border-gray-500 rounded mt-2 resize-none"
+  placeholder="Rate your experience (1-5)..."
+/>
 
-  <div className="flex ">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <span
-        key={star}
-        className="text-blue-300 text-xl cursor-pointer"
-      >
-        ★
-      </span>
-    ))}
-  </div>
+  <button onClick={handlesubmit}
+  className="ml-10  bg-blue-300 hover:bg-blue-500 text-black py-1 px-4 rounded">
+    Submit Feedback
+  </button>
     </div>
    </div>
 

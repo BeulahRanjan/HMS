@@ -40,7 +40,7 @@ function App() {
       <Route path='/getDepByName/:name' element={<Aform />} />
       <Route path='/addAppt/' element={<Aform />} />
       <Route path='/givefeedback' element={<Docpage/>}/>
-      <Route path='/feedback' element={<Feedback/>}/>
+      <Route path='/addfeedback' element={<Feedback/>}/>
       <Route path='/doctors' element={<Docpage/>}/>
 
 
