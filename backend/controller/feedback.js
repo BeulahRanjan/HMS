@@ -10,26 +10,28 @@ const addFeedback = async (req, res) => {
   try {
     const { doctorId } = req.params;
     const { rating, feedback } = req.body;
-    const patientname = req.user.name;
 
-    if (!doctorId || !rating || !feedback) {
+    // ✅ patient full name from auth middleware
+    const patientName = req.user.fullName;
+
+    if (!doctorId || !rating || !feedback || !patientName) {
       return res.status(400).json({
-        message: "doctorId, rating, and feedback are required",
+        message: "doctorId, rating, feedback, and patientName are required",
       });
     }
 
     const newFeedback = new Feedback({
       doctorId,
-      patientname,
+      patientName,
       rating,
       feedback,
     });
 
     await newFeedback.save();
+    console.log("REQ.USER 👉", req.user);
 
-    res.status(201).json({ message: "Feedback added successfully" });
-  } 
-  catch (error) {
+    res.status(201).json({ message: "Feedback submitted successfully" });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
