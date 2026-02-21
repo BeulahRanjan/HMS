@@ -6,15 +6,17 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-async function addFeedback(req, res) {
-  console.log("Adding Feedback:", req.body);
-
+const addFeedback = async (req, res) => {
   try {
-    const { doctorId, patientId, rating, feedback } = req.body;
+    const { doctorId } = req.params;          // 👈 FROM URL
+    const { rating, feedback } = req.body;    // 👈 FROM BODY
+    const patientId = req.user.userId;        // 👈 FROM JWT
 
-    // Optional: validate rating
-    if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: "Rating must be between 1 and 5" });
+    // validation
+    if (!doctorId || !rating || !feedback) {
+      return res.status(400).json({
+        message: "doctorId, rating, and feedback are required",
+      });
     }
 
     const newFeedback = new Feedback({
@@ -32,12 +34,40 @@ async function addFeedback(req, res) {
     });
   } catch (error) {
     console.error("Error adding feedback:", error);
-    res.status(500).json({
-      message: "Error adding feedback",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Server error" });
   }
+  try {
+    const { doctorId } = req.params;          // 👈 FROM URL
+    const { rating, feedback } = req.body;    // 👈 FROM BODY
+    const patientId = req.user.userId;        // 👈 FROM JWT
+
+    // validation
+    if (!doctorId || !rating || !feedback) {
+      return res.status(400).json({
+        message: "doctorId, rating, and feedback are required",
+      });
+    }
+
+    const newFeedback = new Feedback({
+      doctorId,
+      patientId,
+      rating,
+      feedback,
+    });
+
+    await newFeedback.save();
+
+    res.status(201).json({
+      message: "Feedback added successfully",
+      feedback: newFeedback,
+    });
+  } catch (error) {
+    console.error("Error adding feedback:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+
 }
+
 
 
 async function getallFeedback(req, res) {
@@ -55,7 +85,6 @@ async function getallFeedback(req, res) {
     });
   }
 }
-
 
 async function getFeedbackByDoctor(req, res) {
   try {
