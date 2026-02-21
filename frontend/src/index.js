@@ -24,7 +24,7 @@ import "./index.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+  <GoogleOAuthProvider clientId="399410955311-3t5j43go1jfd5ql81ojb8dcisbn0fdlb.apps.googleusercontent.com">
     <App />
   </GoogleOAuthProvider>
 );

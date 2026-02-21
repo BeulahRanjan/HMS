@@ -9,7 +9,7 @@ export default function Glogin() {
     console.log("Google user:", decoded);
 
     // Send Google user data to backend
-    const res = await axios.post("http://localhost:5000/google-login", {
+    const res = await axios.post("http://localhost:5000/auth/google-login", {
       email: decoded.email,
       name: decoded.name,
       picture: decoded.picture,
