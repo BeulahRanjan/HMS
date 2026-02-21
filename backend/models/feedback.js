@@ -7,29 +7,22 @@ const feedbackSchema = new mongoose.Schema(
       ref: "Doctor",
       required: true,
     },
-
-    patientId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Patient", // or "User" if patients are users
+    patientName: {
+      type: String,
       required: true,
     },
-
     rating: {
       type: Number,
       required: true,
       min: 1,
       max: 5,
     },
-
     feedback: {
       type: String,
       required: true,
-      trim: true,
     },
   },
   { timestamps: true }
 );
 
-const Feedback = mongoose.model("Feedback", feedbackSchema);
-
-export default Feedback;
+export default mongoose.model("Feedback", feedbackSchema);
