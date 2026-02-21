@@ -166,6 +166,16 @@ async function deleteUser(req, res) {
   }
 }
 
+async function signwithgoogle(req, res) {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ message: "Token missing" });
+  }
+
+  // verify token here
+  res.json({ message: "Google login success" });
+};
 
 
 const userController = {
@@ -173,7 +183,8 @@ const userController = {
     login:login,
     getUserByEmail: getUserByEmail,
     getAllUsers: getAllUsers,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    signwithgoogle:signwithgoogle
 }
 
 export default userController;
