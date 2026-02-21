@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
 
-export default function FeedbackBox() {
+export default function Feedback() {
   const { doctorId } = useParams(); // ✅ from URL
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState("");
@@ -18,22 +18,21 @@ export default function FeedbackBox() {
       }
 
       const res = await axios.post(
-        `http://localhost:5000/addFeedback/${doctorId}`, // ✅ FIXED URL
+        `http://localhost:5000/addFeedback/${doctorId}`,
         {
-          rating,
+          rating: Number(rating), // ✅ convert to number
           feedback,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         }
       );
 
-      console.log("Feedback response:", res.data); // ✅ correct place
-
+      console.log(res.data);
       alert("Feedback submitted successfully!");
+
       setFeedback("");
       setRating("");
     } catch (error) {
@@ -41,7 +40,7 @@ export default function FeedbackBox() {
         "Error submitting feedback:",
         error.response?.data || error.message
       );
-      alert("Failed to submit feedback");
+      alert(error.response?.data?.message || "Failed to submit feedback");
     }
   };
 

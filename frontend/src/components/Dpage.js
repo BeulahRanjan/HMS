@@ -12,6 +12,8 @@ function Dpage() {
   const [currentSection, setCurrentSection] = useState("dashboard");
   const [selectedImage, setSelectedImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [feedbacks, setFeedbacks] = useState([]);
+const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -149,30 +151,107 @@ const uploadProfileImage = async () => {
 
   console.log("Has Profile Image:", hasProfileImage, doctorProfile?.profileImage);
 
+const getFeedbacks = async (doctorId) => {
+  try {
+    const token = Cookies.get("authToken");
 
+    const response = await axios.get(
+      `http://localhost:5000/doctor/${doctorId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
+    // handle different backend response shapes
+    return response.data.feedbacks || response.data || [];
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    throw error;
+  }
+};
+
+useEffect(() => {
+  if (currentSection === "reviews" && doctorProfile?._id) {
+    const fetchFeedbacks = async () => {
+      try {
+        setLoading(true);
+        const data = await getFeedbacks(doctorProfile._id);
+        setFeedbacks(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeedbacks();
+  }
+}, [currentSection, doctorProfile]);
 
 
   return (
     <div className='flex overflow-x-hidden'>
     <Sidebar onNavigate={setCurrentSection} role={"doctor"}/>
-    {currentSection === 'reviews' &&
-     <div className='flex flex-col'>
-        <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
-          <div className='flex flex-row gap-3'>
-          <img src={`http://localhost:5000${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
-          <div className='flex flex-col'>
-            <p>{doctorProfile?.name}</p>
-            <p>{doctorProfile?.specialist}</p>
-          </div>
-          <div className='flex flex-col ml-[1100px]'>
-          <p>Date: {new Date().toLocaleDateString()}</p>
-          <p>Time: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-          </div>
-          </div>
+    {currentSection === "reviews" && (
+  <div className="flex flex-col gap-4">
+    {/* Header */}
+    <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
+      <div className="flex gap-3 items-center">
+        <img
+          src={`http://localhost:5000${doctorProfile?.profileImage}`}
+          alt=""
+          className="w-12 h-12 rounded-full border-2 border-black"
+        />
+        <div>
+          <p className="font-semibold">{doctorProfile?.name}</p>
+          <p className="text-sm text-gray-600">
+            {doctorProfile?.specialist}
+          </p>
         </div>
-     </div>
-}
+      </div>
+
+      <div className="text-sm">
+        <p>{new Date().toLocaleDateString()}</p>
+        <p>
+          {new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+      </div>
+    </div>
+
+    {/* Feedback List */}
+    <div className="ml-[70px] w-[1450px]">
+      {loading && <p>Loading reviews...</p>}
+
+      {!loading && feedbacks.length === 0 && (
+        <p>No reviews yet</p>
+      )}
+
+      {feedbacks.map((item) => (
+        <div
+          key={item._id}
+          className="bg-white p-4 border rounded mb-3 shadow-sm"
+        >
+          <p className="font-semibold">
+            {item.patientId?.name || "Anonymous Patient"}
+          </p>
+
+          <p className="text-gray-600 mt-1">
+            {item.feedback}
+          </p>
+
+          <p className="text-sm text-gray-400 mt-2">
+            ⭐ Rating: {item.rating}/5
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
     {currentSection === 'appointments' &&
       <div className='flex flex-col'>
