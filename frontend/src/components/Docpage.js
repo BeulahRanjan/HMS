@@ -107,15 +107,19 @@ export default function Docpage() {
                 {doc.description || "No description available"}
               </p>
 
-              <button onClick={() => {
-                if (!isDoctorsPage) {
-                navigate("/feedback"); // 👈 change this to your actual feedback route
-                    }
-                }}
-                className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                { isDoctorsPage ? "View Profile" : "Give Feedback"}
-                </button>
+              <button
+  onClick={() => {
+    if (isDoctorsPage) {
+      navigate(`/doctors/${doc._id}`);   // 👈 doctor profile page
+    } else {
+      navigate(`/addFeedback/${doc._id}`); // 👈 feedback page
+    }
+  }}
+  className="mt-auto bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+>
+  {isDoctorsPage ? "View Profile" : "Give Feedback"}
+</button>
+
 
             </div>
           </div>

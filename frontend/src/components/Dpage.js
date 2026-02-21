@@ -153,10 +153,27 @@ const uploadProfileImage = async () => {
 
 
 
-
   return (
     <div className='flex overflow-x-hidden'>
     <Sidebar onNavigate={setCurrentSection} role={"doctor"}/>
+    {currentSection === 'reviews' &&
+     <div className='flex flex-col'>
+        <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
+          <div className='flex flex-row gap-3'>
+          <img src={`http://localhost:5000${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
+          <div className='flex flex-col'>
+            <p>{doctorProfile?.name}</p>
+            <p>{doctorProfile?.specialist}</p>
+          </div>
+          <div className='flex flex-col ml-[1100px]'>
+          <p>Date: {new Date().toLocaleDateString()}</p>
+          <p>Time: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+          </div>
+          </div>
+        </div>
+     </div>
+}
+
     {currentSection === 'appointments' &&
       <div className='flex flex-col'>
         <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">

@@ -8,10 +8,11 @@ const Sidebar = ({ onNavigate, role }) => {
 
   const docItems = [
     // { label: 'Dashboard', value: 'dashboard', icon: '📊' },
-    // { label: 'Patients', value: 'patients', icon: '🧾' },
+    { label: 'Reviews', value: 'reviews', icon: '🧾' },
     { label: 'Surguries', value:'Surgeries', icon:'🧾'},
     { label: 'Appointments', value: 'appointments', icon: '📅' },
     { label: 'Profile', value: 'profile', icon:'🧑‍⚕️ ' }
+
   ];
 
   const recepItems = [
