@@ -19,11 +19,11 @@ export default function Docpage() {
 
       console.log("Auth token:", token);
 
-      const res = await axios.get("http://localhost:5000/getAllDoctors", {
-        headers: token
-          ? { Authorization: `Bearer ${token}` }
-          : {},
-      });
+      const res = axios.get("/getAllDoctors", {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
 
       console.log("API response:", res.data);
 

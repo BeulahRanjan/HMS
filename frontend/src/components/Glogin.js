@@ -5,23 +5,32 @@ import { useNavigate } from "react-router-dom";
 export default function Glogin() {
   const navigate = useNavigate(); // ✅ correct hook
 
-  const handleSuccess = async (credentialResponse) => {
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/auth/google-login",
-        {
-          token: credentialResponse.credential, // ✅ send ONLY token
-        }
-      );
+const handleSuccess = async (credentialResponse) => {
+  try {
+    // 🔵 Google token (ONLY for backend login)
+    const googleToken = credentialResponse.credential;
+    console.log("Received Google token:", googleToken);
 
-      console.log("Backend response:", res.data);
+    const res = await axios.post(
+      "http://localhost:5000/auth/google-login",
+      { token: googleToken }
+    );
+    navigate("/"); // ✅ navigate after successful login 
+    // 🟢 YOUR APP TOKEN
+    console.log("Backend response:", res.data);
+    console.log("App token:", res.data.token);
 
-      // ✅ navigate ONLY after backend success
-      navigate("/");
-    } catch (err) {
-      console.error("Google login error:", err.response?.data || err.message);
-    }
-  };
+    // ✅ STORE APP TOKEN (THIS WAS THE BUG)
+    localStorage.setItem("token", res.data.token);
+
+    console.log(
+      "Stored token in localStorage:",
+      localStorage.getItem("token")
+    );
+  } catch (err) {
+    console.error("Google login error:", err);
+  }
+};
 
   return (
     <div className="absolute top-4 right-4">
