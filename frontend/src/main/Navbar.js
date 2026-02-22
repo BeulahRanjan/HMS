@@ -4,86 +4,92 @@ import Cookies from 'js-cookie';
 
 function Navbar() {
   const navigate = useNavigate();
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const role = Cookies.get('role'); // doctor | admin | receptionist | patient
+
+  // check login / submission state
   useEffect(() => {
-    const val = Cookies.get('hasSubmittedForm');
-    if (val === 'true') {
-      setHasSubmitted(true);
-    }
+    const submitted = Cookies.get('hasSubmittedForm');
+    setHasSubmitted(submitted === 'true');
   }, []);
 
+  // close dropdown on outside click
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleProfileClick = () => {
-    const val = Cookies.get('role');
-    if(val === 'doctor')
-      navigate('/doctor');
-    else
-      // if(val === 'nurse')
-      //   navigate('/recep');
-      // else
-        if(val === 'receptionist')
-          navigate('/recep');
-        else
-          if(val === 'admin')
-            navigate('/admin');
-          
+    if (role === 'doctor') navigate('/doctor');
+    else if (role === 'receptionist') navigate('/recep');
+    else if (role === 'admin') navigate('/admin');
   };
 
   const handleLogout = () => {
-    setHasSubmitted(true);
+    Cookies.remove('hasSubmittedForm');
+    Cookies.remove('role');
+    localStorage.clear();
     setShowDropdown(false);
-    navigate('/signup');
+    setHasSubmitted(false);
+    navigate('/signup', { replace: true }); // 🔥 FIX
+    window.location.reload();
+  };
+
+  const handleAuthClick = () => {
+    if (role === 'patient' && !hasSubmitted) {
+      handleLogout();
+    } else if (hasSubmitted) {
+      setShowDropdown(prev => !prev);
+    } else {
+      navigate('/signup');
+    }
   };
 
   return (
-    <div className='flex flex-row ml-10 p-2 mr-10 px-2 relative'>
-      <div className='font-bold text-white text-xl ml-[77px]'>HopeCare</div>
-      <ul className='flex flex-row ml-[430px]'>
-        <li onClick={() => navigate('/givefeedback')} className='ml-10 text-white font-bold text-lg cursor-pointer'>Give Feedback</li>
-        <li className='ml-10 text-white font-bold text-lg cursor-pointer'>About Us</li>
-        <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Departments</li>
-        <li onClick={() => navigate('/doctors')} className='ml-10 text-white font-bold text-lg cursor-pointer'>Doctors</li>
-        <li className='ml-10 text-white font-bold text-lg cursor-pointer'>Contact Us</li>
+    <div className="flex flex-row ml-10 p-2 mr-10 px-2 relative">
+      <div className="font-bold text-white text-xl ml-[77px]">HopeCare</div>
 
+      <ul className="flex flex-row ml-[430px]">
+        <li onClick={() => navigate('/givefeedback')} className="ml-10 text-white font-bold text-lg cursor-pointer">Give Feedback</li>
+        <li className="ml-10 text-white font-bold text-lg cursor-pointer">About Us</li>
+        <li className="ml-10 text-white font-bold text-lg cursor-pointer">Departments</li>
+        <li onClick={() => navigate('/doctors')} className="ml-10 text-white font-bold text-lg cursor-pointer">Doctors</li>
+        <li className="ml-10 text-white font-bold text-lg cursor-pointer">Contact Us</li>
+
+        {/* AUTH SECTION */}
         <li
-          className='ml-10 text-white font-bold text-lg cursor-pointer relative'
-          onClick={() => {
-            if (hasSubmitted) {
-              setShowDropdown((prev) => !prev);
-            } else {
-              navigate('/signup');
-            }
-          }}
+          className="ml-10 text-white font-bold text-lg cursor-pointer relative"
+          onClick={handleAuthClick}
         >
-          {hasSubmitted ? 'My Profile' : 'Sign in'}
-        
+          {role === 'patient' 
+            ? 'Logout'
+            : hasSubmitted
+              ? 'My Profile'
+              : 'Sign in'}
 
-          {showDropdown && (
+          {/* Dropdown ONLY for non-patient users */}
+          {showDropdown && role !== 'patient' && (
             <ul
-              className='absolute right-0 mt-2 bg-white text-black shadow-md rounded-md w-40 z-10'
               ref={dropdownRef}
+              className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md w-40 z-10"
             >
               <li
-                className='px-4 py-2 hover:bg-gray-100 cursor-pointer'
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={handleProfileClick}
               >
                 View Appointments
               </li>
               <li
-                className='px-4 py-2 hover:bg-gray-100 cursor-pointer'
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={handleLogout}
               >
                 Logout
