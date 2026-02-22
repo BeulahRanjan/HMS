@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import dotenv from 'dotenv';
 import {jwtDecode} from "jwt-decode";
+import Patient from '../models/patient.js';
 
 
 dotenv.config();
@@ -190,12 +191,22 @@ async function googleLogin  (req, res) {
       user = await User.create({ email, name, googleId });
     }
 
-    // 🔑 YOUR APP JWT
+    let patient = await Patient.findOne({ email: user.email });
+
+if (patient && !patient.userId) {
+  patient.userId = user._id;
+  await patient.save();
+}
+
     const appToken = jwt.sign(
-      { userId: user._id },
-      process.env.SECRET_KEY,
-      { expiresIn: "7d" }
-    );
+  {
+    userId: user._id,
+    name: user.name,
+    email: user.email,
+  },
+  process.env.SECRET_KEY,
+  { expiresIn: "7d" }
+);
 
     // ✅ SEND TOKEN
     res.status(200).json({

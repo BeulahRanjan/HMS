@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const patSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
   name: { type: String, required: true },
   age: { type: Number, required: true },
   gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
@@ -23,3 +27,5 @@ const patSchema = new mongoose.Schema({
 const Patient = mongoose.model("Patient", patSchema);
 
 export default Patient;
+
+

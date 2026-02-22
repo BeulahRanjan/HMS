@@ -12,7 +12,11 @@ const auth = (req, res, next) => {
         const token =authHeader.split(" ")[1];
         const decoded=jwt.verify(token, process.env.SECRET_KEY);
 
-        req.user = {userId:decoded.userId};
+     req.user = {
+  userId: decoded.userId,
+  name: decoded.name,
+  email: decoded.email,
+};
         next();
         console.log("TOKEN:", token);
         console.log("SECRET:", process.env.SECRET_KEY);
@@ -25,3 +29,4 @@ const auth = (req, res, next) => {
 };
 
 export default auth;
+

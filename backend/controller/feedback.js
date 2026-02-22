@@ -11,22 +11,19 @@ const addFeedback = async (req, res) => {
     const { doctorId } = req.params;
     const { rating, feedback } = req.body;
 
-    if (!rating || !feedback) {
-      return res.status(400).json({
-        message: "rating and feedback are required",
-      });
-    }
-
-    // 🔐 get patient from token
-    const patient = await Patient.findById(req.user.userId);
+    const patient = await Patient.findOne({
+      userId: req.user.userId
+    });
 
     if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      return res.status(404).json({
+        message: "Patient not found"
+      });
     }
 
     const newFeedback = new Feedback({
       doctorId,
-      patientId: patient._id,
+      patientId: patient._id,   // ✅ THIS FIXES THE ERROR
       patientName: patient.name,
       rating,
       feedback,
@@ -35,10 +32,11 @@ const addFeedback = async (req, res) => {
     await newFeedback.save();
 
     res.status(201).json({
-      message: "Feedback submitted successfully",
+      message: "Feedback submitted successfully"
     });
-  } catch (error) {
-    console.error(error);
+
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };
