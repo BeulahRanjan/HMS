@@ -7,6 +7,11 @@ const feedbackSchema = new mongoose.Schema(
       ref: "Doctor",
       required: true,
     },
+    patientId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Patient",
+  required: true,
+},
     patientName: {
       type: String,
       required: true,

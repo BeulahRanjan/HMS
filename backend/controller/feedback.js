@@ -11,26 +11,32 @@ const addFeedback = async (req, res) => {
     const { doctorId } = req.params;
     const { rating, feedback } = req.body;
 
-    // ✅ patient full name from auth middleware
-    const patientName = req.user.fullName;
-
-    if (!doctorId || !rating || !feedback || !patientName) {
+    if (!rating || !feedback) {
       return res.status(400).json({
-        message: "doctorId, rating, feedback, and patientName are required",
+        message: "rating and feedback are required",
       });
+    }
+
+    // 🔐 get patient from token
+    const patient = await Patient.findById(req.user.userId);
+
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
     }
 
     const newFeedback = new Feedback({
       doctorId,
-      patientName,
+      patientId: patient._id,
+      patientName: patient.name,
       rating,
       feedback,
     });
 
     await newFeedback.save();
-    console.log("REQ.USER 👉", req.user);
 
-    res.status(201).json({ message: "Feedback submitted successfully" });
+    res.status(201).json({
+      message: "Feedback submitted successfully",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
