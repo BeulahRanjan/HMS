@@ -8,5 +8,5 @@ route.post("/login", userController.login);
 route.get("/getUserByEmail/:email", userController.getUserByEmail);
 route.get("/getAllUsers", userController.getAllUsers);
 route.delete("/deleteUser/:id", userController.deleteUser);
-route.post("/google-login",userController.signwithgoogle);
+route.post("/google-login",userController.googleLogin);
 export default route;

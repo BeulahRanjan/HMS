@@ -2,9 +2,14 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import dotenv from 'dotenv';
+import {jwtDecode} from "jwt-decode";
+
 
 dotenv.config();
+import { OAuth2Client } from "google-auth-library";
 
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // async function signup(req,res) {
 //     try{
@@ -166,15 +171,41 @@ async function deleteUser(req, res) {
   }
 }
 
-async function signwithgoogle(req, res) {
-  const { token } = req.body;
 
-  if (!token) {
-    return res.status(400).json({ message: "Token missing" });
+
+async function googleLogin  (req, res) {
+ 
+   try {
+    const { token } = req.body; // Google token
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { email, name, sub: googleId } = ticket.getPayload();
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({ email, name, googleId });
+    }
+
+    // 🔑 YOUR APP JWT
+    const appToken = jwt.sign(
+      { userId: user._id },
+      process.env.SECRET_KEY,
+      { expiresIn: "7d" }
+    );
+
+    // ✅ SEND TOKEN
+    res.status(200).json({
+      token: appToken,
+      user,
+    });
+  } catch (err) {
+    console.error("Google login failed:", err);
+    res.status(401).json({ message: "Google auth failed" });
   }
-
-  // verify token here
-  res.json({ message: "Google login success" });
 };
 
 
@@ -184,7 +215,7 @@ const userController = {
     getUserByEmail: getUserByEmail,
     getAllUsers: getAllUsers,
     deleteUser: deleteUser,
-    signwithgoogle:signwithgoogle
+    googleLogin:googleLogin
 }
 
 export default userController;
