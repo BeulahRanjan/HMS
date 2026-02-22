@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
 
 export default function Feedback() {
@@ -8,42 +8,50 @@ export default function Feedback() {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState("");
 
-  const handleSubmit = async () => {
-    try {
-      const token = Cookies.get("authToken");
+const handleSubmit = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-      if (!token) {
-        alert("Please login first");
-        return;
-      }
-
-      const res = await axios.post(
-        `http://localhost:5000/addFeedback/${doctorId}`,
-        {
-          rating: Number(rating), // ✅ convert to number
-          feedback,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log(res.data);
-      alert("Feedback submitted successfully!");
-
-      setFeedback("");
-      setRating("");
-    } catch (error) {
-      console.error(
-        "Error submitting feedback:",
-        error.response?.data || error.message
-      );
-      alert(error.response?.data?.message || "Failed to submit feedback");
+    if (!token) {
+      alert("Please login first");
+      return;
     }
-  };
 
+    if (!rating || Number(rating) < 1 || Number(rating) > 5) {
+      alert("Please provide a rating between 1 and 5");
+      return;
+    }
+
+    if (!feedback.trim()) {
+      alert("Please enter feedback");
+      return;
+    }
+
+    const res = await axios.post(
+      `http://localhost:5000/addFeedback/${doctorId}`,
+      {
+        
+        rating: Number(rating),
+        feedback,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+     console.log("Feedback response:", res.data);
+    alert("Feedback submitted successfully!");
+    setFeedback("");
+    setRating("");
+  } catch (error) {
+    console.error(
+      "Error submitting feedback:",
+      error.response?.data || error.message
+    );
+    alert(error.response?.data?.message || "Failed to submit feedback");
+  }
+};
   return (
     <div className="bg-gradient-to-b from-[#e3f0f7] to-[#eff6fa] h-screen flex flex-col items-center justify-center">
       <p className="mb-10 text-3xl font-bold">Feedback Form</p>

@@ -41,16 +41,20 @@ function Docsec() {
   
 const fetchDoctors = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/getAllDoctors", {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("authToken")}`,
-      },
-    });
+    const token = localStorage.getItem("token");
 
-    setDoctors(res.data.doctors);
-    console.log("Doctors fetched:", res.data.doctors);
-  } catch (error) {
-    console.error("Error fetching doctors:", error);
+    const res = await axios.get(
+      "http://localhost:5000/getAllDoctors",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(res.data);
+  } catch (err) {
+    console.error("Error fetching doctors:", err);
   }
 };
 

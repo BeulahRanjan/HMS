@@ -13,31 +13,31 @@ export default function Docpage() {
   const isDoctorsPage = location.pathname.includes("doctors");
 
 
-  const fetchDoctors = async () => {
-    try {
-      const token = Cookies.get("authToken");
+ const fetchDoctors = async () => {
+  try {
+    setLoading(true);
 
-      console.log("Auth token:", token);
+    const token = localStorage.getItem("token");
 
-      const res = axios.get("/getAllDoctors", {
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
-});
+    const res = await axios.get(
+      "http://localhost:5000/getAllDoctors",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      console.log("API response:", res.data);
-
-      // handle both possible response shapes
-      const doctorsData = res.data.doctors || res.data;
-
-      setDoctors(Array.isArray(doctorsData) ? doctorsData : []);
-    } catch (err) {
-      console.error("Error fetching doctors:", err);
-      setError("Failed to load doctors");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // IMPORTANT 👇
+    setDoctors(res.data.doctors || res.data);
+    setError("");
+  } catch (err) {
+    console.error("Error fetching doctors:", err);
+    setError("Failed to load doctors");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchDoctors();
