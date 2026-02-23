@@ -6,39 +6,33 @@ import Department from "../models/dept.js";
 dotenv.config();
 
 async function addAdmin(req, res) {
-    try{
-        const {email, name, phone_no, department, experience} =req.body;
-        if(!email || !name || !phone_no || !department || !experience){
-            return res.status(400).json({message:"Please fill all the fields"});
-        }
+  try {
+    const { email, name, phone_no, dob, gender, experience } = req.body;
 
-        const userId = req.user.userId;
-        const user = await User.findById(userId);
-        if(!user){
-           return  res.status(404).json({message:"User not found"});
-        }
-
-        const dept = await Department.findOne({ name: department });
-        if(!dept) {
-        return res.status(404).json({ message: "Department not found" });    
-        }
-
-        const admin= new Admin({
-            name,
-            email,
-            phone_no,
-            department:dept._id,
-            experience,
-            user: userId
-        });
-        const savedAdmin = await admin.save();
-        await User.findByIdAndUpdate(userId, {hasSubmittedForm: true});
-        return res.status(201).json({message:"Admin added successfully"});
+    if (!email || !name || !phone_no || !dob || !gender || !experience) {
+      return res.status(400).json({ message: "Please fill all the fields" });
     }
-    catch(error){
-        console.log("Error in adding admin:", error);
-        return res.status(500).json({message:"Error in adding admin"});
-    }
+
+    const userId = req.user.userId;
+
+    const admin = new Admin({
+      name,
+      email,
+      phone_no,
+      dob,
+      gender,
+      experience,
+      user: userId,
+    });
+
+    await admin.save();
+    await User.findByIdAndUpdate(userId, { hasSubmittedForm: true });
+
+    return res.status(201).json({ message: "Admin added successfully" });
+  } catch (error) {
+    console.log("Error in adding admin:", error);
+    return res.status(500).json({ message: "Error in adding admin" });
+  }
 }
 
 async function delAdmin(req, res) {
