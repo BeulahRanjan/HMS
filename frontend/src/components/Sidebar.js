@@ -23,9 +23,15 @@ const Sidebar = ({ onNavigate, role }) => {
     { label: 'Appointments', value: 'appointments', icon: '📅' },
     { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
   ];
+   const adminItems = [
+    // { label: 'Home', value: 'home', icon: '🏠' },
+    { label: 'Profile', value: 'profile', icon: '📊' },
+    { label: 'Patients', value: 'patients', icon: '🧾' },
+    { label: 'Appointments', value: 'appointments', icon: '📅' },
+    { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
+  ];
 
-  const links = role === 'doctor' ? docItems : recepItems;
-
+  const links = role === 'doctor' ? docItems : role === 'admin' ? adminItems : recepItems;
   // Handles click on a menu item
   const handleClick = (value) => {
     if (!value) return;
@@ -46,7 +52,7 @@ const Sidebar = ({ onNavigate, role }) => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className={`text-xl font-bold ${collapsed ? 'hidden' : 'block'}`}>
-          {role === 'doctor' ? 'Doctor Panel' : 'Reception Panel'}
+          {role === 'doctor' ? 'Doctor Panel' : role === 'admin' ? 'Admin Panel' : 'Reception Panel'}
         </h2>
         <button onClick={toggleSidebar} className="text-xl">
           {collapsed ? <MenuIcon /> : <CloseIcon />}

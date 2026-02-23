@@ -14,6 +14,7 @@ import Adminform from './components/Adminform';
 import Aform from './components/Aform';
 import Docpage from './components/Docpage';
 import Feedback from './components/Feedback';
+import Adminpage from './components/Adminpage';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
       <Route path='/givefeedback' element={<Docpage/>}/>
       <Route path='/addFeedback/:doctorId' element={<Feedback/>}/>
       <Route path='/doctors' element={<Docpage/>}/>
+      <Route path='/admin' element={<Adminpage/>}/>
 
 
 
