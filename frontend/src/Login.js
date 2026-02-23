@@ -84,6 +84,7 @@ const navigate = useNavigate();
         if (!user.hasSubmittedForm) {
           if (user.role === "doctor") navigate("/addDoctor", { replace: true });
           else if (user.role === "nurse") navigate("/nurseform", { replace: true });
+          else if (user.role === "admin") navigate("/addAdmin", { replace: true });
           else if (user.role === "receptionist")
             navigate("/addRecep", { replace: true });
           else navigate("/", { replace: true });

@@ -9,7 +9,7 @@ import Login from './Login';
  import Dform from './components/Dform';
  import Nform from './components/Nform';
  import Rform from './components/Rform';
-
+import Adminform from './components/Adminform';
  import Dpage from './components/Dpage';
 import Aform from './components/Aform';
 import Docpage from './components/Docpage';
@@ -34,6 +34,7 @@ function App() {
       <Route path="/addRecep" element={<Rform/>}/>
       <Route path='/addPatient' element={<Pform/>} />
       <Route path='/addAppt' element={<Rpage />} />
+      <Route path='addAdmin' element={<Adminform />} />
       <Route path='/getAllPat' element={<Rpage />} />
       <Route path='/upAppt/:id' element={<Aform />} />
       <Route path='/getPatByName/:name' element={<Aform />} />
