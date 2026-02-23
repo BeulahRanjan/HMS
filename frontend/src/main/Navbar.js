@@ -8,8 +8,9 @@ function Navbar() {
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+    const role = localStorage.getItem('role'); 
 
-  const role = Cookies.get('role'); // doctor | admin | receptionist | patient
+ // doctor | admin | receptionist | patient
 
   // check login / submission state
   useEffect(() => {
@@ -45,14 +46,18 @@ function Navbar() {
   };
 
   const handleAuthClick = () => {
-    if (role === 'patient' && !hasSubmitted) {
-      handleLogout();
-    } else if (hasSubmitted) {
-      setShowDropdown(prev => !prev);
-    } else {
-      navigate('/signup');
-    }
-  };
+  if (!role) {
+    navigate('/signup');
+    return;
+  }
+
+  if (role === 'patient') {
+    handleLogout();
+    return;
+  }
+
+  setShowDropdown(prev => !prev);
+};
 
   return (
     <div className="flex flex-row ml-10 p-2 mr-10 px-2 relative">
@@ -70,11 +75,11 @@ function Navbar() {
           className="ml-10 text-white font-bold text-lg cursor-pointer relative"
           onClick={handleAuthClick}
         >
-          {role === 'patient' 
-            ? 'Logout'
-            : hasSubmitted
-              ? 'My Profile'
-              : 'Sign in'}
+          {role
+  ? role === 'patient'
+    ? 'Logout'
+    : 'My Profile'
+  : 'Signin'}
 
           {/* Dropdown ONLY for non-patient users */}
           {showDropdown && role !== 'patient' && (

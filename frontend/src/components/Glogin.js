@@ -7,34 +7,35 @@ export default function Glogin() {
 
 const handleSuccess = async (credentialResponse) => {
   try {
-    // 🔵 Google token (ONLY for backend login)
+    // 🔵 Google token (ONLY for backend verification)
     const googleToken = credentialResponse.credential;
     console.log("Received Google token:", googleToken);
 
     const res = await axios.post(
       "http://localhost:5000/auth/google-login",
-      { token: googleToken }
+      {
+        token: googleToken,
+        role: "patient"   // ✅ SEND ROLE
+      }
     );
-    navigate("/"); // ✅ navigate after successful login 
-    // 🟢 YOUR APP TOKEN
-    console.log("Backend response:", res.data);
-    console.log("App token:", res.data.token);
 
-    // ✅ STORE APP TOKEN (THIS WAS THE BUG)
+    console.log("Backend response:", res.data);
+
+    // 🟢 YOUR APP TOKEN
     localStorage.setItem("token", res.data.token);
 
-    console.log(
-      "Stored token in localStorage:",
-      localStorage.getItem("token")
-    );
+    // 🟢 STORE ROLE FOR NAVBAR / AUTH
+    localStorage.setItem("role", "patient");
+
+    navigate("/", { replace: true }); // ✅ prevent back navigation
   } catch (err) {
     console.error("Google login error:", err);
   }
 };
 
   return (
-    <div className="absolute top-4 right-4">
-      <GoogleLogin
+    <div className=" absolute bottom-[5.5em] right-[16.5em] h-25 w-1/7 ">
+      <GoogleLogin theme='otline' size='large' shape='pill'
         onSuccess={handleSuccess}
         onError={() => console.log("Google Login Failed")}
       />
