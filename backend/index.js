@@ -9,6 +9,7 @@ import recepRoutes from "./route/recep.js";
 import patRoutes from "./route/patient.js";
 import apptRoutes from "./route/appt.js";
 import feedbackRoutes from "./route/feedback.js";
+import adminRoutes from "./route/admin.js";
 import path from "path";
 
 
@@ -41,6 +42,7 @@ app.use("/",recepRoutes);
 app.use("/",patRoutes);
 app.use("/",apptRoutes);
 app.use("/",feedbackRoutes);
+app.use("/",adminRoutes);
 
 
 
