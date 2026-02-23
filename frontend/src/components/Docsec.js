@@ -6,7 +6,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useState, useEffect} from 'react';
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 
 
@@ -39,25 +39,35 @@ function Docsec() {
 
     const [doctors, setDoctors] = useState([]);
   
+// const fetchDoctors = async () => {
+//   try {
+//     const token = localStorage.getItem("token");
+
+//     const res = await axios.get(
+//       "http://localhost:5000/getAllDoctors",
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+
+//     console.log(res.data);
+//   } catch (err) {
+//     console.error("Error fetching doctors:", err);
+//   }
+// };
+
 const fetchDoctors = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:5000/getAllDoctors");
 
-    const res = await axios.get(
-      "http://localhost:5000/getAllDoctors",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    console.log(res.data);
+    // ✅ extract array
+    setDoctors(res.data.doctors);
   } catch (err) {
     console.error("Error fetching doctors:", err);
   }
 };
-
 useEffect(() => {
   fetchDoctors();
 }, []);

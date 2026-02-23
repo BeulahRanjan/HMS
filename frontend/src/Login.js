@@ -21,77 +21,83 @@ const navigate = useNavigate();
         setUserData({ ...userData, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit=async(e)=>{
-        e.preventDefault();
-        try{
-            const response = await axios.post('http://localhost:5000/auth/login', userData);
-            console.log(response.data.user);
-           if(response.status===200){
-            toast.success("Login Successfull !", {
-                        position: "top-right",
-                        autoClose:2000,
-                      });
-            Cookies.set('authToken', response.data.token, { 
-                expires: 7, 
-                sameSite: 'strict'
-              });
-              Cookies.set('userId', response.data.user._id, { 
-                expires: 7, 
-                sameSite: 'strict'
-              });
-              Cookies.set('username', response.data.user.name, { 
-                expires: 7, 
-                sameSite: 'strict'
-              });
-              Cookies.set('role', response.data.user.role, { 
-                expires: 7, 
-                sameSite: 'strict'
-              });
-              Cookies.set('hasSubmittedForm', response.data.user.hasSubmittedForm, { 
-                expires: 7, 
-                sameSite: 'strict'
-              });
-              console.log(response.data);
-                // Set global context
-      setUserGlobalData(response.data.user._id, response.data.user.name);
+   const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      // Clear form
-      setUserData({ email: "", password: "", role: "" });
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/auth/login",
+      userData
+    );
 
-      // Use role from backend response
-      const user = response.data.user;
-      const userRole = response.data.user.role;
-               setTimeout(() => {
-                if (!user.hasSubmittedForm) {
-                  console.log(user.hasSubmittedForm);
-          // Redirect to respective form if first-time login
-          if (userRole === 'doctor') navigate('/addDoctor');
-          else if (userRole === 'nurse') navigate('/nurseform');
-          else if (userRole === 'receptionist') navigate('/addRecep');
-          else navigate('/');
+    if (response.status === 200) {
+      const { user, token } = response.data;
+
+      toast.success("Login Successful!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      // 🔐 AUTH STORAGE (REQUIRED FOR NAVBAR)
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
+
+      Cookies.set("authToken", token, {
+        expires: 7,
+        sameSite: "strict",
+      });
+
+      Cookies.set("userId", user._id, {
+        expires: 7,
+        sameSite: "strict",
+      });
+
+      Cookies.set("username", user.name, {
+        expires: 7,
+        sameSite: "strict",
+      });
+
+      Cookies.set("role", user.role, {
+        expires: 7,
+        sameSite: "strict",
+      });
+
+      Cookies.set(
+        "hasSubmittedForm",
+        user.hasSubmittedForm ? "true" : "false",
+        {
+          expires: 7,
+          sameSite: "strict",
+        }
+      );
+
+      // 🌍 Global context
+      setUserGlobalData(user._id, user.name);
+
+      // 🧭 ROLE-BASED NAVIGATION
+      setTimeout(() => {
+        if (user.role === "patient") {
+          navigate("/", { replace: true });
+          return;
+        }
+
+        if (!user.hasSubmittedForm) {
+          if (user.role === "doctor") navigate("/addDoctor", { replace: true });
+          else if (user.role === "nurse") navigate("/nurseform", { replace: true });
+          else if (user.role === "receptionist")
+            navigate("/addRecep", { replace: true });
+          else navigate("/", { replace: true });
         } else {
-          // Already submitted form → Go to homepage
-          navigate('/');
+          navigate("/", { replace: true });
         }
-      }, 1000);}
-
-           else if(response.status===400){
-            toast.error("Wrong Password!", {
-                position: "top-center",
-              });
-           }
-
-        }
-        catch(error){
-            toast.error("Login Failed! Try Again", {
-                position: "top-center",
-              });
-        }
+      }, 800);
     }
-
-        const handleSignUp=()=>{
-        navigate("/");
-    }
+  } catch (error) {
+    toast.error("Login Failed! Try Again", {
+      position: "top-center",
+    });
+  }
+};
 
 
   return (
@@ -143,7 +149,7 @@ const navigate = useNavigate();
 
 
                     <button type="submit" className='ml-[130px] mt-5 bg-blue-300  w-[80px] rounded-md p-2 hover:bg-blue-400'
-                    onClick={()=>{handleSignUp()}}  >Login</button>
+                    >Login</button>
                 </div>
             </div>
         </form>

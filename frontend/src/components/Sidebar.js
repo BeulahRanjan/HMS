@@ -6,27 +6,44 @@ const Sidebar = ({ onNavigate, role }) => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleSidebar = () => setCollapsed(!collapsed);
 
+  // Menu items for doctor
   const docItems = [
-    // { label: 'Dashboard', value: 'dashboard', icon: '📊' },
+    // { label: 'Home', value: 'home', icon: '🏠' },
     { label: 'Reviews', value: 'reviews', icon: '🧾' },
-    { label: 'Surguries', value:'Surgeries', icon:'🧾'},
+    { label: 'Surgeries', value: 'surgeries', icon: '⚕️' },
     { label: 'Appointments', value: 'appointments', icon: '📅' },
-    { label: 'Profile', value: 'profile', icon:'🧑‍⚕️ ' }
-
+    { label: 'Profile', value: 'profile', icon: '🧑‍⚕️' }
   ];
 
+  // Menu items for receptionist
   const recepItems = [
-    { label: 'Profile', value: 'Profile', icon: '📊' },
+    // { label: 'Home', value: 'home', icon: '🏠' },
+    { label: 'Profile', value: 'profile', icon: '📊' },
     { label: 'Patients', value: 'patients', icon: '🧾' },
     { label: 'Appointments', value: 'appointments', icon: '📅' },
-    { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' },
-    // { label: 'Profile', value: 'profile', icon:'🧑‍⚕️ ' }
+    { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
   ];
 
-  const links = role === "doctor" ? docItems : recepItems;
+  const links = role === 'doctor' ? docItems : recepItems;
+
+  // Handles click on a menu item
+  const handleClick = (value) => {
+    if (!value) return;
+
+    const normalized = value.toLowerCase();
+    if (normalized === 'home') {
+      // Navigate to homepage
+      onNavigate && onNavigate('home');
+    } else {
+      onNavigate && onNavigate(normalized);
+    }
+  };
 
   return (
-    <div className={` fixed h-screen  ${collapsed ? 'w-20' : 'w-64'} opacity-100 z-10 bg-[#eff6fa] p-4 transition-all duration-300 shadow-md`}>
+    <div
+      className={`fixed h-screen ${collapsed ? 'w-20' : 'w-64'} bg-[#eff6fa] p-4 transition-all duration-300 shadow-md z-10`}
+    >
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className={`text-xl font-bold ${collapsed ? 'hidden' : 'block'}`}>
           {role === 'doctor' ? 'Doctor Panel' : 'Reception Panel'}
@@ -36,17 +53,17 @@ const Sidebar = ({ onNavigate, role }) => {
         </button>
       </div>
 
+      {/* Menu Items */}
       <ul className="space-y-4">
         {links.map((link) => (
           <li key={link.value}>
-            <a
-              href="#"
-              onClick={() => onNavigate && onNavigate(link.value)}
-              className="flex items-center gap-3 text-lg hover:bg-blue-200 p-2 rounded transition"
+            <button
+              onClick={() => handleClick(link.value)}
+              className="flex items-center gap-3 text-lg w-full text-left hover:bg-blue-200 p-2 rounded transition"
             >
               {link.icon}
               {!collapsed && <span>{link.label}</span>}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

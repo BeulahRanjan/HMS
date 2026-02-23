@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function Rpage() {
 
 
-  const [currentSection, setCurrentSection] = useState('dashboard');
+  const [currentSection, setCurrentSection] = useState('Profile');
 
   const [recepProfile, setRecepProfile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -277,7 +277,7 @@ useEffect(() => {
 
 
         <div className="flex">
-      <Sidebar onNavigate={setCurrentSection} />
+      <Sidebar onNavigate={setCurrentSection}  />
       <div className="ml-[100px] p-6 w-full">
         {currentSection === 'Profile' && 
         <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 flex flex-col">

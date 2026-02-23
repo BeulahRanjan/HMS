@@ -1,33 +1,26 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Glogin() {
   const navigate = useNavigate(); // ✅ correct hook
 
 const handleSuccess = async (credentialResponse) => {
   try {
-    // 🔵 Google token (ONLY for backend verification)
     const googleToken = credentialResponse.credential;
-    console.log("Received Google token:", googleToken);
 
     const res = await axios.post(
       "http://localhost:5000/auth/google-login",
-      {
-        token: googleToken,
-        role: "patient"   // ✅ SEND ROLE
-      }
+      { token: googleToken }
     );
 
-    console.log("Backend response:", res.data);
-
-    // 🟢 YOUR APP TOKEN
+    // 🔥 STORE AUTH STATE
     localStorage.setItem("token", res.data.token);
-
-    // 🟢 STORE ROLE FOR NAVBAR / AUTH
     localStorage.setItem("role", "patient");
+    Cookies.set("hasSubmittedForm", "true");
 
-    navigate("/", { replace: true }); // ✅ prevent back navigation
+    navigate("/");
   } catch (err) {
     console.error("Google login error:", err);
   }
@@ -35,7 +28,7 @@ const handleSuccess = async (credentialResponse) => {
 
   return (
     <div className=" absolute bottom-[5.5em] right-[16.5em] h-25 w-1/7 ">
-      <GoogleLogin theme='otline' size='large' shape='pill'
+      <GoogleLogin theme='outline' size='large' shape='pill'
         onSuccess={handleSuccess}
         onError={() => console.log("Google Login Failed")}
       />

@@ -6,16 +6,14 @@ function Navbar() {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
+  const [role, setRole] = useState(null);          // ✅ STATE
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-    const role = localStorage.getItem('role'); 
 
- // doctor | admin | receptionist | patient
-
-  // check login / submission state
+  // sync state from storage ON LOAD
   useEffect(() => {
-    const submitted = Cookies.get('hasSubmittedForm');
-    setHasSubmitted(submitted === 'true');
+    setRole(localStorage.getItem('role'));
+    setHasSubmitted(Cookies.get('hasSubmittedForm') === 'true');
   }, []);
 
   // close dropdown on outside click
@@ -39,25 +37,41 @@ function Navbar() {
     Cookies.remove('hasSubmittedForm');
     Cookies.remove('role');
     localStorage.clear();
-    setShowDropdown(false);
+
+    setRole(null);                 // ✅ FORCE UI UPDATE
     setHasSubmitted(false);
-    navigate('/signup', { replace: true }); // 🔥 FIX
-    window.location.reload();
+    setShowDropdown(false);
+
+    navigate('/signup', { replace: true });
   };
 
   const handleAuthClick = () => {
-  if (!role) {
-    navigate('/signup');
-    return;
-  }
+    if (!role) {
+      navigate('/signup');
+      return;
+    }
 
-  if (role === 'patient') {
-    handleLogout();
-    return;
-  }
+    if (role === 'patient') {
+      handleLogout();
+      return;
+    }
 
-  setShowDropdown(prev => !prev);
-};
+    if (!hasSubmitted) {
+      navigate('/signup');
+      return;
+    }
+
+    setShowDropdown(prev => !prev);
+  };
+
+  // ✅ SINGLE SOURCE OF TRUTH FOR TEXT
+  const authText = !role
+    ? 'Signin'
+    : role === 'patient'
+      ? 'Logout'
+      : hasSubmitted
+        ? 'My Profile'
+        : 'Signin';
 
   return (
     <div className="flex flex-row ml-10 p-2 mr-10 px-2 relative">
@@ -70,19 +84,15 @@ function Navbar() {
         <li onClick={() => navigate('/doctors')} className="ml-10 text-white font-bold text-lg cursor-pointer">Doctors</li>
         <li className="ml-10 text-white font-bold text-lg cursor-pointer">Contact Us</li>
 
-        {/* AUTH SECTION */}
+        {/* AUTH */}
         <li
           className="ml-10 text-white font-bold text-lg cursor-pointer relative"
           onClick={handleAuthClick}
         >
-          {role
-  ? role === 'patient'
-    ? 'Logout'
-    : 'My Profile'
-  : 'Signin'}
+          {authText}
 
-          {/* Dropdown ONLY for non-patient users */}
-          {showDropdown && role !== 'patient' && (
+          {/* Dropdown only for staff + submitted */}
+          {showDropdown && role !== 'patient' && hasSubmitted && (
             <ul
               ref={dropdownRef}
               className="absolute right-0 mt-2 bg-white text-black shadow-md rounded-md w-40 z-10"
