@@ -23,7 +23,7 @@ const addFeedback = async (req, res) => {
 
     const newFeedback = new Feedback({
       doctorId,
-      patientId: patient._id,   // ✅ THIS FIXES THE ERROR
+      patientId: patient._id,   
       patientName: patient.name,
       rating,
       feedback,

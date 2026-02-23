@@ -208,7 +208,7 @@ if (patient && !patient.userId) {
   { expiresIn: "7d" }
 );
 
-    // ✅ SEND TOKEN
+  
     res.status(200).json({
       token: appToken,
       user,
