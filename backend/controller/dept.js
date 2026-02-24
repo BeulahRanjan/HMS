@@ -4,36 +4,66 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function addDept(req, res) {
-    try{
-        const {name, description, No_of_doctors, No_of_nurses, No_of_surgeons, No_of_patients, No_of_attendants,
-            Head_of_department, Equipment_list, floor, rooms, established_year} =req.body;
-        if(!name || !description || !No_of_doctors || !No_of_nurses || !No_of_surgeons || !No_of_patients|| !No_of_attendants || !Head_of_department ||
-            !Equipment_list || !floor || !rooms || !established_year
-        ){
-            return res.status(400).json({message:"Please fill all the fields"});
-        }
+  try {
+    const {
+      name,
+      description,
+      No_of_doctors,
+      No_of_nurses,
+      No_of_surgeons,
+      No_of_patients,
+      No_of_attendents, // 👈 match frontend spelling
+      Head_of_department,
+      Equipment_list,
+      floor,
+      rooms,
+      established_year,
+    } = req.body;
 
-        const dept= new Department({
-            name,
-            description,
-            No_of_doctors,
-            No_of_nurses,
-            No_of_surgeons: 0,
-            No_of_patients: 0,
-            No_of_attendants: 0,
-            Head_of_department: "",
-            Equipment_list: [],
-            floor: 0,
-            rooms:0,
-            established_year: 0
-        });
-        const savedDept = await dept.save();
-        return res.status(201).json({message:"Department created successfully"});
+    // ✅ Proper validation (0 is allowed)
+    if (
+      !name ||
+      !description ||
+      Head_of_department == null ||
+      floor == null ||
+      rooms == null ||
+      established_year == null ||
+      No_of_doctors == null ||
+      No_of_nurses == null ||
+      No_of_surgeons == null ||
+      No_of_patients == null ||
+      No_of_attendents == null ||
+      !Array.isArray(Equipment_list)
+    ) {
+      return res.status(400).json({ message: "Please fill all the fields" });
     }
-    catch(error){
-        console.log("Error in adding deptartment details:", error);
-        return res.status(500).json({message:"Error in adding department details"});
-    }
+
+    const dept = new Department({
+      name,
+      description,
+      Head_of_department,
+      floor,
+      rooms,
+      established_year,
+      No_of_doctors,
+      No_of_nurses,
+      No_of_surgeons,
+      No_of_patients,
+      No_of_attendants: No_of_attendents, // map correctly
+      Equipment_list,
+    });
+
+    await dept.save();
+
+    return res.status(201).json({
+      message: "Department created successfully",
+    });
+  } catch (error) {
+    console.error("Error in adding department:", error);
+    return res.status(500).json({
+      message: "Error in adding department details",
+    });
+  }
 }
 
 async function delDept(req, res) {
