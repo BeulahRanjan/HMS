@@ -19,6 +19,10 @@ app.use(
   express.static(path.join(process.cwd(), "uploads"))
 );
 // app.use(express.json());
+app.get("/", (req, res) => {
+  res.json({ status: "OK", env: "production" });
+});
+
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
