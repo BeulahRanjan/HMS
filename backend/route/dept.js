@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/addDept', auth , deptController.addDept);
 router.delete('/delDept/:id', auth , deptController.delDept);
 router.get('/getDept/:id', auth , deptController.getDept);
-router.get('/getAllDept', auth , deptController.getAllDept);
+router.get('/getAllDept',  deptController.getAllDept);
 router.get('/getDeptByName/:name', auth , deptController.getDeptByName);
 router.put('/upDept/:id', auth , deptController.upDept);
 

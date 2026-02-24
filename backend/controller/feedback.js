@@ -101,10 +101,10 @@ async function getFeedbackbyDate(req, res) {
 }
 
 const feedbackController = {
-  addFeedback,
-  getallFeedback,
-  getFeedbackByDoctor,
-  getFeedbackbyDate,
+  addFeedback: addFeedback,
+  getallFeedback: getallFeedback,
+  getFeedbackByDoctor: getFeedbackByDoctor,
+  getFeedbackbyDate: getFeedbackbyDate,
 };
 
 export default feedbackController;
