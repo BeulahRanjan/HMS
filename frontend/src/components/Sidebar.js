@@ -25,9 +25,8 @@ const Sidebar = ({ onNavigate, role }) => {
   ];
    const adminItems = [
     // { label: 'Home', value: 'home', icon: '🏠' },
-    { label: 'Profile', value: 'profile', icon: '📊' },
-    { label: 'Patients', value: 'patients', icon: '🧾' },
-    { label: 'Appointments', value: 'appointments', icon: '📅' },
+    { label: 'departments', value: 'departments', icon: '📊' },
+    { label: 'Dashboard', value: 'dashboard', icon: '🧾' },
     { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
   ];
 

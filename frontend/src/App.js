@@ -15,6 +15,7 @@ import Aform from './components/Aform';
 import Docpage from './components/Docpage';
 import Feedback from './components/Feedback';
 import Adminpage from './components/Adminpage';
+import Deptform from './components/Deptform';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
       <Route path='addAdmin' element={<Adminform />} />
       <Route path='/getAllPat' element={<Rpage />} />
       <Route path='/upAppt/:id' element={<Aform />} />
+      <Route path='/upDept/:id' element={<Deptform/>}/>
       <Route path='/getPatByName/:name' element={<Aform />} />
       <Route path='/getDocByName/:name' element={<Aform />} />
       <Route path='/getDepByName/:name' element={<Aform />} />
@@ -46,6 +48,7 @@ function App() {
       <Route path='/addFeedback/:doctorId' element={<Feedback/>}/>
       <Route path='/doctors' element={<Docpage/>}/>
       <Route path='/admin' element={<Adminpage/>}/>
+      <Route path='/addDept'element={<Deptform/>}/>
 
 
 
