@@ -44,7 +44,8 @@ export default function DeptForm() {
           }
         );
 
-        const dept = res.data.department;
+        const dept = res.data;
+        console.log(res.data);
 
         setFormData({
           ...dept,
@@ -84,35 +85,96 @@ export default function DeptForm() {
   };
 
   /* ================= SUBMIT ================= */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const url = isEditMode
-        ? `http://localhost:5000/upDept/${id}`
-        : "http://localhost:5000/addDept";
+  //   try {
+  //     const url = isEditMode
+  //       ? `http://localhost:5000/upDept/${id}`
+  //       : "http://localhost:5000/addDept";
 
-      const method = isEditMode ? "put" : "post";
+  //     const method = isEditMode ? "put" : "post";
 
-      await axios({
-        method,
-        url,
-        data: formData,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  //     await axios({
+  //       method,
+  //       url,
+  //       data: formData,
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
 
-      toast.success(
-        isEditMode ? "Department updated successfully" : "Department added successfully"
-      );
+  //     toast.success(
+  //       isEditMode ? "Department updated successfully" : "Department added successfully"
+  //     );
 
-      navigate("/admin");
-    } catch (err) {
-      toast.error("Failed to save department");
-    }
+  //     navigate("/admin");
+  //   } catch (err) {
+  //     toast.error("Failed to save department");
+  //   }
+  // };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    ...formData,
+
+    floor: Number(formData.floor),
+    rooms: Number(formData.rooms),
+    established_year: Number(formData.established_year),
+
+    No_of_doctors: Number(formData.No_of_doctors),
+    No_of_nurses: Number(formData.No_of_nurses),
+    No_of_surgeons: Number(formData.No_of_surgeons),
+    No_of_attendents: Number(formData.No_of_attendents),
+    No_of_patients: Number(formData.No_of_patients),
+
+    Equipment_list: formData.Equipment_list.map(eq => ({
+      name: eq.name,
+      quantity: Number(eq.quantity),
+      condition: eq.condition,
+    })),
   };
 
+  // 🚨 client-side safety check
+  for (const [key, value] of Object.entries(payload)) {
+    if (
+      value === "" ||
+      value === null ||
+      (typeof value === "number" && isNaN(value))
+    ) {
+      toast.error(`Field "${key}" is missing`);
+      return;
+    }
+  }
+
+  try {
+    const url = isEditMode
+      ? `http://localhost:5000/upDept/${id}`
+      : "http://localhost:5000/addDept";
+
+    const method = isEditMode ? "put" : "post";
+
+    await axios({
+      method,
+      url,
+      data: payload,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    toast.success(
+      isEditMode ? "Department updated successfully" : "Department added successfully"
+    );
+
+    navigate("/admin");
+  } catch (err) {
+    console.error(err.response?.data);
+    toast.error(err.response?.data?.message || "Failed to save department");
+  }
+};  
   /* ================= UI ================= */
   return (
     <div className="min-h-screen bg-[#d0e5f1] flex justify-center items-center">

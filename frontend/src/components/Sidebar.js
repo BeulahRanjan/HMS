@@ -9,8 +9,7 @@ const Sidebar = ({ onNavigate, role }) => {
   // Menu items for doctor
   const docItems = [
     // { label: 'Home', value: 'home', icon: '🏠' },
-    { label: 'Reviews', value: 'reviews', icon: '🧾' },
-    { label: 'Surgeries', value: 'surgeries', icon: '⚕️' },
+    { label: 'Reviews', value: 'reviews', icon: '🧾' },,
     { label: 'Appointments', value: 'appointments', icon: '📅' },
     { label: 'Profile', value: 'profile', icon: '🧑‍⚕️' }
   ];
@@ -26,8 +25,8 @@ const Sidebar = ({ onNavigate, role }) => {
    const adminItems = [
     // { label: 'Home', value: 'home', icon: '🏠' },
     { label: 'departments', value: 'departments', icon: '📊' },
-    { label: 'Dashboard', value: 'dashboard', icon: '🧾' },
-    { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
+    // { label: 'Dashboard', value: 'dashboard', icon: '🧾' },
+    // { label: 'Doctors', value: 'doctors', icon: '🧑‍⚕️' }
   ];
 
   const links = role === 'doctor' ? docItems : role === 'admin' ? adminItems : recepItems;

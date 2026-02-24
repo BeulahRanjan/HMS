@@ -16,6 +16,7 @@ import Docpage from './components/Docpage';
 import Feedback from './components/Feedback';
 import Adminpage from './components/Adminpage';
 import Deptform from './components/Deptform';
+import Deptpage from './components/Deptpage';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
       <Route path='/doctors' element={<Docpage/>}/>
       <Route path='/admin' element={<Adminpage/>}/>
       <Route path='/addDept'element={<Deptform/>}/>
+      <Route path='/departments' element={<Deptpage/>}/>
 
 
 

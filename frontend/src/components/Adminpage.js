@@ -4,6 +4,7 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 export default function Adminpage() {
   const [departments, setDepartments] = useState([]);
@@ -12,6 +13,23 @@ export default function Adminpage() {
   const [currentSection, setCurrentSection] = useState("departments");
 
   const navigate = useNavigate();
+    const deleteDepartment= async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/delDept/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('authToken')}`,
+        },
+      });
+  
+      // Update UI after deletion
+      setDepartments((prevDepartments) =>
+        prevDepartments.filter((appt) => appt._id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+      // alert("Failed to delete appointment.");
+    }
+  };
 
   // ✅ Fetch all departments
   useEffect(() => {
@@ -67,7 +85,7 @@ export default function Adminpage() {
                           navigate(`/upDept/${dept._id}`)
                         }
                       />
-                      <DeleteIcon className="cursor-pointer text-red-600" />
+                      <DeleteIcon className="cursor-pointer text-red-600" onClick={() => deleteDepartment(dept._id)}/>
                     </div>
                   </div>
 

@@ -156,7 +156,7 @@ const getFeedbacks = async (doctorId) => {
     const token = Cookies.get("authToken");
 
     const response = await axios.get(
-      `http://localhost:5000/doctor/${doctorId}`,
+      `http://localhost:5000/getFeedbackByDoctor/${doctorId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -164,8 +164,22 @@ const getFeedbacks = async (doctorId) => {
       }
     );
 
-    // handle different backend response shapes
-    return response.data.feedbacks || response.data || [];
+    console.log("Feedback API response:", response.data);
+
+    // normalize response
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    if (Array.isArray(response.data.feedbacks)) {
+      return response.data.feedbacks;
+    }
+
+    if (Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+
+    return [];
   } catch (error) {
     console.error("Error fetching feedback:", error);
     throw error;
@@ -173,23 +187,23 @@ const getFeedbacks = async (doctorId) => {
 };
 
 useEffect(() => {
-  if (currentSection === "reviews" && doctorProfile?._id) {
-    const fetchFeedbacks = async () => {
-      try {
-        setLoading(true);
-        const data = await getFeedbacks(doctorProfile._id);
-        setFeedbacks(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (currentSection !== "reviews" || !doctorProfile?._id) return;
 
-    fetchFeedbacks();
-  }
-}, [currentSection, doctorProfile]);
+  const fetchFeedbacks = async () => {
+    try {
+      setLoading(true);
+      const data = await getFeedbacks(doctorProfile._id);
+      setFeedbacks(data);
+    } catch (error) {
+      console.error(error);
+      setFeedbacks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  fetchFeedbacks();
+}, [currentSection, doctorProfile?._id]);
 
   return (
     <div className='flex overflow-x-hidden'>
@@ -224,7 +238,7 @@ useEffect(() => {
     </div>
 
     {/* Feedback List */}
-    <div className="ml-[70px] w-[1450px]">
+    <div className="ml-[100px] w-[1450px]">
       {loading && <p>Loading reviews...</p>}
 
       {!loading && feedbacks.length === 0 && (
@@ -236,10 +250,7 @@ useEffect(() => {
           key={item._id}
           className="bg-white p-4 border rounded mb-3 shadow-sm"
         >
-          <p className="font-semibold">
-            {item.patientId?.name || "Anonymous Patient"}
-          </p>
-
+          
           <p className="text-gray-600 mt-1">
             {item.feedback}
           </p>
@@ -504,6 +515,7 @@ useEffect(() => {
 }
  </div>
 
+ 
     </div>
   )
 }
