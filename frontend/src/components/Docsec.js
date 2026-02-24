@@ -60,7 +60,7 @@ function Docsec() {
 
 const fetchDoctors = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/getAllDoctors");
+    const res = await axios.get("https://hms-1-1u51.onrender.com/getAllDoctors");
 
     // ✅ extract array
     setDoctors(res.data.doctors);
@@ -115,7 +115,7 @@ useEffect(() => {
     <img
       src={
         doc?.profileImage
-          ? `http://localhost:5000${doc.profileImage}?t=${Date.now()}`
+          ? `https://hms-1-1u51.onrender.com${doc.profileImage}?t=${Date.now()}`
           : "/default-doctor.png"
       }
       alt={doc.name}

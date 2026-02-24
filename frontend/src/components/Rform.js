@@ -33,7 +33,7 @@ function Rform() {
       e.preventDefault();
   
       try {
-        const response = await axios.post('http://localhost:5000/addRecep', formData, {
+        const response = await axios.post('https://hms-1-1u51.onrender.com/addRecep', formData, {
           headers: {
             Authorization: `Bearer ${Cookies.get('authToken')}`,
           },

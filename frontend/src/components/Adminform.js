@@ -56,7 +56,7 @@ function Adminform() {
 
   try {
     const response = await axios.post(
-      "http://localhost:5000/addAdmin",
+      "https://hms-1-1u51.onrender.com/addAdmin",
       formData,
       {
         headers: {

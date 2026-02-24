@@ -121,13 +121,13 @@ const handleSubmit = async (e) => {
   try {
     // Fetch IDs from backend using names
     const [patientRes, doctorRes, deptRes] = await Promise.all([
-      axios.get(`http://localhost:5000/getPatByName/${formData.patientName}`, {
+      axios.get(`https://hms-1-1u51.onrender.com/getPatByName/${formData.patientName}`, {
         headers: { Authorization: `Bearer ${Cookies.get('authToken')}` }
       }),
-      axios.get(`http://localhost:5000/getDocByName/${formData.doctorName}`, {
+      axios.get(`https://hms-1-1u51.onrender.com/getDocByName/${formData.doctorName}`, {
         headers: { Authorization: `Bearer ${Cookies.get('authToken')}` }
       }),
-      axios.get(`http://localhost:5000/getDeptByName/${formData.departmentName}`, {
+      axios.get(`https://hms-1-1u51.onrender.com/getDeptByName/${formData.departmentName}`, {
         headers: { Authorization: `Bearer ${Cookies.get('authToken')}` }
       })
     ]);
@@ -162,8 +162,8 @@ if (!doctorId) {
 console.log("Auth token:", Cookies.get('authToken'));
 
     const url = isEditMode
-      ? `http://localhost:5000/upAppt/${appointmentId}`
-      : `http://localhost:5000/addAppt`;
+      ? `https://hms-1-1u51.onrender.com/upAppt/${appointmentId}`
+      : `https://hms-1-1u51.onrender.com/addAppt`;
 
     const method = isEditMode ? 'put' : 'post';
 

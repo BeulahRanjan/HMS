@@ -11,7 +11,7 @@ const handleSuccess = async (credentialResponse) => {
     const googleToken = credentialResponse.credential;
 
     const res = await axios.post(
-      "http://localhost:5000/auth/google-login",
+      "https://hms-1-1u51.onrender.com/auth/google-login",
       { token: googleToken }
     );
 

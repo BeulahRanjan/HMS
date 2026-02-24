@@ -27,7 +27,7 @@ const [loading, setLoading] = useState(false);
     try {
       const token = Cookies.get("authToken");
 
-      const res = await axios.get("http://localhost:5000/profile", {
+      const res = await axios.get("https://hms-1-1u51.onrender.com/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -67,7 +67,7 @@ const uploadProfileImage = async () => {
     formData.append("profileImage", selectedImage);
 
     const res = await axios.put(
-      "http://localhost:5000/upload-profile-image",
+      "https://hms-1-1u51.onrender.com/upload-profile-image",
       formData,
       {
         headers: {
@@ -103,7 +103,7 @@ const uploadProfileImage = async () => {
   const goToEditDoctor = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/getDoctor/${id}`,
+        `https://hms-1-1u51.onrender.com/getDoctor/${id}`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("authToken")}`,
@@ -156,7 +156,7 @@ const getFeedbacks = async (doctorId) => {
     const token = Cookies.get("authToken");
 
     const response = await axios.get(
-      `http://localhost:5000/getFeedbackByDoctor/${doctorId}`,
+      `https://hms-1-1u51.onrender.com/getFeedbackByDoctor/${doctorId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -214,7 +214,7 @@ useEffect(() => {
     <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
       <div className="flex gap-3 items-center">
         <img
-          src={`http://localhost:5000${doctorProfile?.profileImage}`}
+          src={`https://hms-1-1u51.onrender.com${doctorProfile?.profileImage}`}
           alt=""
           className="w-12 h-12 rounded-full border-2 border-black"
         />
@@ -268,7 +268,7 @@ useEffect(() => {
       <div className='flex flex-col'>
         <div className="bg-[#eff6fa] p-4 flex items-center justify-between w-[1450px] h-[70px] ml-[70px]">
           <div className='flex flex-row gap-3'>
-          <img src={`http://localhost:5000${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
+          <img src={`https://hms-1-1u51.onrender.com${doctorProfile?.profileImage}?t=${Date.now()}`} alt='' className='w-12 h-12 rounded-full border-2 border-black'/>
           <div className='flex flex-col'>
             <p>{doctorProfile?.name}</p>
             <p>{doctorProfile?.specialist}</p>
@@ -404,7 +404,7 @@ useEffect(() => {
     preview
       ? preview
       : doctorProfile?.profileImage
-      ? `http://localhost:5000${doctorProfile.profileImage}?t=${Date.now()}`
+      ? `https://hms-1-1u51.onrender.com${doctorProfile.profileImage}?t=${Date.now()}`
       : "/default-doctor.png"
   }
       

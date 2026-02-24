@@ -88,11 +88,11 @@ const handleSubmit = async (e) => {
     // 1️⃣ Resolve IDs from names 
     const [deptRes, userRes] = await Promise.all([
       axios.get(
-        `http://localhost:5000/getDeptByName/${formData.department}`,
+        `https://hms-1-1u51.onrender.com/getDeptByName/${formData.department}`,
         { headers: { Authorization: `Bearer ${Cookies.get('authToken')}` } }
       ),
       axios.get(
-        `http://localhost:5000/auth/getUserByEmail/${formData.email}`,
+        `https://hms-1-1u51.onrender.com/auth/getUserByEmail/${formData.email}`,
         { headers: { Authorization: `Bearer ${Cookies.get('authToken')}` } }
       )
     ]);
@@ -127,8 +127,8 @@ const handleSubmit = async (e) => {
 
     // 3️⃣ Decide Add vs Update
     const url = isEditMode
-      ? `http://localhost:5000/upDoctor/${doctorProfile._id}`
-      : `http://localhost:5000/addDoctor`;
+      ? `https://hms-1-1u51.onrender.com/upDoctor/${doctorProfile._id}`
+      : `https://hms-1-1u51.onrender.com/addDoctor`;
 
     const method = isEditMode ? "put" : "post";
 

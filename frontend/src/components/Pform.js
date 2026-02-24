@@ -32,7 +32,7 @@ const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/addPatient', formData, {
+      const response = await axios.post('https://hms-1-1u51.onrender.com/addPatient', formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get('authToken')}`,
         },

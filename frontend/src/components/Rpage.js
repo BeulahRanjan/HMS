@@ -51,7 +51,7 @@ const isTimeInSlot = (time, slot) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/getAllPat', {
+        const response = await axios.get('https://hms-1-1u51.onrender.com/getAllPat', {
           headers: {
             Authorization: `Bearer ${Cookies.get('authToken')}`,
           },
@@ -71,7 +71,7 @@ const isTimeInSlot = (time, slot) => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/getAllAppts', {
+        const response = await axios.get('https://hms-1-1u51.onrender.com/getAllAppts', {
           headers: {
             Authorization: `Bearer ${Cookies.get('authToken')}`,
           },
@@ -88,7 +88,7 @@ const isTimeInSlot = (time, slot) => {
 
   const deleteAppointment = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:5000/delAppt/${id}`, {
+    const response = await axios.delete(`https://hms-1-1u51.onrender.com/delAppt/${id}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('authToken')}`,
       },
@@ -106,7 +106,7 @@ const isTimeInSlot = (time, slot) => {
 
   const deletePatient = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:5000/delPatient/${id}`, {
+    const response = await axios.delete(`https://hms-1-1u51.onrender.com/delPatient/${id}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('authToken')}`,
       },
@@ -124,7 +124,7 @@ const isTimeInSlot = (time, slot) => {
 
 const fetchAppointment = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:5000/getAppt/${id}`, {
+    const response = await axios.get(`https://hms-1-1u51.onrender.com/getAppt/${id}`, {
       headers: {
         Authorization: `Bearer ${Cookies.get('authToken')}`,
       },
@@ -144,7 +144,7 @@ const fetchAppointment = async (id) => {
     try {
       const token = Cookies.get("authToken");
 
-      const res = await axios.get("http://localhost:5000/rprofile", {
+      const res = await axios.get("https://hms-1-1u51.onrender.com/rprofile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -184,7 +184,7 @@ const uploadProfileImage = async () => {
     formData.append("profileImage", selectedImage);
 
     const res = await axios.put(
-      "http://localhost:5000/upload-rprofile-image",
+      "https://hms-1-1u51.onrender.com/upload-rprofile-image",
       formData,
       {
         headers: {
@@ -200,7 +200,7 @@ const uploadProfileImage = async () => {
       ...prev,
       profileImage: imagePath,
     }));
-    const imageUrl1=`http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`;
+    const imageUrl1=`https://hms-1-1u51.onrender.com${recepProfile.profileImage}?t=${Date.now()}`;
     console.log(imageUrl1);
     setSelectedImage(null);
     setPreview(null);
@@ -222,7 +222,7 @@ const uploadProfileImage = async () => {
  const goToEditRecep = async (id) => {
   try {
     const res = await axios.get(
-      `http://localhost:5000/getRecep/${id}`,
+      `https://hms-1-1u51.onrender.com/getRecep/${id}`,
       {
         headers: {
           Authorization: `Bearer ${Cookies.get("authToken")}`,
@@ -250,7 +250,7 @@ const uploadProfileImage = async () => {
 
 const fetchDoctors = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/getAllDoctors", {
+    const res = await axios.get("https://hms-1-1u51.onrender.com/getAllDoctors", {
       headers: {
         Authorization: `Bearer ${Cookies.get("authToken")}`,
       },
@@ -307,7 +307,7 @@ useEffect(() => {
     preview
       ? preview
       : recepProfile?.profileImage
-      ? `http://localhost:5000${recepProfile.profileImage}?t=${Date.now()}`
+      ? `https://hms-1-1u51.onrender.com${recepProfile.profileImage}?t=${Date.now()}`
       : "/default-receptionist.png"
   }
 
@@ -520,7 +520,7 @@ useEffect(() => {
     <img
       src={
         doc?.profileImage
-          ? `http://localhost:5000${doc.profileImage}?t=${Date.now()}`
+          ? `https://hms-1-1u51.onrender.com${doc.profileImage}?t=${Date.now()}`
           : "/default-doctor.png"
       }
       alt={doc.name}

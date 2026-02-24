@@ -28,7 +28,7 @@ const handleSubmit = async () => {
     }
 
     const res = await axios.post(
-      `http://localhost:5000/addFeedback/${doctorId}`,
+      `https://hms-1-1u51.onrender.com/addFeedback/${doctorId}`,
       {
         
         rating: Number(rating),

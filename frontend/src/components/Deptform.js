@@ -36,7 +36,7 @@ export default function DeptForm() {
     const fetchDept = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/getDept/${id}`,
+          `https://hms-1-1u51.onrender.com/getDept/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -151,8 +151,8 @@ const handleSubmit = async (e) => {
 
   try {
     const url = isEditMode
-      ? `http://localhost:5000/upDept/${id}`
-      : "http://localhost:5000/addDept";
+      ? `https://hms-1-1u51.onrender.com/upDept/${id}`
+      : "https://hms-1-1u51.onrender.com/addDept";
 
     const method = isEditMode ? "put" : "post";
 

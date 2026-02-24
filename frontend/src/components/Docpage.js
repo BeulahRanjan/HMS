@@ -20,7 +20,7 @@ export default function Docpage() {
     const token = localStorage.getItem("token");
 
     const res = await axios.get(
-      "http://localhost:5000/getAllDoctors",
+      "https://hms-1-1u51.onrender.com/getAllDoctors",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ export default function Docpage() {
                   doc?.profileImage
                     ? doc.profileImage.startsWith("http")
                       ? doc.profileImage
-                      : `http://localhost:5000${doc.profileImage}`
+                      : `https://hms-1-1u51.onrender.com:5000${doc.profileImage}`
                     : "/default-doctor.png"
                 }
                 alt={doc.name}

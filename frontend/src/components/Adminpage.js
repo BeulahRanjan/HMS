@@ -15,7 +15,7 @@ export default function Adminpage() {
   const navigate = useNavigate();
     const deleteDepartment= async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/delDept/${id}`, {
+      const response = await axios.delete(`https://hms-1-1u51.onrender.com/delDept/${id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('authToken')}`,
         },
@@ -37,7 +37,7 @@ export default function Adminpage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get("http://localhost:5000/getAllDept", {
+        const res = await axios.get("https://hms-1-1u51.onrender.com/getAllDept", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

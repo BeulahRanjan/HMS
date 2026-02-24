@@ -22,7 +22,7 @@ function Signup() {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post("http://localhost:5000/auth/signup", userData);
+            const response = await axios.post("https://hms-1-1u51.onrender.com/auth/signup", userData);
             console.log(response);
             if (response.status === 201) {
                 toast.success("SignUp Successfull !", {
