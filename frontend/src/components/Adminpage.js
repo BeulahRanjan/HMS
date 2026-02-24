@@ -64,7 +64,7 @@ export default function Adminpage() {
                       <EditIcon
                         className="cursor-pointer text-blue-600"
                         onClick={() =>
-                          navigate(`/editDept/${dept._id}`)
+                          navigate(`/upDept/${dept._id}`)
                         }
                       />
                       <DeleteIcon className="cursor-pointer text-red-600" />

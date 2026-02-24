@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function DeptForm() {
   const { id } = useParams(); // 👈 if exists → edit mode
@@ -20,18 +21,29 @@ export default function DeptForm() {
   });
 
   // ✅ Fetch department for edit
-  useEffect(() => {
-    if (!isEditMode) return;
+useEffect(() => {
+  if (!id) return;
 
-    const fetchDept = async () => {
+  const fetchDept = async () => {
+    try {
       const res = await axios.get(
-        `http://localhost:5000/getDeptById/${id}`
+        `http://localhost:5000/getDept/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
-      setFormData(res.data.department);
-    };
 
-    fetchDept();
-  }, [id, isEditMode]);
+      setFormData(res.data.department);
+    } catch (err) {
+      console.error(err);
+      toast.error("Unauthorized or department not found");
+    }
+  };
+
+  fetchDept();
+}, [id]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,7 +54,7 @@ export default function DeptForm() {
 
     if (isEditMode) {
       await axios.put(
-        `http://localhost:5000/updateDept/${id}`,
+        `http://localhost:5000/upDept/${id}`,
         formData
       );
     } else {
@@ -64,7 +76,7 @@ export default function DeptForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="name"
-          value={formData.name}
+          value={formData.name || ""}
           onChange={handleChange}
           placeholder="Department Name"
           className="w-full border p-2"
