@@ -122,20 +122,30 @@ async function getDeptByName(req,res) {
     }
 }
 
-async function upDept(req, res){
-    try{
-        const deptId = req.params.id;
-        const data= req.body;
-        const dept = await Department.findByIdAndUpdate(deptId, data, {new: true});
-        if(!dept){
-            return res.status(404).json({message:"Department not found"});
-        }
-        return res.status(200).json({message:"Department updated successfully"});
+async function upDept(req, res) {
+  try {
+    const deptId = req.params.id;
+
+    const dept = await Department.findByIdAndUpdate(
+      deptId,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!dept) {
+      return res.status(404).json({ message: "Department not found" });
     }
-    catch(error){
-        console.log("Error in updating department:", error);
-        return res.status(500).json({message:"Error in updating department"});
-    }
+
+    return res.status(200).json({
+      message: "Department updated successfully",
+      department: dept,
+    });
+  } catch (error) {
+    console.error("Error in updating department:", error);
+    return res.status(500).json({
+      message: "Error in updating department",
+    });
+  }
 }
 
 
