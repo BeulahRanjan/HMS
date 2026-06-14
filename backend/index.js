@@ -19,7 +19,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://hms-1-0lx7.onrender.com"
+    "https://hms-2-dlmm.onrender.com"
   ],
   credentials: true
 }));
